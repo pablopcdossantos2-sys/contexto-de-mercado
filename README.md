@@ -37,7 +37,8 @@ O projeto combina teoria, rotina, registro e treino deliberado. A proposta não 
 - **Diário de Contexto** — pré/pós-mercado, histórico local, backup JSON e importação.
 - **Laboratório de Cenários** — exercícios de construção de hipóteses no formato se/então.
 - **Plano x Mercado Real** — revisão de leitura, atualização, execução e disciplina.
-- **Replay de Contexto (MVP)** — carrega uma captura inicial e uma continuação; a continuação fica oculta até a leitura inicial ser travada.
+- **Replay de Contexto** — carrega uma captura inicial e uma continuação; a continuação fica oculta até a leitura inicial ser travada.
+- **Replay Guiado** — biblioteca de sessões sintéticas reveladas em quatro etapas, com leitura travada a cada avanço.
 
 ## ROADMAP
 
@@ -49,7 +50,7 @@ Situação atual:
 - Fase 1 — Currículo essencial: ✅ concluída
 - Fase 2 — Sistema diário de registro: ✅ concluída
 - Fase 3 — Treino e comparação: ✅ concluída
-- Fase 4 — Replay de leitura: 🔄 em execução (MVP entregue)
+- Fase 4 — Replay de leitura: ✅ concluída
 - Fases 5–7 — trilhas, métricas e robustez: 📋 planejadas
 
 ## Privacidade e dados
