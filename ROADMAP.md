@@ -137,6 +137,6 @@ O projeto deve levar o usuário por cinco competências:
 
 A ordem é intencional:
 
-**conceito → observação → rotina → registro → treino → replay → métricas**
+**conceito → observação → rotina → registro → treino → replay → avaliação → métricas**
 
 O projeto evita começar por dashboards sofisticados antes de ensinar ao usuário o que vale a pena registrar.
