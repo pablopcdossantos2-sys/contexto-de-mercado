@@ -1,0 +1,61 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Trilhas de aprendizagem do projeto Contexto de Mercado: Iniciante, Intraday e Leitura de Fluxo."><title>Trilhas de Aprendizagem — Contexto de Mercado</title><link rel="stylesheet" href="../styles.css"></head><body>
+<header class="site-header"><div class="container nav"><a class="brand" href="../index.html">Contexto <span>de Mercado</span></a><button class="menu-button" aria-label="Abrir menu">Menu</button><nav class="nav-links"><a href="../index.html">Início</a><a href="../index.html#artigos">Artigos</a><a aria-current="page" href="trilhas.html">Trilhas</a><a href="../index.html#ferramentas">Ferramentas</a><a href="../roadmap.html">ROADMAP</a></nav></div></header>
+<div class="container breadcrumb"><a href="../index.html">Início</a> / Aprendizagem / Trilhas</div>
+<section class="article-hero"><div class="container"><div class="eyebrow">Fase 5 · Aprendizagem estruturada</div><h1>Trilhas de Aprendizagem</h1><p class="kicker">Escolha uma trilha e avance por leitura, prática e avaliação. O progresso fica salvo apenas neste navegador.</p></div></section>
+
+<main>
+<section class="section alt"><div class="container">
+<div class="track-grid" id="trackCards"></div>
+</div></section>
+
+<section class="section"><div class="container">
+<div class="section-head"><div><div class="eyebrow">Avaliações comuns</div><h2>Treine antes de concluir.</h2></div><p>As trilhas compartilham exercícios de classificação de regime e separação entre informação relevante e ruído.</p></div>
+<div class="grid">
+<a class="card" href="classificacao-regimes.html"><span class="tag">Exercício</span><h3>Classificação de Regimes</h3><p>Analise seis gráficos sintéticos e classifique tendência, range, compressão, expansão ou transição.</p></a>
+<a class="card" href="informacao-ruido.html"><span class="tag">Exercício</span><h3>Informação x Ruído</h3><p>Decida quais informações realmente alteram uma hipótese e quais apenas parecem importantes.</p></a>
+<a class="card" href="quiz.html"><span class="tag">Avaliação</span><h3>Quizzes por trilha</h3><p>Faça o quiz específico de Iniciante, Intraday ou Leitura de Fluxo. Nota mínima: 80%.</p></a>
+</div>
+</div></section>
+
+<section class="section alt"><div class="container">
+<div class="note"><strong>Sobre o certificado:</strong> cada trilha libera um certificado local quando os critérios de leitura e avaliação são cumpridos. Ele serve apenas como registro pessoal de conclusão deste projeto e <strong>não possui valor acadêmico, profissional ou regulatório</strong>.</div>
+<p class="actions"><a class="button primary" href="certificado.html">Ver elegibilidade para certificado</a></p>
+</div></section>
+</main>
+<footer class="footer"><div class="container">Progresso salvo localmente. Limpar os dados do navegador pode apagar o histórico da Fase 5.</div></footer><script src="../script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+const tracks={
+iniciante:{name:"Iniciante",desc:"Construa vocabulário, aprenda a localizar o preço e transforme análise em rotina.",ids:["fund-contexto","fund-regimes","fund-topdown","fund-localizacao","fund-volatilidade","fund-rotina","exercise-regimes","quiz-iniciante"],modules:[
+["fund-contexto","O que é contexto de mercado?","../artigos/o-que-e-contexto-de-mercado.html"],
+["fund-regimes","Tendência, range e transição","../artigos/regimes-de-mercado.html"],
+["fund-topdown","Leitura top-down","../artigos/leitura-top-down.html"],
+["fund-localizacao","Localização e referências","../artigos/localizacao-do-preco.html"],
+["fund-volatilidade","Volatilidade","../artigos/volatilidade.html"],
+["fund-rotina","Rotina pré-mercado","../rotina/pre-mercado.html"],
+["exercise-regimes","Exercício: classificação de regimes","classificacao-regimes.html"],
+["quiz-iniciante","Quiz Iniciante","quiz.html?trilha=iniciante"]]},
+intraday:{name:"Intraday",desc:"Aprofunde tempo de sessão, rompimentos, macro, intermercado e atualização de contexto.",ids:["intraday-horarios","fund-localizacao","fund-volatilidade","intraday-gaps","intraday-intermercado","intraday-macro","exercise-regimes","exercise-signal-noise","quiz-intraday"],modules:[
+["intraday-horarios","Abertura e horários","../artigos/abertura-e-horarios.html"],
+["fund-localizacao","Localização e referências","../artigos/localizacao-do-preco.html"],
+["fund-volatilidade","Volatilidade","../artigos/volatilidade.html"],
+["intraday-gaps","Gaps, aceitação e rejeição","../artigos/gaps-aceitacao-rejeicao.html"],
+["intraday-intermercado","Correlação e intermercado","../artigos/correlacao-intermercado.html"],
+["intraday-macro","Eventos macroeconômicos","../artigos/eventos-macroeconomicos.html"],
+["exercise-regimes","Exercício: classificação de regimes","classificacao-regimes.html"],
+["exercise-signal-noise","Exercício: informação x ruído","informacao-ruido.html"],
+["quiz-intraday","Quiz Intraday","quiz.html?trilha=intraday"]]},
+fluxo:{name:"Leitura de Fluxo",desc:"Aprenda o que volume, agressão e liquidez mostram — e evite inferir intenção sem evidência.",ids:["fluxo-liquidez","intraday-gaps","fund-localizacao","exercise-signal-noise","quiz-fluxo"],modules:[
+["fluxo-liquidez","Liquidez, volume e agressão","../artigos/liquidez-volume-agressao.html"],
+["intraday-gaps","Aceitação, rejeição e falsos rompimentos","../artigos/gaps-aceitacao-rejeicao.html"],
+["fund-localizacao","Localização e referências","../artigos/localizacao-do-preco.html"],
+["exercise-signal-noise","Exercício: informação x ruído","informacao-ruido.html"],
+["quiz-fluxo","Quiz Leitura de Fluxo","quiz.html?trilha=fluxo"]]}
+};
+const d=CMLearning.load(),root=document.getElementById("trackCards");
+root.innerHTML=Object.entries(tracks).map(([key,t])=>{
+ const done=t.ids.filter(id=>d.completed[id]).length,pct=Math.round(done/t.ids.length*100);
+ return `<section class="track-card"><span class="tag">${done}/${t.ids.length} módulos</span><h2>${t.name}</h2><p class="muted">${t.desc}</p><div class="progress-track"><div class="progress-bar" style="width:${pct}%"></div></div><p><strong>${pct}% concluído</strong></p><div>${t.modules.map(([id,label,href])=>`<div class="module-row"><a href="${href}">${label}</a><span class="module-state ${d.completed[id]?"done":""}">${d.completed[id]?"✓ concluído":"pendente"}</span></div>`).join("")}</div><div class="actions"><a class="button ${pct===100?"primary":"secondary"}" href="certificado.html?trilha=${key}">${pct===100?"Gerar certificado":"Ver requisitos"}</a></div></section>`;
+}).join("");
+});
+</script></body></html>
