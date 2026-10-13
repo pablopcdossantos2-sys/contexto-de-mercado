@@ -1,0 +1,85 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Checklist interativo de contexto de mercado para organizar a preparação pré-mercado e registrar cenários."><title>Checklist de Contexto — Contexto de Mercado</title><link rel="stylesheet" href="../styles.css"></head><body>
+<header class="site-header"><div class="container nav"><a class="brand" href="../index.html">Contexto <span>de Mercado</span></a><button class="menu-button" aria-label="Abrir menu">Menu</button><nav class="nav-links"><a href="../index.html">Início</a><a href="../index.html#artigos">Artigos</a><a href="../rotina/pre-mercado.html">Rotina</a><a aria-current="page" href="checklist-contexto.html">Ferramentas</a></nav></div></header>
+<div class="container breadcrumb"><a href="../index.html">Início</a> / Ferramentas / Checklist de Contexto</div>
+<section class="article-hero"><div class="container"><div class="eyebrow">Ferramenta 01</div><h1>Checklist de Contexto</h1><p class="kicker">Transforme uma impressão vaga sobre o mercado em um registro objetivo. Seus dados ficam apenas no navegador deste dispositivo, via armazenamento local.</p></div></section>
+
+<main class="section"><div class="container tool-grid">
+<form id="contextForm" class="checklist">
+<div class="check-group"><h2>Identificação</h2>
+<label>Ativo<input type="text" name="ativo" placeholder="Ex.: WIN, WDO, índice, ação..."></label><br>
+<label>Data<input type="text" name="data" placeholder="DD/MM/AAAA"></label><br>
+<label>Período operacional<input type="text" name="timeframe" placeholder="Ex.: 5 min"></label>
+</div>
+
+<div class="check-group"><h2>1. Ambiente do dia</h2>
+<div class="check-item"><input type="checkbox" id="c1" data-check><label for="c1">Verifiquei eventos e horários potencialmente relevantes.</label></div>
+<div class="check-item"><input type="checkbox" id="c2" data-check><label for="c2">Sei como pretendo agir próximo desses horários.</label></div>
+<label>Observações<textarea name="eventos" placeholder="Eventos, horários e regras pessoais..."></textarea></label>
+</div>
+
+<div class="check-group"><h2>2. Quadro maior</h2>
+<div class="check-item"><input type="checkbox" id="c3" data-check><label for="c3">Observei um horizonte acima do gráfico operacional.</label></div>
+<div class="check-item"><input type="checkbox" id="c4" data-check><label for="c4">Consigo resumir a estrutura atual sem prever o futuro.</label></div>
+<label>Resumo da estrutura<textarea name="estrutura" placeholder="Descreva o que o preço já fez e onde está agora."></textarea></label>
+</div>
+
+<div class="check-group"><h2>3. Regime e volatilidade</h2>
+<div class="check-item"><input type="checkbox" id="c5" data-check><label for="c5">Classifiquei o regime predominante.</label></div>
+<div class="check-item"><input type="checkbox" id="c6" data-check><label for="c6">Comparei a volatilidade atual com o comportamento recente.</label></div>
+<label>Regime<select name="regime"><option value="">Selecione</option><option>Tendência / direcional</option><option>Range / equilíbrio</option><option>Transição / indefinição</option><option>Compressão predominante</option><option>Expansão predominante</option></select></label><br>
+<label>Notas<textarea name="volatilidade" placeholder="Eficiência dos impulsos, profundidade das correções, amplitude..."></textarea></label>
+</div>
+
+<div class="check-group"><h2>4. Referências</h2>
+<div class="check-item"><input type="checkbox" id="c7" data-check><label for="c7">Marquei apenas níveis que podem alterar minha leitura.</label></div>
+<div class="check-item"><input type="checkbox" id="c8" data-check><label for="c8">Sei o que observar quando o preço chegar a cada região.</label></div>
+<label>Níveis / regiões<textarea name="niveis" placeholder="Liste poucas referências e por que importam."></textarea></label>
+</div>
+
+<div class="check-group"><h2>5. Cenário A</h2>
+<div class="check-item"><input type="checkbox" id="c9" data-check><label for="c9">O cenário está escrito no formato condicional “se/então”.</label></div>
+<div class="check-item"><input type="checkbox" id="c10" data-check><label for="c10">Defini o que invalida a hipótese.</label></div>
+<label>Hipótese<textarea name="cenarioA" placeholder="Se..., então... Só considero... Invalida se..."></textarea></label>
+</div>
+
+<div class="check-group"><h2>6. Cenário B</h2>
+<div class="check-item"><input type="checkbox" id="c11" data-check><label for="c11">Preparei uma hipótese alternativa, sem obrigação de operar.</label></div>
+<div class="check-item"><input type="checkbox" id="c12" data-check><label for="c12">A hipótese alternativa também possui invalidação.</label></div>
+<label>Hipótese<textarea name="cenarioB" placeholder="Se..., então... Só considero... Invalida se..."></textarea></label>
+</div>
+
+<div class="check-group"><h2>7. Ficar de fora também é um plano</h2>
+<div class="check-item"><input type="checkbox" id="c13" data-check><label for="c13">Defini condições objetivas em que não vou operar.</label></div>
+<div class="check-item"><input type="checkbox" id="c14" data-check><label for="c14">Revisei minhas regras de risco antes de procurar entradas.</label></div>
+<label>Não operar se<textarea name="naoOperar" placeholder="Condições que cancelam sua participação hoje."></textarea></label>
+<label>Regras de risco a lembrar<textarea name="risco" placeholder="Registre somente regras do seu próprio plano."></textarea></label>
+</div>
+
+<div class="actions"><button type="button" class="button primary" id="saveBtn">Salvar no navegador</button><button type="button" class="button secondary" id="exportBtn">Exportar TXT</button><button type="button" class="button secondary" id="clearBtn">Limpar</button></div>
+</form>
+
+<aside class="tool-panel">
+<span class="tag">Completude da preparação</span><div class="score"><span id="score">0</span>%</div>
+<div class="progress-track" aria-hidden="true"><div id="progress" class="progress-bar"></div></div>
+<p id="status" class="muted">Comece pela leitura do ambiente. O percentual mede apenas itens revisados; não mede qualidade do mercado nem probabilidade de sucesso.</p>
+<hr style="border:0;border-top:1px solid var(--line);margin:22px 0">
+<strong>Lembrete</strong><p class="muted">Um checklist completo não é sinal de entrada. A execução continua dependendo das regras do seu método e da presença de um gatilho válido.</p>
+<a class="button secondary" href="../rotina/pre-mercado.html">Ver rotina explicada</a>
+</aside>
+</div></main>
+
+<footer class="footer"><div class="container">Ferramenta educacional. As informações são armazenadas localmente no seu navegador.</div></footer>
+<script src="../script.js"></script>
+<script>
+(()=>{const form=document.getElementById("contextForm"),checks=[...form.querySelectorAll("[data-check]")],score=document.getElementById("score"),bar=document.getElementById("progress"),status=document.getElementById("status"),key="contextoMercadoChecklistV1";
+function update(){const done=checks.filter(c=>c.checked).length,p=Math.round(done/checks.length*100);score.textContent=p;bar.style.width=p+"%";status.textContent=p===100?"Checklist revisado. Isso indica preparação registrada — não um sinal para operar.":p>=70?"Boa parte da preparação foi revisada. Confira os itens restantes antes de decidir.":"Comece pela leitura do ambiente. O percentual mede apenas itens revisados; não mede qualidade do mercado nem probabilidade de sucesso."}
+function data(){const o={};new FormData(form).forEach((v,k)=>o[k]=v);o.checks=checks.map(c=>c.checked);return o}
+function restore(){try{const o=JSON.parse(localStorage.getItem(key)||"null");if(!o)return;Object.entries(o).forEach(([k,v])=>{if(k==="checks")return;const el=form.elements[k];if(el)el.value=v});if(Array.isArray(o.checks))checks.forEach((c,i)=>c.checked=!!o.checks[i]);update()}catch(e){}}
+function asText(){const o=data();return ["CHECKLIST DE CONTEXTO DE MERCADO","",`Ativo: ${o.ativo||"-"}`,`Data: ${o.data||"-"}`,`Período: ${o.timeframe||"-"}`,"",`Ambiente/eventos:\n${o.eventos||"-"}`,"",`Estrutura:\n${o.estrutura||"-"}`,"",`Regime: ${o.regime||"-"}`,`Volatilidade:\n${o.volatilidade||"-"}`,"",`Referências:\n${o.niveis||"-"}`,"",`Cenário A:\n${o.cenarioA||"-"}`,"",`Cenário B:\n${o.cenarioB||"-"}`,"",`Não operar se:\n${o.naoOperar||"-"}`,"",`Regras de risco:\n${o.risco||"-"}`,"",`Preparação revisada: ${score.textContent}%`,"","Uso educacional. Este registro não é recomendação de investimento nem sinal operacional."].join("\n")}
+checks.forEach(c=>c.addEventListener("change",update));
+document.getElementById("saveBtn").addEventListener("click",()=>{localStorage.setItem(key,JSON.stringify(data()));status.textContent="Preparação salva neste navegador.";});
+document.getElementById("clearBtn").addEventListener("click",()=>{if(confirm("Limpar todos os campos e o registro salvo neste navegador?")){form.reset();localStorage.removeItem(key);update()}});
+document.getElementById("exportBtn").addEventListener("click",()=>{const b=new Blob([asText()],{type:"text/plain;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="contexto-de-mercado.txt";a.click();URL.revokeObjectURL(a.href)});
+restore();update();
+})();
+</script></body></html>
