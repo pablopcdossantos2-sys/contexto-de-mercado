@@ -30,7 +30,7 @@ for(const file of htmlFiles){
   [...new Set(dup)].forEach(id=>add(errors,file,"duplicate id: "+id));
   for(const m of html.matchAll(/href=["']([^"']+)["']/gi)){
     let href=m[1];
-    if(/^(https?:|mailto:|tel:|javascript:|#)/i.test(href))continue;
+    if(/^(https?:|mailto:|tel:|javascript:|#)/i.test(href)||href.includes("${"))continue;
     href=href.split("#")[0].split("?")[0];
     if(!href)continue;
     const target=path.resolve(path.dirname(file),href);
