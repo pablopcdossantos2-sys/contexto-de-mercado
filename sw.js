@@ -1,5 +1,5 @@
-const CACHE="contexto-mercado-v7";
-const CORE=["./","./index.html","./styles.css","./script.js","./offline.html","./roadmap.html","./aprendizado/trilhas.html","./ferramentas/diario-contexto.html","./ferramentas/painel-processo.html","./privacidade.html","./ferramentas/gerenciar-dados.html","./en/index.html","./es/index.html"];
+const CACHE="contexto-mercado-v7-1";
+const CORE=["./","./index.html","./styles.css","./script.js","./manifest.webmanifest","./icons/icon-192.svg","./icons/icon-512.svg","./offline.html","./roadmap.html","./aprendizado/trilhas.html","./ferramentas/diario-contexto.html","./ferramentas/painel-processo.html","./privacidade.html","./ferramentas/gerenciar-dados.html","./en/index.html","./en/course.html","./en/pre-market.html","./en/tools.html","./en/privacy.html","./es/index.html","./es/course.html","./es/pre-market.html","./es/tools.html","./es/privacy.html"];
 const url=p=>new URL(p,self.location.href).href;
 self.addEventListener("install",event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE.map(url))).then(()=>self.skipWaiting()));
