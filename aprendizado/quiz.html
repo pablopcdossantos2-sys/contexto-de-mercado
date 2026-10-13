@@ -1,0 +1,57 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Quizzes conceituais das trilhas do Contexto de Mercado."><title>Quizzes — Contexto de Mercado</title><link rel="stylesheet" href="../styles.css"></head><body>
+<header class="site-header"><div class="container nav"><a class="brand" href="../index.html">Contexto <span>de Mercado</span></a><button class="menu-button" aria-label="Abrir menu">Menu</button><nav class="nav-links"><a href="../index.html">Início</a><a href="trilhas.html">Trilhas</a><a aria-current="page" href="quiz.html">Quizzes</a><a href="../roadmap.html">ROADMAP</a></nav></div></header>
+<div class="container breadcrumb"><a href="../index.html">Início</a> / Aprendizagem / Quizzes</div>
+<section class="article-hero"><div class="container"><div class="eyebrow">Avaliação conceitual</div><h1>Quizzes por trilha</h1><p class="kicker">A nota mínima para concluir o módulo é 80%. As perguntas testam conceitos e processo, não previsão de preço.</p></div></section>
+<main class="section"><div class="container tool-grid">
+<div>
+<div class="check-group"><label>Escolha a trilha<select id="track"><option value="iniciante">Iniciante</option><option value="intraday">Intraday</option><option value="fluxo">Leitura de Fluxo</option></select></label></div>
+<form id="quizForm" class="checklist"></form>
+<div class="actions"><button class="button primary" id="submitBtn" type="button">Corrigir quiz</button><button class="button secondary" id="resetBtn" type="button">Recomeçar</button></div>
+</div>
+<aside class="tool-panel"><span class="tag">Resultado</span><div class="score" id="score">—</div><p id="status" class="muted">Responda todas as perguntas e corrija o quiz.</p><hr style="border:0;border-top:1px solid var(--line);margin:22px 0"><p class="muted">Seu melhor resultado fica salvo localmente. Acertar uma questão não significa que exista uma resposta mecânica equivalente no mercado real.</p></aside>
+</div></main>
+<footer class="footer"><div class="container">Avaliação educacional local. Nota mínima de conclusão: 80%.</div></footer><script src="../script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+const sets={
+iniciante:[
+["O que melhor descreve contexto de mercado?",["Uma previsão de direção","O conjunto de informações que dá significado ao comportamento atual","Um indicador específico","A taxa de acerto de um setup"],1,"Contexto descreve o ambiente e ajuda a interpretar sinais; não é uma previsão isolada."],
+["Qual é a diferença entre cenário e gatilho?",["Não existe diferença","Cenário é hipótese condicional; gatilho é a condição objetiva de execução","Gatilho vem antes do contexto","Cenário é sempre direcional"],1,"Cenário organiza hipóteses. Gatilho pertence à regra de execução."],
+["Em um range, onde tende a haver mais ruído contextual?",["No centro da faixa","Sempre na mínima","Sempre na máxima","Fora de qualquer referência"],0,"O centro de uma área de equilíbrio costuma oferecer menos referência estrutural."],
+["Volatilidade informa diretamente a direção futura?",["Sim","Não"],1,"Volatilidade mede magnitude/ritmo, não direção."],
+["Uma referência deve permanecer no gráfico mesmo se não alterar nenhuma decisão?",["Sim","Não"],1,"Se uma referência não muda interpretação ou ação, ela pode apenas poluir a leitura."],
+["O que torna uma hipótese útil?",["Ela precisa estar certa","Ela deve ser observável e possuir invalidação","Ela deve prever o fechamento","Ela precisa de muitos indicadores"],1,"Uma hipótese útil pode ser testada e invalidada."],
+["Ficar de fora pode fazer parte do plano?",["Sim","Não"],0,"Não operar é uma decisão válida quando as condições do método não aparecem."],
+["Uma boa leitura garante trade vencedor?",["Sim","Não"],1,"Qualidade do processo e resultado de uma operação são coisas diferentes."],
+["Na leitura top-down, qual é o objetivo?",["Acumular timeframes","Hierarquizar estrutura e referências antes de aproximar a lente","Encontrar sinais em todos os períodos","Eliminar incerteza"],1,"O quadro maior organiza a informação; não elimina incerteza."],
+["O resultado financeiro isolado mede a qualidade do processo?",["Sim","Não"],1,"Um bom processo pode terminar em perda e um processo ruim pode, ocasionalmente, ganhar."]],
+intraday:[
+["Por que o horário faz parte do contexto?",["Porque cada horário garante uma direção","Porque liquidez, volatilidade e urgência podem mudar ao longo da sessão","Porque só a abertura importa","Porque elimina falsos rompimentos"],1,"A sessão possui ritmos; nenhum horário garante direção."],
+["O que caracteriza melhor aceitação?",["Um único tick além da máxima","Permanência e negociação consistente em nova região","Qualquer candle grande","Volume baixo"],1,"Aceitação envolve sustentação, não apenas ultrapassar visualmente um nível."],
+["Um falso rompimento pode ser descrito de forma mais objetiva como:",["Manipulação comprovada","Falha de aceitação fora da estrutura anterior","Sinal automático de reversão","Erro do gráfico"],1,"A linguagem de aceitação/rejeição evita atribuir intenção sem evidência."],
+["Antes de evento macro relevante, a melhor função do calendário é:",["Prever o número","Reconhecer risco temporal e definir comportamento","Forçar uma posição antes da divulgação","Ignorar o evento"],1,"O calendário reduz surpresa evitável; não prevê a reação."],
+["Correlação implica causalidade?",["Sim","Não"],1,"Associação estatística não prova relação causal."],
+["Uma relação intermercado pode mudar de regime?",["Sim","Não"],0,"Relações entre ativos variam no tempo e podem perder utilidade."],
+["Na abertura, velocidade equivale a clareza?",["Sim","Não"],1,"Mercado rápido pode estar em descoberta de preço e ser difícil de interpretar."],
+["Um gap deve ser tratado sempre como sinal de fechamento do gap?",["Sim","Não"],1,"Gap é primeiro uma condição de localização."],
+["Se o mercado rompe uma máxima e volta rapidamente para dentro da faixa, o que sabemos com mais segurança?",["Que vai cair","Que houve falha em sustentar negociação acima","Que houve manipulação institucional","Que a tendência acabou"],1,"Descrevemos o observável sem extrapolar direção futura."],
+["Qual informação deve mudar quando o contexto muda?",["A narrativa deve ser defendida","A hipótese deve ser atualizada","Nada deve mudar","O resultado anterior deve ser apagado"],1,"Contexto é atualizado quando a evidência muda."]],
+fluxo:[
+["Volume mostra:",["Negociação efetivamente realizada","Toda a liquidez passiva futura","Intenção privada","Direção garantida"],0,"Volume mostra atividade negociada."],
+["Agressor é, em termos gerais:",["Quem cruza o spread para executar","Quem deixa toda ordem passiva","Quem sempre move o preço","Uma instituição específica"],0,"Agressão descreve iniciativa de execução, não identidade."],
+["Grande agressão compradora sem avanço proporcional pode ser compatível com:",["Absorção como hipótese","Alta garantida","Ausência de vendedores","Manipulação comprovada"],0,"Absorção é uma hipótese possível, dependente de contexto e reação posterior."],
+["Ordens visíveis no livro são promessa de permanência?",["Sim","Não"],1,"Ordens podem ser canceladas, movidas ou renovadas."],
+["Fluxo permite saber com certeza a intenção de um participante?",["Sim","Não"],1,"Fluxo mostra execução e resposta do preço, não acesso à intenção privada."],
+["Para interpretar agressão, localização importa?",["Sim","Não"],0,"A mesma intensidade pode significar coisas diferentes em regiões diferentes."],
+["Aceitação depende obrigatoriamente de um número fixo de candles?",["Sim","Não"],1,"Não existe contagem universal."],
+["Agressão intensa sempre produz deslocamento proporcional?",["Sim","Não"],1,"Liquidez passiva pode absorver iniciativa."],
+["O que é mais objetivo registrar?",["'Institucional está comprando'","Intensidade da agressão e resposta do preço"],1,"Descrever observáveis reduz inferências frágeis."],
+["Volume alto sozinho identifica continuação?",["Sim","Não"],1,"Volume alto pode aparecer em continuação, reversão, absorção ou disputa."]]
+};
+const track=document.getElementById("track"),form=document.getElementById("quizForm"),score=document.getElementById("score"),status=document.getElementById("status");
+const q=new URLSearchParams(location.search).get("trilha");if(sets[q])track.value=q;
+function render(){score.textContent="—";status.textContent="Responda todas as perguntas e corrija o quiz.";form.innerHTML=sets[track.value].map((x,i)=>`<section class="check-group"><h3>${i+1}. ${x[0]}</h3>${x[1].map((o,j)=>`<label class="quiz-option"><input type="radio" name="q${i}" value="${j}">${o}</label>`).join("")}<div class="quiz-feedback" id="f${i}" hidden></div></section>`).join("")}
+function correct(){const qs=sets[track.value];let hits=0,answered=0;qs.forEach((x,i)=>{const a=form.querySelector(`input[name=q${i}]:checked`),fb=document.getElementById("f"+i);if(a){answered++;const ok=Number(a.value)===x[2];if(ok)hits++;fb.hidden=false;fb.innerHTML=(ok?"<strong>✓ Correto.</strong> ":"<strong>✗ Revise.</strong> ")+x[3]}else{fb.hidden=false;fb.innerHTML="<strong>Sem resposta.</strong> "+x[3]}});const pct=Math.round(hits/qs.length*100);score.textContent=pct+"%";CMLearning.setScore("quiz-"+track.value,pct,{hits,total:qs.length});if(pct>=80){CMLearning.mark("quiz-"+track.value,{score:pct,label:"Quiz "+track.options[track.selectedIndex].text});status.textContent="Aprovado. Este módulo foi concluído."}else{status.textContent="Resultado abaixo de 80%. Revise os feedbacks e tente novamente."}return {pct,answered}}
+track.onchange=()=>{history.replaceState(null,"","?trilha="+track.value);render()};document.getElementById("submitBtn").onclick=correct;document.getElementById("resetBtn").onclick=render;render();
+});
+</script></body></html>
