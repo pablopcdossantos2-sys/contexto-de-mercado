@@ -1,0 +1,103 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Painel de métricas do processo de trading: preparação, respeito ao plano, operações fora de cenário, atualização de contexto e regimes."><title>Painel do Processo — Contexto de Mercado</title><link rel="stylesheet" href="../styles.css"></head><body>
+<header class="site-header"><div class="container nav"><a class="brand" href="../index.html">Contexto <span>de Mercado</span></a><button class="menu-button" aria-label="Abrir menu">Menu</button><nav class="nav-links"><a href="../index.html">Início</a><a href="../aprendizado/trilhas.html">Trilhas</a><a href="../rotina/pre-mercado.html">Rotina</a><a aria-current="page" href="painel-processo.html">Métricas</a><a href="../roadmap.html">ROADMAP</a></nav></div></header>
+<div class="container breadcrumb"><a href="../index.html">Início</a> / Ferramentas / Painel do Processo</div>
+<section class="article-hero"><div class="container"><div class="eyebrow">Ferramenta 07 · Fase 6</div><h1>Painel do Processo</h1><p class="kicker">Meça consistência de preparação, respeito ao plano e qualidade de atualização do contexto. <strong>Rentabilidade e taxa de acerto não entram no painel.</strong></p></div></section>
+
+<main>
+<section class="section"><div class="container">
+<div id="noData" class="data-warning" hidden><strong>Ainda não há dados suficientes.</strong><p>O painel usa principalmente os registros do <a href="diario-contexto.html">Diário de Contexto</a>. Crie registros pré e pós-mercado para começar a formar métricas de processo.</p></div>
+
+<div class="check-group">
+<div class="filter-row">
+<label>Ativo<select id="assetFilter"><option value="">Todos os ativos</option></select></label>
+<label>Janela<select id="windowFilter"><option value="all">Todos os registros</option><option value="10">10 sessões mais recentes</option><option value="20">20 sessões mais recentes</option><option value="50">50 sessões mais recentes</option></select></label>
+<button class="button secondary" id="exportBtn" type="button">Exportar resumo TXT</button>
+</div>
+<p class="muted" id="filterSummary"></p>
+</div>
+
+<section style="margin-top:24px">
+<div class="section-head"><div><div class="eyebrow">Scorecard</div><h2>Métricas principais</h2></div><p>Cada indicador possui uma definição fixa e transparente. Campos não preenchidos são excluídos do denominador correspondente.</p></div>
+<div class="dashboard-grid">
+<div class="dashboard-card"><span class="tag">Preparação</span><div class="metric-value" id="prepRate">—</div><h3>Sessões com preparação completa</h3><p id="prepDetail"></p></div>
+<div class="dashboard-card"><span class="tag">Disciplina</span><div class="metric-value" id="planRate">—</div><h3>Plano respeitado</h3><p id="planDetail"></p></div>
+<div class="dashboard-card"><span class="tag">Cenário</span><div class="metric-value" id="outsideRate">—</div><h3>Operações fora do cenário</h3><p id="outsideDetail"></p></div>
+<div class="dashboard-card"><span class="tag">Atualização</span><div class="metric-value" id="lateRate">—</div><h3>Mudança tardia de contexto</h3><p id="lateDetail"></p></div>
+<div class="dashboard-card"><span class="tag">Participação</span><div class="metric-value" id="noTradeRate">—</div><h3>Sessões sem operação</h3><p id="noTradeDetail"></p></div>
+<div class="dashboard-card"><span class="tag">Amostra</span><div class="metric-value" id="sessionCount">0</div><h3>Sessões analisadas</h3><p id="sampleDetail"></p></div>
+</div>
+</section>
+
+<section class="section" style="padding-bottom:0"><div class="section-head"><div><div class="eyebrow">Contexto registrado</div><h2>Distribuição de regimes</h2></div><p>Esta distribuição mostra apenas como você classificou o regime pré-mercado; não mede qual regime foi mais lucrativo.</p></div><div class="check-group"><div id="regimeBars" class="bar-list"></div></div></section>
+
+<section class="section" style="padding-bottom:0"><div class="section-head"><div><div class="eyebrow">Leitura x execução</div><h2>Onde o processo se rompe?</h2></div><p>A matriz exclui classificações intermediárias e sessões sem operação para comparar casos mais nítidos.</p></div>
+<div class="check-group">
+<div class="matrix">
+<div class="matrix-head">Leitura ↓ / Execução →</div><div class="matrix-head">Boa execução</div><div class="matrix-head">Má execução</div>
+<div class="matrix-head">Boa leitura</div><div class="matrix-cell"><strong id="goodGood">0</strong><span class="muted">leitura clara + processo seguido</span></div><div class="matrix-cell"><strong id="goodBad">0</strong><span class="muted">boa leitura + desvios relevantes</span></div>
+<div class="matrix-head">Má leitura</div><div class="matrix-cell"><strong id="badGood">0</strong><span class="muted">leitura ruim + processo seguido</span></div><div class="matrix-cell"><strong id="badBad">0</strong><span class="muted">leitura ruim + desvios relevantes</span></div>
+</div>
+<p class="muted" id="matrixDetail"></p>
+</div></section>
+
+<section class="section" style="padding-bottom:0"><div class="section-head"><div><div class="eyebrow">Revisões complementares</div><h2>Plano x Mercado Real</h2></div><p>As médias abaixo vêm da ferramenta de autoavaliação Plano x Mercado Real e não são misturadas com as taxas do Diário.</p></div>
+<div class="dashboard-grid">
+<div class="dashboard-card"><span class="tag">Leitura</span><div class="metric-value" id="avgReading">—</div><p>Clareza da leitura prévia, em escala de 1 a 5.</p></div>
+<div class="dashboard-card"><span class="tag">Adaptação</span><div class="metric-value" id="avgAdapt">—</div><p>Atualização quando o contexto mudou.</p></div>
+<div class="dashboard-card"><span class="tag">Execução</span><div class="metric-value" id="avgExecution">—</div><p>Compatibilidade entre execução e plano.</p></div>
+<div class="dashboard-card"><span class="tag">Disciplina</span><div class="metric-value" id="avgDiscipline">—</div><p>Disciplina para não operar quando necessário.</p></div>
+</div><p class="muted" id="reviewCount"></p></section>
+
+<section class="section" style="padding-bottom:0"><div class="section-head"><div><div class="eyebrow">Qualidade dos dados</div><h2>O que está faltando registrar?</h2></div><p>Métricas de processo só são úteis quando os campos são preenchidos de forma consistente.</p></div><div class="check-group" id="qualityStats"></div></section>
+
+<section class="section"><div class="article">
+<h2>Como cada métrica é calculada</h2>
+<table><thead><tr><th>Métrica</th><th>Definição usada pelo painel</th></tr></thead><tbody>
+<tr><td>Preparação completa</td><td>Registro com <strong>contexto pré-mercado + cenário A + condição de não-operação</strong> preenchidos.</td></tr>
+<tr><td>Plano respeitado</td><td>“Sim” dividido por sessões operadas classificadas como Sim, Parcialmente ou Não. Sessões “Não operei” ficam fora desse denominador.</td></tr>
+<tr><td>Operações fora de cenário</td><td>Quando total de operações e operações fora do cenário foram informados, usa a razão entre esses totais. Sem esses números, mostra a incidência por sessão como fallback.</td></tr>
+<tr><td>Mudança tardia</td><td>Leituras marcadas como “Boa, mas atualizei tarde” ou “Defendi uma hipótese invalidada” entre sessões com qualidade de leitura preenchida.</td></tr>
+<tr><td>Boa leitura / má leitura</td><td>Boa = “Clara e atualizada”. Má = “Vaga / ambígua” ou “Defendi uma hipótese invalidada”. A categoria “Boa, mas atualizei tarde” é intermediária e fica fora da matriz.</td></tr>
+<tr><td>Boa / má execução</td><td>Boa = “Segui meu processo”. Má = “Houve desvios relevantes”. “Desvios pequenos” e “Não houve operação” ficam fora da matriz.</td></tr>
+</tbody></table>
+<div class="note" style="margin-top:24px"><strong>O painel deliberadamente não calcula:</strong> taxa de acerto, lucro médio, expectativa, Sharpe, drawdown ou relação entre regime e lucro. Essas métricas financeiras poderiam induzir o usuário a interpretar uma amostra pequena e autoclassificada como evidência de vantagem estatística.</div>
+</div></section>
+</div></section>
+</main>
+<footer class="footer"><div class="container">Métricas locais de processo. Elas não estimam retorno esperado nem probabilidade de lucro.</div></footer><script src="../script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+var JOURNAL="contextoMercadoJournalV1",REVIEWS="contextoMercadoPlanVsRealV1";
+function el(id){return document.getElementById(id)}
+function arr(key){try{var x=JSON.parse(localStorage.getItem(key)||"[]");return Array.isArray(x)?x:[]}catch(e){return[]}}
+function clean(v){return String(v==null?"":v).trim()}
+function percent(n,d){return d?Math.round(n/d*100):null}
+function showPct(node,n,d){var p=percent(n,d);node.textContent=p===null?"—":p+"%";return p}
+function numberOrNull(v){var x=Number(v);return Number.isFinite(x)&&x>=0?x:null}
+function timeValue(e){var m=clean(e.date).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);if(m)return new Date(Number(m[3]),Number(m[2])-1,Number(m[1])).getTime();var id=Number(e.id);return Number.isFinite(id)?id:0}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+var all=arr(JOURNAL),filtered=[],assetFilter=el("assetFilter"),windowFilter=el("windowFilter");
+var assets=Array.from(new Set(all.map(function(e){return clean(e.asset)}).filter(Boolean))).sort(function(a,b){return a.localeCompare(b,"pt-BR")});
+assets.forEach(function(a){var o=document.createElement("option");o.value=a;o.textContent=a;assetFilter.appendChild(o)});
+function selectEntries(){var x=all.slice().sort(function(a,b){return timeValue(b)-timeValue(a)});if(assetFilter.value)x=x.filter(function(e){return clean(e.asset)===assetFilter.value});if(windowFilter.value!=="all")x=x.slice(0,Number(windowFilter.value));return x}
+function render(){
+ filtered=selectEntries();var n=filtered.length;el("sessionCount").textContent=n;el("noData").hidden=n>0;el("filterSummary").textContent=n?("Exibindo "+n+" registro"+(n===1?"":"s")+(assetFilter.value?" de "+assetFilter.value:"")+"."):"Nenhum registro do Diário corresponde ao filtro atual.";
+ var prepared=filtered.filter(function(e){return clean(e.preContext)&&clean(e.scenarioA)&&clean(e.noTrade)}).length;showPct(el("prepRate"),prepared,n);el("prepDetail").textContent=n?(prepared+" de "+n+" sessões possuem os três campos essenciais."):"Sem sessões.";
+ var planDen=filtered.filter(function(e){return ["Sim","Parcialmente","Não"].includes(e.followed)}),planYes=planDen.filter(function(e){return e.followed==="Sim"}).length;showPct(el("planRate"),planYes,planDen.length);el("planDetail").textContent=planDen.length?(planYes+" de "+planDen.length+" sessões operadas foram marcadas como “Sim”."):"Sem autoavaliações de plano.";
+ var totalTrades=0,outTrades=0,tradeRows=0;filtered.forEach(function(e){var t=numberOrNull(e.tradesTotal),o=numberOrNull(e.tradesOutsideScenario);if(t!==null&&o!==null&&o<=t){totalTrades+=t;outTrades+=o;tradeRows++}});
+ var outsideSessions=filtered.filter(function(e){return ["Sim","Não"].includes(e.outsideScenario)}),outsideYes=outsideSessions.filter(function(e){return e.outsideScenario==="Sim"}).length;
+ if(totalTrades>0){showPct(el("outsideRate"),outTrades,totalTrades);el("outsideDetail").textContent=outTrades+" de "+totalTrades+" operações, em "+tradeRows+" sessão"+(tradeRows===1?"":"ões")+" com contagem informada. Incidência por sessão: "+(outsideSessions.length?percent(outsideYes,outsideSessions.length)+"%":"—")+"."}
+ else{showPct(el("outsideRate"),outsideYes,outsideSessions.length);el("outsideDetail").textContent=outsideSessions.length?("Fallback por sessão: "+outsideYes+" de "+outsideSessions.length+" tiveram ao menos uma operação fora do cenário. Informe contagens no Diário para obter taxa por operação."):"Sem dados de operações fora de cenário."}
+ var readRows=filtered.filter(function(e){return clean(e.reading)}),late=readRows.filter(function(e){return e.reading==="Boa, mas atualizei tarde"||e.reading==="Defendi uma hipótese invalidada"}).length,defended=readRows.filter(function(e){return e.reading==="Defendi uma hipótese invalidada"}).length;showPct(el("lateRate"),late,readRows.length);el("lateDetail").textContent=readRows.length?(late+" de "+readRows.length+" leituras indicam atraso ou defesa de hipótese; "+defended+" foram “defendi uma hipótese invalidada”."):"Sem avaliações de leitura.";
+ var participation=filtered.filter(function(e){return clean(e.followed)}),noTrade=participation.filter(function(e){return e.followed==="Não operei"}).length;showPct(el("noTradeRate"),noTrade,participation.length);el("noTradeDetail").textContent=participation.length?(noTrade+" de "+participation.length+" sessões avaliadas terminaram sem operação."):"Sem avaliação de participação.";
+ el("sampleDetail").textContent=n?("Filtro atual aplicado a "+n+" sessões do Diário."):"Registre sessões no Diário para iniciar a amostra.";
+ renderRegimes();renderMatrix();renderQuality();renderReviews();
+}
+function renderRegimes(){var counts={};filtered.forEach(function(e){var r=clean(e.regime)||"Não informado";counts[r]=(counts[r]||0)+1});var entries=Object.entries(counts).sort(function(a,b){return b[1]-a[1]}),n=filtered.length;el("regimeBars").innerHTML=entries.length?entries.map(function(row){var r=row[0],c=row[1];return '<div class="bar-row"><span>'+escapeHtml(r)+'</span><div class="bar-track"><div class="bar-fill" style="width:'+(percent(c,n)||0)+'%"></div></div><strong>'+c+'</strong></div>'}).join(""):'<p class="muted">Sem regimes registrados.</p>'}
+function renderMatrix(){var gg=0,gb=0,bg=0,bb=0,eligible=0;filtered.forEach(function(e){var goodR=e.reading==="Clara e atualizada",badR=e.reading==="Vaga / ambígua"||e.reading==="Defendi uma hipótese invalidada",goodE=e.execution==="Segui meu processo",badE=e.execution==="Houve desvios relevantes";if((goodR||badR)&&(goodE||badE)){eligible++;if(goodR&&goodE)gg++;if(goodR&&badE)gb++;if(badR&&goodE)bg++;if(badR&&badE)bb++}});el("goodGood").textContent=gg;el("goodBad").textContent=gb;el("badGood").textContent=bg;el("badBad").textContent=bb;el("matrixDetail").textContent=eligible?(eligible+" sessões possuem classificações não intermediárias de leitura e execução."):"Ainda não há sessões elegíveis para a matriz."}
+function renderReviews(){var rev=arr(REVIEWS);if(assetFilter.value)rev=rev.filter(function(e){return clean(e.asset)===assetFilter.value});if(windowFilter.value!=="all")rev=rev.sort(function(a,b){return new Date(b.createdAt||0)-new Date(a.createdAt||0)}).slice(0,Number(windowFilter.value));function avg(k){var xs=rev.map(function(e){return Number(e[k])}).filter(function(x){return Number.isFinite(x)&&x>=1&&x<=5});return xs.length?(xs.reduce(function(a,b){return a+b},0)/xs.length).toFixed(1)+"/5":"—"}el("avgReading").textContent=avg("reading");el("avgAdapt").textContent=avg("adapt");el("avgExecution").textContent=avg("execution");el("avgDiscipline").textContent=avg("discipline");el("reviewCount").textContent=rev.length?(rev.length+" revisão"+(rev.length===1?"":"ões")+" da ferramenta Plano x Mercado Real no filtro atual."):"Nenhuma revisão complementar no filtro atual."}
+function renderQuality(){var n=filtered.length;if(!n){el("qualityStats").innerHTML='<p class="muted">Sem dados para avaliar completude.</p>';return}var fields=[["Preparação essencial",function(e){return clean(e.preContext)&&clean(e.scenarioA)&&clean(e.noTrade)}],["Qualidade da leitura",function(e){return clean(e.reading)}],["Qualidade da execução",function(e){return clean(e.execution)}],["Plano respeitado",function(e){return clean(e.followed)}],["Regime pré-mercado",function(e){return clean(e.regime)}],["Contagem de operações",function(e){return numberOrNull(e.tradesTotal)!==null&&numberOrNull(e.tradesOutsideScenario)!==null}]];el("qualityStats").innerHTML=fields.map(function(f){var label=f[0],test=f[1],c=filtered.filter(test).length;return '<div class="mini-stat"><span>'+label+'</span><strong>'+c+'/'+n+' · '+percent(c,n)+'%</strong></div>'}).join("")}
+function summary(){var lines=["PAINEL DO PROCESSO — RESUMO","Filtro: "+(assetFilter.value||"todos os ativos")+" · "+windowFilter.options[windowFilter.selectedIndex].text,"Sessões: "+filtered.length,"","Preparação completa: "+el("prepRate").textContent,"Plano respeitado: "+el("planRate").textContent,"Operações fora do cenário: "+el("outsideRate").textContent,"Mudança tardia de contexto: "+el("lateRate").textContent,"Sessões sem operação: "+el("noTradeRate").textContent,"","LEITURA X EXECUÇÃO","Boa leitura + boa execução: "+el("goodGood").textContent,"Boa leitura + má execução: "+el("goodBad").textContent,"Má leitura + boa execução: "+el("badGood").textContent,"Má leitura + má execução: "+el("badBad").textContent,"","Estas métricas avaliam registros de processo e não estimam retorno esperado ou probabilidade de lucro."].join("\n");var b=new Blob([lines],{type:"text/plain;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="painel-processo-resumo.txt";a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},500)}
+assetFilter.onchange=render;windowFilter.onchange=render;el("exportBtn").onclick=summary;render();
+});
+</script></body></html>
