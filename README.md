@@ -27,6 +27,17 @@ O projeto combina teoria, rotina, registro e treino deliberado. A proposta não 
 - Correlação e leitura intermercado.
 - Eventos macroeconômicos e risco de calendário.
 
+### Trilhas e avaliação
+
+- **Trilha Iniciante** — fundamentos, regime, top-down, localização, volatilidade, rotina, exercício visual e quiz.
+- **Trilha Intraday** — horários, localização, volatilidade, gaps, intermercado, macro e avaliações.
+- **Trilha Leitura de Fluxo** — liquidez, volume, agressão, aceitação/rejeição e avaliação específica.
+- **Classificação de Regimes** — seis gráficos sintéticos com feedback.
+- **Informação x Ruído** — exercício de relevância contextual.
+- **Quizzes por trilha** — nota mínima de 80% para conclusão.
+- **Progresso local por módulo** — integrado aos artigos e avaliações.
+- **Certificado educacional local** — liberado somente após os requisitos; sem valor acadêmico/profissional.
+
 ### Rotina
 
 - Preparação pré-mercado em sete etapas.
@@ -51,7 +62,9 @@ Situação atual:
 - Fase 2 — Sistema diário de registro: ✅ concluída
 - Fase 3 — Treino e comparação: ✅ concluída
 - Fase 4 — Replay de leitura: ✅ concluída
-- Fases 5–7 — trilhas, métricas e robustez: 📋 planejadas
+- Fase 5 — Trilhas e avaliação: ✅ concluída
+- Fase 6 — Métricas do processo: 📋 planejada
+- Fase 7 — Portabilidade e robustez: 📋 planejada
 
 ## Privacidade e dados
 
