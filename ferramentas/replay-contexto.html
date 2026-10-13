@@ -1,0 +1,63 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Replay de Contexto: registre uma leitura antes de revelar a continuação do mercado."><title>Replay de Contexto — Contexto de Mercado</title><link rel="stylesheet" href="../styles.css">
+<style>
+.replay-image{width:100%;min-height:220px;display:grid;place-items:center;border:1px dashed var(--line);border-radius:14px;background:#08131b;overflow:hidden;margin:12px 0}
+.replay-image img{display:block;max-height:560px;object-fit:contain}
+.locked{opacity:.68}.replay-columns{display:grid;grid-template-columns:1fr 1fr;gap:18px}.hidden-stage{display:none}
+@media(max-width:800px){.replay-columns{grid-template-columns:1fr}}
+</style></head><body>
+<header class="site-header"><div class="container nav"><a class="brand" href="../index.html">Contexto <span>de Mercado</span></a><button class="menu-button" aria-label="Abrir menu">Menu</button><nav class="nav-links"><a href="../index.html">Início</a><a href="../index.html#artigos">Artigos</a><a href="../rotina/pre-mercado.html">Rotina</a><a aria-current="page" href="replay-contexto.html">Ferramentas</a></nav></div></header>
+<div class="container breadcrumb"><a href="../index.html">Início</a> / Ferramentas / Replay de Contexto</div>
+<section class="article-hero"><div class="container"><div class="eyebrow">Ferramenta 05 · Fase 4</div><h1>Replay de Contexto</h1><p class="kicker">Treine leitura sem conhecer o desfecho. Carregue uma imagem do gráfico até o momento da decisão e outra com a continuação; a segunda permanece oculta até você travar a hipótese inicial.</p></div></section>
+
+<main class="section"><div class="container">
+<div class="note"><strong>Como usar:</strong> prepare duas capturas do mesmo gráfico: <strong>A</strong>, cortada no instante da análise, e <strong>B</strong>, mostrando o que aconteceu depois. As imagens são lidas apenas no seu navegador e não são salvas no histórico da ferramenta.</div>
+
+<div class="replay-columns" style="margin-top:24px">
+<section class="check-group" id="stageA"><span class="tag">Etapa A · Sem conhecer o futuro</span><h2>1. Leitura inicial</h2>
+<label>Imagem A — gráfico até o momento da leitura<input id="beforeFile" type="file" accept="image/*"></label>
+<div class="replay-image" id="beforePreview"><span class="muted">A imagem inicial aparecerá aqui.</span></div>
+<label>Ativo<input id="asset" type="text" placeholder="Ex.: WIN"></label>
+<label>Data / sessão<input id="date" type="text" placeholder="DD/MM/AAAA"></label>
+<label>Regime observado<select id="regime"><option value="">Selecione</option><option>Tendência / direcional</option><option>Range / equilíbrio</option><option>Transição</option><option>Compressão</option><option>Expansão</option></select></label>
+<label>Localização e referências<textarea id="location" placeholder="Onde o preço está e quais referências importam?"></textarea></label>
+<label>Leitura do contexto<textarea id="context" placeholder="Descreva apenas o que já é observável."></textarea></label>
+<label>Cenário A<textarea id="scenarioA" placeholder="Se..., então..."></textarea></label>
+<label>Cenário B<textarea id="scenarioB"></textarea></label>
+<label>Invalidações<textarea id="invalidations"></textarea></label>
+<label>Não operar se<textarea id="noTrade"></textarea></label>
+</section>
+
+<section class="check-group"><span class="tag">Preparar antes de revelar</span><h2>2. Continuação oculta</h2>
+<label>Imagem B — continuação do gráfico<input id="afterFile" type="file" accept="image/*"></label>
+<div class="replay-image"><div id="futureCover"><strong>Futuro oculto</strong><p class="muted">A continuação só será mostrada depois que você travar a leitura inicial.</p></div><img id="afterImg" alt="Continuação do gráfico" hidden></div>
+<p class="muted">Carregar a imagem B não a revela. Primeiro finalize a Etapa A.</p>
+<button class="button primary" type="button" id="revealBtn">Travar leitura e revelar continuação</button>
+<button class="button secondary" type="button" id="resetBtn">Recomeçar exercício</button>
+</section>
+</div>
+
+<section id="stageB" class="check-group hidden-stage" style="margin-top:18px"><span class="tag">Etapa B · Depois de revelar</span><h2>3. Atualização do contexto</h2>
+<div class="replay-columns">
+<div><label>O que aconteceu de fato?<textarea id="actual"></textarea></label><label>Qual informação nova exigia atualização?<textarea id="newInfo"></textarea></label><label>Em que momento sua hipótese ficou mais forte, mais fraca ou inválida?<textarea id="changeMoment"></textarea></label></div>
+<div><label>Sua leitura inicial era<select id="readingQuality"><option value="">Selecione</option><option>Clara e falsificável</option><option>Razoável, mas vaga</option><option>Direcional demais / previsão</option><option>Sem invalidação útil</option></select></label><br><label>Você teria atualizado o contexto a tempo?<select id="adaptQuality"><option value="">Selecione</option><option>Provavelmente sim</option><option>Talvez, com atraso</option><option>Provavelmente defenderia a hipótese</option></select></label><label>O que aprendeu?<textarea id="lesson"></textarea></label></div>
+</div>
+<div class="actions"><button class="button primary" id="saveBtn" type="button">Salvar replay</button><button class="button secondary" id="exportBtn" type="button">Exportar TXT</button></div>
+</section>
+
+<section class="section" style="padding-bottom:0"><div class="section-head"><div><div class="eyebrow">Histórico textual</div><h2>Replays salvos</h2></div><p>Por privacidade e limite de armazenamento, as imagens não são persistidas. O histórico guarda sua leitura e revisão em texto.</p></div><div id="history" class="grid"></div></section>
+</div></main>
+<footer class="footer"><div class="container">Replay educacional. Conhecer o desfecho muda a percepção do passado; por isso a leitura inicial é travada antes da revelação.</div></footer>
+<script src="../script.js"></script>
+<script>
+(()=>{const KEY="contextoMercadoReplayV1",ids=["asset","date","regime","location","context","scenarioA","scenarioB","invalidations","noTrade"],reviewIds=["actual","newInfo","changeMoment","readingQuality","adaptQuality","lesson"];let afterUrl=null,beforeUrl=null,revealed=false;
+function preview(file,imgEl,placeholder){if(!file)return null;const url=URL.createObjectURL(file);if(imgEl){imgEl.src=url;imgEl.hidden=false}else{placeholder.innerHTML="";const img=document.createElement("img");img.src=url;placeholder.appendChild(img)}return url}
+document.getElementById("beforeFile").onchange=e=>{if(beforeUrl)URL.revokeObjectURL(beforeUrl);beforeUrl=preview(e.target.files[0],null,document.getElementById("beforePreview"))};
+document.getElementById("afterFile").onchange=e=>{if(afterUrl)URL.revokeObjectURL(afterUrl);const f=e.target.files[0];if(!f)return;afterUrl=URL.createObjectURL(f);document.getElementById("afterImg").src=afterUrl;if(revealed)document.getElementById("afterImg").hidden=false};
+document.getElementById("revealBtn").onclick=()=>{if(!document.getElementById("afterFile").files[0]){alert("Carregue a imagem B antes de revelar.");return}if(!document.getElementById("context").value.trim()&&!document.getElementById("scenarioA").value.trim()){alert("Registre ao menos a leitura do contexto ou um cenário antes de revelar.");return}revealed=true;ids.forEach(id=>document.getElementById(id).disabled=true);document.getElementById("beforeFile").disabled=true;document.getElementById("afterFile").disabled=true;document.getElementById("stageA").classList.add("locked");document.getElementById("futureCover").hidden=true;document.getElementById("afterImg").hidden=false;document.getElementById("stageB").classList.remove("hidden-stage");document.getElementById("stageB").scrollIntoView({behavior:"smooth"})};
+function data(){const o={createdAt:new Date().toISOString()};[...ids,...reviewIds].forEach(id=>o[id]=document.getElementById(id).value);return o}
+function entries(){try{const a=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return[]}}
+function render(){const a=entries().slice().reverse();document.getElementById("history").innerHTML=a.map((e,i)=>`<div class="card"><span class="tag">Replay ${a.length-i}</span><h3>${e.date||"Sem data"} · ${e.asset||"Sem ativo"}</h3><p>${(e.context||"Sem leitura registrada").slice(0,180)}</p><p class="muted"><strong>Lição:</strong> ${e.lesson||"—"}</p></div>`).join("")||'<p class="muted">Nenhum replay salvo.</p>'}
+document.getElementById("saveBtn").onclick=()=>{if(!revealed)return;const a=entries();a.push(data());localStorage.setItem(KEY,JSON.stringify(a));render()};
+document.getElementById("exportBtn").onclick=()=>{const o=data(),t=["REPLAY DE CONTEXTO","",`Data: ${o.date||"-"} · Ativo: ${o.asset||"-"}`,`Regime inicial: ${o.regime||"-"}`,"","LEITURA INICIAL",o.context||"-","Localização: "+(o.location||"-"),"Cenário A: "+(o.scenarioA||"-"),"Cenário B: "+(o.scenarioB||"-"),"Invalidações: "+(o.invalidations||"-"),"Não operar se: "+(o.noTrade||"-"),"","DEPOIS DA REVELAÇÃO",o.actual||"-","Nova informação: "+(o.newInfo||"-"),"Momento de mudança: "+(o.changeMoment||"-"),"Qualidade da leitura: "+(o.readingQuality||"-"),"Adaptação: "+(o.adaptQuality||"-"),"Lição: "+(o.lesson||"-")].join("\n");const b=new Blob([t],{type:"text/plain;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="replay-contexto.txt";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)};
+document.getElementById("resetBtn").onclick=()=>location.reload();render()})();
+</script></body></html>
