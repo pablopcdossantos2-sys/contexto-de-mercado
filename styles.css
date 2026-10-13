@@ -129,3 +129,43 @@ th{color:var(--text)} td{color:#c7d3da}
 .mini-stat:last-child{border-bottom:0}
 @media(max-width:900px){.dashboard-grid{grid-template-columns:1fr 1fr}.filter-row{grid-template-columns:1fr 1fr}}
 @media(max-width:680px){.dashboard-grid{grid-template-columns:1fr}.bar-row{grid-template-columns:1fr}.filter-row{grid-template-columns:1fr}.matrix{grid-template-columns:110px 1fr 1fr}}
+
+.skip-link{position:fixed;left:12px;top:12px;z-index:9999;transform:translateY(-180%);background:var(--accent);color:#04221d;padding:10px 14px;border-radius:10px;font-weight:900;text-decoration:none}
+.skip-link:focus{transform:translateY(0)}
+:focus-visible{outline:3px solid var(--accent-2);outline-offset:3px}
+button,a,input,select,textarea{scroll-margin-top:90px}
+.button,.menu-button,input,select{min-height:44px}
+.language-switcher{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.language-switcher a{text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:6px 10px}
+.language-switcher a[aria-current="page"]{border-color:var(--accent);color:var(--accent)}
+body{overflow-x:hidden}
+img,svg,video,canvas{max-width:100%}
+.article,.card,.check-group,.dashboard-card,.track-card{overflow-wrap:anywhere}
+table{max-width:100%}
+.data-actions{display:flex;flex-wrap:wrap;gap:12px}
+.data-key{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.82rem;color:var(--muted)}
+.status-ok{color:var(--accent);font-weight:800}
+.status-warn{color:var(--warning);font-weight:800}
+.i18n-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media(max-width:680px){
+  .container{width:min(calc(100% - 24px),var(--max))}
+  h1{font-size:clamp(2.15rem,13vw,3.6rem)}
+  h2{font-size:clamp(1.55rem,9vw,2.35rem)}
+  .button{width:100%}
+  .actions,.hero-actions{display:grid;grid-template-columns:1fr}
+  .nav{min-height:62px}
+  .nav-links{left:12px;right:12px;max-height:calc(100vh - 82px);overflow:auto}
+  textarea,input[type="text"],input[type="number"],select{font-size:16px}
+  .article{font-size:1rem}
+  .check-group,.card,.track-card,.dashboard-card{padding:18px}
+  .matrix{font-size:.82rem;overflow-x:auto}
+  table{display:block;overflow-x:auto;white-space:normal}
+  .i18n-grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+@media(prefers-contrast:more){
+  :root{--muted:#c2d0d8;--line:#456173}
+}
