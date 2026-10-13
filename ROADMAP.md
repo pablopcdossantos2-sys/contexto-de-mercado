@@ -116,15 +116,17 @@ O projeto deve levar o usuário por cinco competências:
 
 ---
 
-## Fase 7 — Portabilidade e robustez 📋 PLANEJADA
+## Fase 7 — Portabilidade e robustez ✅ CONCLUÍDA
 
-- [ ] Importar/exportar todos os dados do usuário.
-- [ ] Migração de versões do armazenamento local.
-- [ ] PWA/offline.
-- [ ] Testes de acessibilidade.
-- [ ] Revisão para telas pequenas.
-- [ ] Política clara de privacidade: dados locais por padrão.
-- [ ] Versões PT-BR, inglês e espanhol.
+- [x] Importar/exportar todos os dados do usuário em um backup global JSON.
+- [x] Migração/versionamento do armazenamento local com esquema v2.
+- [x] PWA/offline com manifesto, ícones, Service Worker e fallback offline.
+- [x] Testes estáticos de acessibilidade e links executáveis localmente e em GitHub Actions.
+- [x] Revisão para telas pequenas, incluindo navegação, formulários, tabelas, matrizes e prevenção de overflow.
+- [x] Política clara de privacidade: dados locais por padrão, cache offline separado dos registros e instruções de exclusão.
+- [x] Versão canônica PT-BR e portais educacionais em inglês e espanhol, com currículo central, rotina, ferramentas e privacidade localizados.
+
+**Critério de conclusão atingido:** o projeto pode ser instalado como PWA, usado parcialmente offline, migrar e transportar seus dados locais, detectar regressões estáticas básicas de acessibilidade e ser acessado por portais PT-BR/EN/ES.
 
 ---
 
