@@ -84,14 +84,16 @@ O projeto deve levar o usuário por cinco competências:
 
 ---
 
-## Fase 5 — Trilhas e avaliação de aprendizagem 📋 PLANEJADA
+## Fase 5 — Trilhas e avaliação de aprendizagem ✅ CONCLUÍDA
 
-- [ ] Trilhas “Iniciante”, “Intraday” e “Leitura de fluxo”.
-- [ ] Quizzes conceituais.
-- [ ] Exercícios de classificação de regime.
-- [ ] Desafios de identificação de informação relevante vs. ruído.
-- [ ] Progresso local por módulo.
-- [ ] Certificado local de conclusão sem valor profissional/acadêmico.
+- [x] Trilhas “Iniciante”, “Intraday” e “Leitura de Fluxo”.
+- [x] Quizzes conceituais específicos por trilha, com nota mínima de 80%.
+- [x] Exercícios de classificação de regime com gráficos sintéticos.
+- [x] Desafios de identificação de informação relevante vs. ruído.
+- [x] Progresso local por módulo, integrado aos artigos e avaliações.
+- [x] Certificado local de conclusão sem valor profissional/acadêmico, liberado somente após os requisitos da trilha.
+
+**Critério de conclusão atingido:** o usuário pode seguir uma trilha estruturada, registrar progresso por módulo, realizar avaliações práticas e conceituais e emitir um certificado educacional local após cumprir os requisitos.
 
 ---
 
