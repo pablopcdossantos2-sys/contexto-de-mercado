@@ -1,0 +1,29 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Exercício de classificação de regimes de mercado com gráficos sintéticos."><title>Classificação de Regimes — Contexto de Mercado</title><link rel="stylesheet" href="../styles.css"></head><body>
+<header class="site-header"><div class="container nav"><a class="brand" href="../index.html">Contexto <span>de Mercado</span></a><button class="menu-button" aria-label="Abrir menu">Menu</button><nav class="nav-links"><a href="../index.html">Início</a><a href="trilhas.html">Trilhas</a><a aria-current="page" href="classificacao-regimes.html">Regimes</a><a href="quiz.html">Quizzes</a></nav></div></header>
+<div class="container breadcrumb"><a href="../index.html">Início</a> / Aprendizagem / Classificação de regimes</div>
+<section class="article-hero"><div class="container"><div class="eyebrow">Exercício visual</div><h1>Classificação de Regimes</h1><p class="kicker">Classifique seis sequências sintéticas. Os exemplos são deliberadamente simplificados para treinar linguagem e observação — no mercado real, regimes podem ser ambíguos e mudar gradualmente.</p></div></section>
+<main class="section"><div class="container tool-grid">
+<div id="cases" class="checklist"></div>
+<div class="actions"><button class="button primary" id="checkBtn" type="button">Corrigir classificações</button><button class="button secondary" id="resetBtn" type="button">Refazer</button></div>
+</div>
+<aside class="tool-panel"><span class="tag">Resultado</span><div class="score" id="score">—</div><p id="status" class="muted">Observe direção, sobreposição, amplitude e mudança de comportamento.</p><hr style="border:0;border-top:1px solid var(--line);margin:22px 0"><p class="muted">Conclusão do exercício: 80% ou mais. O objetivo não é criar rótulos absolutos, mas aprender a justificar uma classificação com observáveis.</p></aside>
+</div></main>
+<footer class="footer"><div class="container">Dados inteiramente sintéticos. Não representam um ativo real.</div></footer><script src="../script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+const items=[
+{name:"A",answer:"tendencia",data:[100,101,102,101.7,103,104,103.6,105,106,105.8,107,108,107.5,109,110,109.7,111,112],why:"Há deslocamento persistente para cima, correções relativamente contidas e renovação de máximas."},
+{name:"B",answer:"range",data:[100,102,99,101.5,98.8,101,99.2,102,99.1,101.4,98.9,101.8,99.3,101.2,99,101.6,99.4,101],why:"O preço retorna repetidamente à mesma área, com alta sobreposição e pouca progressão líquida."},
+{name:"C",answer:"compressao",data:[100,101,99.4,100.7,99.6,100.5,99.75,100.35,99.85,100.25,99.92,100.16,99.96,100.1,99.98,100.05,100,100.03],why:"A amplitude diminui progressivamente e os movimentos ficam mais estreitos e sobrepostos."},
+{name:"D",answer:"expansao",data:[100,99.8,100.2,99.7,100.3,99.4,100.5,99,100.8,98.5,101.1,97.9,101.6,97.2,102.1,96.4,102.8,95.7],why:"A amplitude cresce de forma clara. Expansão descreve aumento de deslocamento, não uma direção específica."},
+{name:"E",answer:"transicao",data:[100,101,102,103,104,105,105.5,106,106.2,106.4,106.1,106.5,106,106.3,105.8,106.2,105.6,105.9],why:"O movimento direcional perde eficiência, aumenta a sobreposição e deixa de renovar máximas com a mesma qualidade."},
+{name:"F",answer:"tendencia",data:[110,109,108.5,107.4,107.8,106.5,105.7,106.1,104.8,104,104.3,103.1,102.4,102.8,101.5,100.7,101,99.8],why:"Há deslocamento persistente para baixo com correções que não recuperam a estrutura anterior."}
+];
+const opts=[["tendencia","Tendência / direcional"],["range","Range / equilíbrio"],["compressao","Compressão"],["expansao","Expansão"],["transicao","Transição"]];
+const root=document.getElementById("cases");
+function svg(data){const min=Math.min(...data),max=Math.max(...data),span=max-min||1,pts=data.map((v,i)=>{const x=20+i/(data.length-1)*560,y=190-(v-min)/span*150;return x+","+y}).join(" ");return `<div class="exercise-chart"><svg viewBox="0 0 600 220" aria-label="Série sintética"><line x1="20" y1="190" x2="580" y2="190" stroke="currentColor" opacity=".15"/><polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="3"/></svg></div>`}
+function render(){document.getElementById("score").textContent="—";document.getElementById("status").textContent="Observe direção, sobreposição, amplitude e mudança de comportamento.";root.innerHTML=items.map((it,i)=>`<section class="check-group"><span class="tag">Caso ${it.name}</span>${svg(it.data)}<label style="display:block;margin-top:12px">Classificação<select name="case${i}"><option value="">Selecione</option>${opts.map(o=>`<option value="${o[0]}">${o[1]}</option>`).join("")}</select></label><div class="quiz-feedback" id="fb${i}" hidden></div></section>`).join("")}
+document.getElementById("checkBtn").onclick=()=>{let hits=0;items.forEach((it,i)=>{const v=root.querySelector(`select[name=case${i}]`).value,ok=v===it.answer,fb=document.getElementById("fb"+i);if(ok)hits++;fb.hidden=false;fb.innerHTML=(ok?"<strong>✓ Classificação compatível.</strong> ":"<strong>✗ Compare novamente.</strong> ")+it.why});const pct=Math.round(hits/items.length*100);document.getElementById("score").textContent=pct+"%";CMLearning.setScore("exercise-regimes",pct,{hits,total:items.length});if(pct>=80){CMLearning.mark("exercise-regimes",{score:pct,label:"Classificação de regimes"});document.getElementById("status").textContent="Exercício concluído. Lembre-se: exemplos reais podem exigir descrições mais nuançadas."}else document.getElementById("status").textContent="Abaixo de 80%. Revise os critérios e tente novamente."};
+document.getElementById("resetBtn").onclick=render;render();
+});
+</script></body></html>
