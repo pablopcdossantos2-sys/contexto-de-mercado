@@ -50,6 +50,7 @@ O projeto combina teoria, rotina, registro e treino deliberado. A proposta não 
 - **Plano x Mercado Real** — revisão de leitura, atualização, execução e disciplina.
 - **Replay de Contexto** — carrega uma captura inicial e uma continuação; a continuação fica oculta até a leitura inicial ser travada.
 - **Replay Guiado** — biblioteca de sessões sintéticas reveladas em quatro etapas, com leitura travada a cada avanço.
+- **Painel do Processo** — métricas de preparação, respeito ao plano, operações fora de cenário, atualização tardia, regimes, leitura × execução e qualidade dos dados.
 
 ## ROADMAP
 
@@ -63,8 +64,14 @@ Situação atual:
 - Fase 3 — Treino e comparação: ✅ concluída
 - Fase 4 — Replay de leitura: ✅ concluída
 - Fase 5 — Trilhas e avaliação: ✅ concluída
-- Fase 6 — Métricas do processo: 📋 planejada
+- Fase 6 — Métricas do processo: ✅ concluída
 - Fase 7 — Portabilidade e robustez: 📋 planejada
+
+### Métricas de processo
+
+O Painel do Processo lê os registros locais do Diário de Contexto e, separadamente, as autoavaliações do Plano x Mercado Real. Ele inclui filtros por ativo e janela, distribuição de regimes e uma matriz entre qualidade da leitura e qualidade da execução.
+
+O painel deliberadamente **não** calcula taxa de acerto, expectativa de retorno, Sharpe, drawdown ou rentabilidade por regime. A finalidade é acompanhar disciplina e consistência do processo, não inferir vantagem estatística a partir de uma amostra autoclassificada.
 
 ## Privacidade e dados
 
