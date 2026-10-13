@@ -1,0 +1,30 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Exercício para diferenciar informação contextual relevante, informação condicional e ruído."><title>Informação x Ruído — Contexto de Mercado</title><link rel="stylesheet" href="../styles.css"></head><body>
+<header class="site-header"><div class="container nav"><a class="brand" href="../index.html">Contexto <span>de Mercado</span></a><button class="menu-button" aria-label="Abrir menu">Menu</button><nav class="nav-links"><a href="../index.html">Início</a><a href="trilhas.html">Trilhas</a><a aria-current="page" href="informacao-ruido.html">Informação x Ruído</a><a href="quiz.html">Quizzes</a></nav></div></header>
+<div class="container breadcrumb"><a href="../index.html">Início</a> / Aprendizagem / Informação x Ruído</div>
+<section class="article-hero"><div class="container"><div class="eyebrow">Exercício de relevância</div><h1>Informação relevante x ruído</h1><p class="kicker">Nem todo dado disponível merece peso na decisão. Classifique cada informação como <strong>relevante</strong>, <strong>depende do método/contexto</strong> ou <strong>ruído para a leitura apresentada</strong>.</p></div></section>
+<main class="section"><div class="container tool-grid"><div id="items" class="checklist"></div><div class="actions"><button class="button primary" id="checkBtn" type="button">Corrigir exercício</button><button class="button secondary" id="resetBtn" type="button">Refazer</button></div></div>
+<aside class="tool-panel"><span class="tag">Resultado</span><div class="score" id="score">—</div><p id="status" class="muted">Pergunte: esta informação realmente muda uma hipótese ou apenas chama atenção?</p><hr style="border:0;border-top:1px solid var(--line);margin:22px 0"><p class="muted">Conclusão: 80% ou mais. “Depende” é uma resposta válida quando a utilidade exige regra prévia do método.</p></aside></div></main>
+<footer class="footer"><div class="container">Exercício educacional. Relevância depende do mercado, método e horizonte analisado.</div></footer><script src="../script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+const qs=[
+["Faltam cinco minutos para uma divulgação macro relevante para o ativo que você opera.","relevante","É informação temporal objetiva capaz de alterar volatilidade, liquidez e sua regra de participação."],
+["Um influenciador publicou que está 'muito comprador' no ativo.","ruido","Opinião externa sem relação com suas regras ou evidência observável não deve ganhar peso só pela autoridade percebida."],
+["O preço está acima da VWAP da sessão.","depende","Pode ser uma referência útil se sua leitura define o que fazer com essa informação; isoladamente não é sinal."],
+["O preço testa a máxima da sessão anterior, marcada antes da abertura.","relevante","A localização em uma referência previamente mapeada pode mudar a interpretação da reação do preço."],
+["Seu trade anterior do dia terminou em stop.","ruido","O resultado anterior pode afetar psicologia e risco, mas não muda por si só o contexto objetivo do mercado atual."],
+["Há agressão compradora intensa em uma região mapeada, mas o preço quase não avança.","relevante","A combinação entre iniciativa e resposta do preço é observável e pode levantar hipótese de absorção."],
+["O RSI está em 71, mas seu método não utiliza RSI.","ruido","Um dado fora do processo não deve ser incorporado apenas porque está disponível."],
+["Um ativo correlacionado normalmente diverge hoje, e a relação recente está instável.","depende","A divergência pode ser informativa, mas forçar uma correlação instável pode produzir narrativa em vez de contexto."],
+["A sessão abre com gap fora do range do dia anterior.","relevante","O gap altera a localização inicial e cria uma condição objetiva a ser observada."],
+["O candle atual 'parece muito' com uma formação vista ontem em uma rede social.","ruido","Sem definição operacional e contexto comparável, semelhança visual tende a ser narrativa."],
+["O spread aumentou e a execução ficou visivelmente pior perto de um evento.","relevante","Mudança de condições de liquidez e execução é informação prática de risco."],
+["Uma média móvel cruza outra, mas você nunca testou nem usa esse cruzamento no método.","ruido","Adicionar um sinal não previsto durante a decisão aumenta ruído e favorece racionalização."]
+];
+const labels=[["relevante","Relevante"],["depende","Depende"],["ruido","Ruído"]];
+const root=document.getElementById("items");
+function render(){document.getElementById("score").textContent="—";document.getElementById("status").textContent="Pergunte: esta informação realmente muda uma hipótese ou apenas chama atenção?";root.innerHTML=qs.map((q,i)=>`<section class="check-group"><span class="tag">Situação ${i+1}</span><h3>${q[0]}</h3>${labels.map(o=>`<label class="quiz-option"><input type="radio" name="q${i}" value="${o[0]}">${o[1]}</label>`).join("")}<div class="quiz-feedback" id="fb${i}" hidden></div></section>`).join("")}
+document.getElementById("checkBtn").onclick=()=>{let hits=0;qs.forEach((q,i)=>{const a=root.querySelector(`input[name=q${i}]:checked`),ok=a&&a.value===q[1],fb=document.getElementById("fb"+i);if(ok)hits++;fb.hidden=false;fb.innerHTML=(ok?"<strong>✓ Boa classificação.</strong> ":"<strong>✗ Revise.</strong> ")+q[2]});const pct=Math.round(hits/qs.length*100);document.getElementById("score").textContent=pct+"%";CMLearning.setScore("exercise-signal-noise",pct,{hits,total:qs.length});if(pct>=80){CMLearning.mark("exercise-signal-noise",{score:pct,label:"Informação x ruído"});document.getElementById("status").textContent="Exercício concluído. O objetivo é reduzir dados sem função decisória."}else document.getElementById("status").textContent="Abaixo de 80%. Revise os feedbacks e tente novamente."};
+document.getElementById("resetBtn").onclick=render;render();
+});
+</script></body></html>
