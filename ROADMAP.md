@@ -97,16 +97,22 @@ O projeto deve levar o usuário por cinco competências:
 
 ---
 
-## Fase 6 — Métricas do processo 📋 PLANEJADA
+## Fase 6 — Métricas do processo ✅ CONCLUÍDA
 
-- [ ] Painel com frequência de preparação.
-- [ ] Percentual de dias em que o plano foi respeitado.
-- [ ] Frequência de operações fora do cenário.
-- [ ] Frequência de mudança tardia de contexto.
-- [ ] Distribuição de regimes registrados.
-- [ ] Comparação entre “boa leitura/má execução” e “má leitura/boa execução”.
+- [x] Painel com frequência de preparação.
+- [x] Percentual de dias em que o plano foi respeitado.
+- [x] Frequência de operações fora do cenário, com contagem por operação quando disponível e fallback por sessão.
+- [x] Frequência de mudança tardia de contexto.
+- [x] Distribuição de regimes registrados.
+- [x] Comparação entre “boa leitura/má execução” e “má leitura/boa execução”.
+- [x] Filtros por ativo e janela de sessões.
+- [x] Indicadores de completude/qualidade dos dados.
+- [x] Exportação TXT do resumo das métricas.
+- [x] Médias complementares da ferramenta Plano x Mercado Real, mantidas separadas das taxas do Diário.
 
-> As métricas devem avaliar **processo**, nunca prometer vantagem estatística ou retorno financeiro.
+> As métricas avaliam **processo** e deliberadamente não calculam taxa de acerto, expectativa, Sharpe, drawdown ou relação entre regime e rentabilidade.
+
+**Critério de conclusão atingido:** o usuário possui um painel local que transforma o histórico do Diário em métricas transparentes de preparação, disciplina, atualização de contexto e qualidade de execução, sem apresentar os resultados como evidência de vantagem estatística.
 
 ---
 
