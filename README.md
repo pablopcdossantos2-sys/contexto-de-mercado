@@ -1,5 +1,7 @@
 # Contexto de Mercado
 
+**Português** · [English](README.en.md) · [Español](README.es.md)
+
 Web portfólio educacional e curso prático dedicado a ensinar traders iniciantes a compreenderem o **contexto de mercado antes de executar operações**.
 
 O projeto combina teoria, rotina, registro e treino deliberado. A proposta não é fornecer sinais de compra ou venda, e sim ensinar o usuário a organizar perguntas, hipóteses e revisões.
@@ -65,7 +67,7 @@ Situação atual:
 - Fase 4 — Replay de leitura: ✅ concluída
 - Fase 5 — Trilhas e avaliação: ✅ concluída
 - Fase 6 — Métricas do processo: ✅ concluída
-- Fase 7 — Portabilidade e robustez: 📋 planejada
+- Fase 7 — Portabilidade e robustez: ✅ concluída
 
 ### Métricas de processo
 
@@ -73,11 +75,23 @@ O Painel do Processo lê os registros locais do Diário de Contexto e, separadam
 
 O painel deliberadamente **não** calcula taxa de acerto, expectativa de retorno, Sharpe, drawdown ou rentabilidade por regime. A finalidade é acompanhar disciplina e consistência do processo, não inferir vantagem estatística a partir de uma amostra autoclassificada.
 
+### Portabilidade, PWA e acessibilidade
+
+- **Backup global** — `ferramentas/gerenciar-dados.html` exporta/importa todos os conjuntos locais em um único JSON versionado.
+- **Migração de dados** — `script.js` mantém uma versão de esquema e normaliza dados legados ao abrir o site.
+- **PWA/offline** — `manifest.webmanifest` e `sw.js` permitem instalação e cache de páginas/arquivos públicos já utilizados.
+- **Acessibilidade** — skip link, foco visível, estados ARIA no menu, feedback `aria-live`, redução de movimento, contraste reforçado e teste estático em CI.
+- **Mobile** — alvos de toque, navegação rolável, tabelas responsivas e proteção contra overflow.
+- **Idiomas** — versão canônica PT-BR, portal em inglês em `en/` e portal em espanhol em `es/`.
+- **Teste automatizado** — `node scripts/quality-check.mjs`; executado também por `.github/workflows/quality.yml`.
+
+Veja também [ACCESSIBILITY.md](ACCESSIBILITY.md).
+
 ## Privacidade e dados
 
 As ferramentas atuais são estáticas e armazenam os registros no **armazenamento local do navegador**. O projeto não possui backend nem envia os registros do usuário para um servidor próprio.
 
-O Diário de Contexto possui exportação/importação JSON para backup. Limpar os dados do navegador pode apagar os registros locais se o usuário não tiver feito backup.
+O Diário de Contexto mantém seu backup individual, e a página **Gerenciar dados** oferece backup/restauração global de todos os conjuntos do projeto. Limpar os dados do navegador pode apagar os registros locais se o usuário não tiver feito backup.
 
 ## Uso local e GitHub Pages
 
