@@ -1,0 +1,50 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Replay guiado com sessões sintéticas reveladas em múltiplas etapas para treinar atualização de contexto."><title>Replay Guiado — Contexto de Mercado</title><link rel="stylesheet" href="../styles.css">
+<style>
+.chartbox{border:1px solid var(--line);border-radius:16px;background:#08131b;padding:12px;overflow:hidden}.chartbox svg{width:100%;height:auto;display:block}
+.stage-pill{display:inline-block;padding:6px 10px;border:1px solid var(--line);border-radius:999px;margin:4px 4px 4px 0;color:var(--muted)}.stage-pill.active{color:var(--text);border-color:var(--accent)}
+.locked-note{padding:12px;border-left:3px solid var(--accent);background:var(--surface);margin:12px 0}.history-item{border-top:1px solid var(--line);padding:12px 0}
+</style></head><body>
+<header class="site-header"><div class="container nav"><a class="brand" href="../index.html">Contexto <span>de Mercado</span></a><button class="menu-button" aria-label="Abrir menu">Menu</button><nav class="nav-links"><a href="../index.html">Início</a><a href="../index.html#artigos">Artigos</a><a href="../rotina/pre-mercado.html">Rotina</a><a aria-current="page" href="replay-guiado.html">Ferramentas</a></nav></div></header>
+<div class="container breadcrumb"><a href="../index.html">Início</a> / Ferramentas / Replay Guiado</div>
+<section class="article-hero"><div class="container"><div class="eyebrow">Ferramenta 06 · Fase 4</div><h1>Replay Guiado</h1><p class="kicker">Escolha uma sessão sintética e veja o gráfico em quatro etapas. Em cada uma, registre o contexto antes de liberar os próximos pontos.</p></div></section>
+
+<main class="section"><div class="container tool-grid">
+<div>
+<div class="check-group"><h2>Biblioteca de exercícios</h2><label>Sessão<select id="caseSelect"></select></label><p id="caseIntro" class="muted"></p><div id="stagePills"></div></div>
+<div class="chartbox"><svg id="chart" viewBox="0 0 700 300" role="img" aria-label="Gráfico sintético de preços"></svg></div>
+<div class="check-group" style="margin-top:18px"><span class="tag" id="stageLabel">Etapa 1</span><h2>Atualize sua leitura</h2>
+<label>O que é observável agora?<textarea id="observation"></textarea></label>
+<label>Regime / estado provável<select id="regime"><option value="">Selecione</option><option>Direcional</option><option>Range / equilíbrio</option><option>Transição</option><option>Compressão</option><option>Expansão</option><option>Indefinido</option></select></label>
+<label>Cenário principal<textarea id="scenario" placeholder="Se..., então..."></textarea></label>
+<label>Invalidação<textarea id="invalid"></textarea></label>
+<label>O que faria você não operar?<textarea id="noTrade"></textarea></label>
+<div class="actions"><button class="button primary" id="lockBtn" type="button">Travar etapa e revelar próxima</button><button class="button secondary" id="restartBtn" type="button">Reiniciar sessão</button></div>
+</div>
+<div id="lockedHistory" class="check-group"><h2>Leituras já travadas</h2><div id="historyText" class="muted">Nenhuma etapa travada ainda.</div></div>
+<div id="finalReview" class="check-group" hidden><span class="tag">Revisão final</span><h2>O que mudou ao longo da sessão?</h2><label>Em qual etapa o contexto mudou de forma relevante?<textarea id="change"></textarea></label><label>Qual hipótese você teria mantido por tempo demais?<textarea id="bias"></textarea></label><label>Principal aprendizado<textarea id="lesson"></textarea></label><div class="actions"><button class="button primary" id="saveBtn" type="button">Salvar replay guiado</button></div></div>
+</div>
+
+<aside class="tool-panel"><span class="tag">Como ler</span><h3>Sem “acertar o futuro”</h3><p class="muted">Os dados são sintéticos e não representam um ativo real. O exercício avalia atualização de leitura.</p><ul class="muted"><li>Descreva antes de prever.</li><li>Use cenários condicionais.</li><li>Trave a hipótese antes da revelação.</li><li>Mude de ideia quando a evidência mudar.</li></ul><hr style="border:0;border-top:1px solid var(--line);margin:22px 0"><strong><span id="savedCount">0</span> replays guiados salvos</strong></aside>
+</div></main>
+<footer class="footer"><div class="container">Dados sintéticos para treino educacional. Não representam desempenho ou comportamento futuro de ativos reais.</div></footer><script src="../script.js"></script>
+<script>
+(()=>{const cases=[
+{id:"A",name:"Sessão A — deslocamento e perda de eficiência",intro:"Comece sem rótulo. Observe como direção, correções e sobreposição evoluem.",p:[100,101,102,101.6,103,104,103.5,105,106,105.7,107,108,107.4,109,110,109.6,111,112,111.5,113,113.4,113.1,113.8,113.3,114,113.5,114.1,113.7,114.2,113.8,114.4,113.9,114.1,113.6,113.8,113.2,112.7,113.1,112.4,111.8,112.1,111.4,110.8,111.2,110.4,109.8,110.1,109.3,108.9,109.2,108.5,108.1,108.4,107.8,107.4,107.7,107.1,106.8,107,106.5]},
+{id:"B",name:"Sessão B — equilíbrio e tentativa de saída",intro:"Observe bordas, permanência fora da área e qualidade do retorno.",p:[100,101,99.5,100.7,99.2,100.8,99.4,100.6,99.1,100.9,99.5,100.5,99.3,100.7,99.6,100.4,99.2,100.8,99.5,100.6,101.2,101.8,102.4,102.1,101.7,101.2,100.7,100.3,99.9,99.6,99.3,99.7,100.1,99.8,100.2,99.9,100.4,100.8,101.3,101.9,102.6,103.2,103.8,104.1,103.7,104.4,104.9,105.3,105,105.6,106,105.8,106.4,106.9,106.6,107.2,107.6,107.4,108,108.3]},
+{id:"C",name:"Sessão C — compressão e expansão",intro:"Treine reconhecer quando amplitude e ritmo mudam sem antecipar direção.",p:[100,100.4,99.8,100.3,99.9,100.2,99.9,100.1,99.95,100.15,99.98,100.12,100,100.1,99.97,100.08,100.02,100.06,99.99,100.04,99.7,99.2,98.6,98,97.4,96.9,96.3,95.8,95.1,94.7,94.1,93.8,94.2,93.6,93.2,92.9,93.4,93.8,94.3,94.9,95.4,95.1,95.8,96.2,96.8,97.4,97.1,97.8,98.4,99,99.6,100.1,100.7,101.2,101.8,102.4,102,102.7,103.2,103.8]},
+{id:"D",name:"Sessão D — tendência, transição e range",intro:"Observe quando a lógica de continuidade deixa de descrever bem o mercado.",p:[100,99.4,98.8,98.1,97.5,96.9,96.2,95.8,95.1,94.5,93.9,93.2,92.8,92.1,91.6,91,90.4,89.9,89.3,88.8,88.5,89.1,88.7,89.4,88.9,89.6,89.1,89.8,89.3,89.9,90.4,89.8,90.6,89.9,90.8,90.1,90.9,90.2,91,90.3,89.7,90.5,89.8,90.7,89.9,90.8,90.1,91.1,90.4,89.6,90.3,89.7,90.5,89.8,90.6,89.9,90.7,90.2,90.9,90.4]}
+],cuts=[20,35,50,60],KEY="contextoMercadoGuidedReplayV1";let ci=0,stage=0,snaps=[];
+const $=id=>document.getElementById(id);
+function populate(){caseSelect.innerHTML=cases.map((c,i)=>`<option value="${i}">${c.name}</option>`).join("");loadCase()}
+function loadCase(){ci=Number(caseSelect.value)||0;stage=0;snaps=[];caseIntro.textContent=cases[ci].intro;clearFields();render();renderHistory();finalReview.hidden=true}
+function clearFields(){["observation","scenario","invalid","noTrade"].forEach(id=>$(id).value="");regime.value=""}
+function render(){const pts=cases[ci].p.slice(0,cuts[stage]),min=Math.min(...cases[ci].p)-1,max=Math.max(...cases[ci].p)+1,w=660,h=240,x0=20,y0=20;const coords=pts.map((v,i)=>{const x=x0+i/(59)*(w-40),y=y0+(max-v)/(max-min)*(h-40);return [x,y]});chart.innerHTML=`<rect x="20" y="20" width="620" height="200" fill="none" stroke="currentColor" opacity=".18"/><polyline points="${coords.map(p=>p.join(",")).join(" ")}" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="20" y="265" fill="currentColor" opacity=".55">Pontos visíveis: ${pts.length}/60</text>`;stageLabel.textContent=`Etapa ${stage+1} de 4`;stagePills.innerHTML=cuts.map((_,i)=>`<span class="stage-pill ${i===stage?"active":""}">${i+1}</span>`).join("");lockBtn.textContent=stage<3?"Travar etapa e revelar próxima":"Travar etapa final e revisar"}
+function snapshot(){return {stage:stage+1,visible:cuts[stage],observation:observation.value,regime:regime.value,scenario:scenario.value,invalid:invalid.value,noTrade:noTrade.value}}
+function renderHistory(){historyText.innerHTML=snaps.length?snaps.map(s=>`<div class="history-item"><strong>Etapa ${s.stage} · ${s.regime||"sem classificação"}</strong><p>${s.observation||"Sem observação."}</p><p><strong>Cenário:</strong> ${s.scenario||"—"}</p></div>`).join(""):"Nenhuma etapa travada ainda."}
+lockBtn.onclick=()=>{if(!observation.value.trim()&&!scenario.value.trim()){alert("Registre ao menos uma observação ou cenário antes de revelar a próxima etapa.");return}snaps.push(snapshot());renderHistory();if(stage<3){stage++;clearFields();render()}else{finalReview.hidden=false;lockBtn.disabled=true;finalReview.scrollIntoView({behavior:"smooth"})}};
+restartBtn.onclick=loadCase;caseSelect.onchange=loadCase;
+function saved(){try{const a=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return[]}}
+function count(){savedCount.textContent=saved().length}
+saveBtn.onclick=()=>{const a=saved();a.push({caseId:cases[ci].id,caseName:cases[ci].name,snapshots:snaps,change:change.value,bias:bias.value,lesson:lesson.value,createdAt:new Date().toISOString()});localStorage.setItem(KEY,JSON.stringify(a));count();saveBtn.textContent="Replay salvo"};
+populate();count()})();
+</script></body></html>
