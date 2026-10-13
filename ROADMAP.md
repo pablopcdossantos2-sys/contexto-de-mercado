@@ -69,7 +69,7 @@ O projeto deve levar o usuário por cinco competências:
 
 ---
 
-## Fase 4 — Replay de leitura 🔄 EM EXECUÇÃO
+## Fase 4 — Replay de leitura ✅ CONCLUÍDA
 
 - [x] Replay de Contexto com captura de gráfico/imagem.
 - [x] Ocultar o “futuro” e registrar a leitura antes de revelar a etapa seguinte.
@@ -77,12 +77,10 @@ O projeto deve levar o usuário por cinco competências:
 - [x] Marcação do momento em que a hipótese ficou mais forte, fraca ou inválida.
 - [x] Comparação entre hipótese inicial e revisão posterior.
 - [x] Histórico textual local dos replays.
-- [ ] Biblioteca curada de exercícios pronta para uso, sem exigir capturas próprias.
-- [ ] Replay em múltiplas etapas para simular uma linha do tempo mais longa.
+- [x] Biblioteca curada de exercícios pronta para uso, sem exigir capturas próprias.
+- [x] Replay em múltiplas etapas para simular uma linha do tempo mais longa.
 
-**MVP já entregue:** o usuário consegue carregar duas capturas, registrar e travar a leitura antes de revelar a continuação e salvar a revisão em texto.
-
-**Critério de conclusão da fase:** além do MVP, disponibilizar biblioteca curada e replay em múltiplas etapas.
+**Critério de conclusão atingido:** há dois modos de treino: replay com capturas próprias e replay guiado com sessões sintéticas reveladas em etapas.
 
 ---
 
