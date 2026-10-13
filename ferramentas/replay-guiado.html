@@ -35,6 +35,7 @@
 {id:"D",name:"Sessão D — tendência, transição e range",intro:"Observe quando a lógica de continuidade deixa de descrever bem o mercado.",p:[100,99.4,98.8,98.1,97.5,96.9,96.2,95.8,95.1,94.5,93.9,93.2,92.8,92.1,91.6,91,90.4,89.9,89.3,88.8,88.5,89.1,88.7,89.4,88.9,89.6,89.1,89.8,89.3,89.9,90.4,89.8,90.6,89.9,90.8,90.1,90.9,90.2,91,90.3,89.7,90.5,89.8,90.7,89.9,90.8,90.1,91.1,90.4,89.6,90.3,89.7,90.5,89.8,90.6,89.9,90.7,90.2,90.9,90.4]}
 ],cuts=[20,35,50,60],KEY="contextoMercadoGuidedReplayV1";let ci=0,stage=0,snaps=[];
 const $=id=>document.getElementById(id);
+const caseSelect=$("caseSelect"),caseIntro=$("caseIntro"),stagePills=$("stagePills"),finalReview=$("finalReview"),regime=$("regime"),chart=$("chart"),stageLabel=$("stageLabel"),lockBtn=$("lockBtn"),historyText=$("historyText"),observation=$("observation"),scenario=$("scenario"),invalid=$("invalid"),noTrade=$("noTrade"),restartBtn=$("restartBtn"),saveBtn=$("saveBtn"),change=$("change"),bias=$("bias"),lesson=$("lesson"),savedCount=$("savedCount");
 function populate(){caseSelect.innerHTML=cases.map((c,i)=>`<option value="${i}">${c.name}</option>`).join("");loadCase()}
 function loadCase(){ci=Number(caseSelect.value)||0;stage=0;snaps=[];caseIntro.textContent=cases[ci].intro;clearFields();render();renderHistory();finalReview.hidden=true}
 function clearFields(){["observation","scenario","invalid","noTrade"].forEach(id=>$(id).value="");regime.value=""}
