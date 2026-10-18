@@ -114,3 +114,4 @@ Todo o conteúdo tem finalidade exclusivamente educacional. Nada neste projeto c
 ## Rotina especializada para WINFUT e WDOFUT
 
 - `rotina/leitura-pre-pregao-winfut-wdofut.html` — tutorial diário com contexto macro/intermercado, estrutura multi-horizonte, suportes e resistências recentes/históricos, volatilidade, cenários condicionais e checklist local.
+- `ferramentas/volatilidade-historica-winfut-wdofut.html` — calcula no navegador amplitude diária, medianas de 5/20 pregões, percentil empírico, true range e ATR-14 a partir de CSV OHLC; permite mapear colunas e exportar CSV, sem enviar o arquivo a servidor.
