@@ -6,7 +6,7 @@ const html=fs.readFileSync("ferramentas/volatilidade-historica-winfut-wdofut.htm
 const numeric=html.match(/function detectDecimal\(rows\)[\s\S]*?function setStatus/);
 assert.ok(numeric,"numeric parser functions must exist");
 const context={};
-const helpers=vm.runInNewContext(numeric[0].replace(/function setStatus[\\s\\S]*$/,"")+";({number,detectDecimal})",context);
+const helpers=vm.runInNewContext(numeric[0].split("function setStatus")[0]+";({number,detectDecimal})",context);
 context.decimal=",";
 assert.equal(helpers.number("210.800"),210800);
 assert.equal(helpers.number("5.080,500"),5080.5);
@@ -17,7 +17,7 @@ assert.equal(helpers.detectDecimal([["Data","Máximo"],["16/10/2026","5.080,500"
 
 const readMatch=html.match(/async function readText\(file\)\{[\s\S]*?\nfunction setStatus/);
 assert.ok(readMatch,"encoding fallback must exist");
-const readSource=readMatch[0].replace(/\nfunction setStatus[\s\S]*$/,"");
+const readSource=readMatch[0].split("\\nfunction setStatus")[0];
 const readContext={TextDecoder};
 vm.runInNewContext(readSource,readContext);
 const latin1=Buffer.from("Ativo;Máximo\nWDOFUT;5.080,500","latin1");
