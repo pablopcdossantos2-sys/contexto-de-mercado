@@ -48,7 +48,7 @@ const lines=text.replace(/^\uFEFF/,"").split(/\r?\n/).filter(x=>x.trim());if(!li
 const parseLine=line=>{let out=[],v="",q=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'&&q&&line[i+1]==='"'){v+='"';i++}else if(c==='"')q=!q;else if(c===sep&&!q){out.push(v.trim());v=""}else v+=c}out.push(v.trim());return out};
 return lines.map(parseLine)
 }
-function detectSep(text){const sample=text.split(/\r?\n/).slice(0,5).join("\n");return [",",";","\t"].map(s=>({s,n:(sample.match(new RegExp(s==="\t"?"\\t":s===";"?";":",","g"))||[]).length})).sort((a,b)=>b.n-a.n)[0].s}
+function detectSep(text){const sample=text.split(/\r?\n/).slice(0,5).join("\n");return [",",";","\t"].map(s=>({s,n:sample.split(s).length-1})).sort((a,b)=>b.n-a.n)[0].s}
 function detectDecimal(rows){const vals=rows.slice(1,8).flat().filter(v=>/\d[.,]\d/.test(v));const commas=vals.filter(v=>/\d,\d/.test(v)).length;const dots=vals.filter(v=>/\d\.\d/.test(v)).length;return commas>dots?",":"."}
 function number(v){let s=String(v??"").trim().replace(/[\sR$]/g,"");if(!s)return NaN;if(decimal===","){if(s.includes(".")&&s.includes(","))s=s.replace(/\./g,"").replace(",",".");else s=s.replace(",",".")}else if(s.includes(",")&&s.includes("."))s=s.replace(/,/g,"");else s=s.replace(",",".");s=s.replace(/[^0-9+\-.eE]/g,"");return Number(s)}
 function setStatus(s){$("status").textContent=s}
