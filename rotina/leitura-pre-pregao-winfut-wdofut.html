@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Tutorial diário para ler o contexto de WINFUT e WDOFUT antes do pregão, com tendência, níveis, volatilidade e cenários condicionais.">
+<title>Leitura pré-pregão de WINFUT e WDOFUT — Contexto de Mercado</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+.guide-step{border:1px solid var(--line);border-radius:18px;padding:clamp(18px,3vw,28px);margin:20px 0;background:var(--surface)}
+.guide-step h2{margin-top:8px}.step-number{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#071018;font-weight:900}
+.guide-checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:10px;margin:16px 0}
+.guide-check{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:12px}
+.guide-check input{margin-top:5px;min-width:18px;min-height:18px}
+.guide-field{display:grid;gap:7px;margin:12px 0}
+.guide-field input,.guide-field textarea,.guide-field select{width:100%;background:var(--surface-2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit}
+.guide-field textarea{min-height:88px}
+.guide-table{width:100%;border-collapse:collapse;margin:16px 0}
+.guide-table th,.guide-table td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}
+.guide-note{padding:14px;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 10px 10px 0;margin:16px 0}
+.guide-progress{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden}.guide-progress>div{height:100%;background:var(--accent);width:0;transition:width .2s}
+@media(max-width:650px){.guide-table{font-size:.88rem}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#conteudo-principal">Pular para o conteúdo</a>
+<header class="site-header"><div class="container nav"><a class="brand" href="../index.html">Contexto <span>de Mercado</span></a><button class="menu-button" aria-label="Abrir menu">Menu</button><nav class="nav-links"><a href="../index.html">Início</a><a href="../index.html#artigos">Artigos</a><a href="pre-mercado.html">Rotina geral</a><a aria-current="page" href="leitura-pre-pregao-winfut-wdofut.html">WIN/WDO</a><a href="../ferramentas/diario-contexto.html">Diário</a><a href="../ferramentas/gerenciar-dados.html">Dados</a></nav></div></header>
+<div class="container breadcrumb"><a href="../index.html">Início</a> / Rotina / Leitura pré-pregão WINFUT e WDOFUT</div>
+<section class="article-hero"><div class="container"><div class="eyebrow">Rotina prática · repetir antes de cada pregão</div><h1>Como ler WINFUT e WDOFUT antes da abertura</h1><p class="kicker">Um roteiro diário para descrever tendência e regime, marcar suportes e resistências relevantes, medir a volatilidade recente e preparar cenários condicionais — sem transformar análise em previsão ou sinal automático.</p><div class="hero-actions"><a class="button primary" href="#rotina-interativa">Iniciar checklist de hoje</a><a class="button secondary" href="../ferramentas/diario-contexto.html">Registrar no Diário</a></div></div></section>
+<main id="conteudo-principal" class="section"><div class="container">
+<div class="note"><strong>Princípio:</strong> contexto não é previsão. A análise deve responder “o que está acontecendo, onde estamos e o que precisarei observar?”, não “qual direção está garantida?”. WIN e WDO são relacionados, mas não são intercambiáveis: registre a leitura de cada contrato separadamente e só depois compare.</div>
+<div class="grid">
+<a class="card" href="../artigos/leitura-top-down.html"><span class="tag">Base</span><h3>Leitura top-down</h3><p>Comece pelo quadro maior antes de reduzir o horizonte.</p></a>
+<a class="card" href="../artigos/localizacao-do-preco.html"><span class="tag">Níveis</span><h3>Localização do preço</h3><p>Referências não são linhas mágicas; observe reação e aceitação.</p></a>
+<a class="card" href="../artigos/volatilidade.html"><span class="tag">Amplitude</span><h3>Volatilidade</h3><p>Compare a faixa recente com o histórico equivalente.</p></a>
+</div>
+
+<section class="guide-step"><span class="step-number">1</span><h2>Prepare os dados certos</h2><p>Antes de traçar linhas, confirme que os gráficos representam os contratos, sessões e horários corretos. Use a mesma convenção de ajuste e o mesmo horário de referência ao comparar dias.</p>
+<div class="guide-checks">
+<label class="guide-check"><input type="checkbox" data-daily-check="dados1"><span>Confirme WINFUT e WDOFUT, vencimento/contrato e fonte de dados.</span></label>
+<label class="guide-check"><input type="checkbox" data-daily-check="dados2"><span>Carregue pelo menos 20–60 pregões diários, se disponíveis, e os últimos 5–10 pregões intradiários.</span></label>
+<label class="guide-check"><input type="checkbox" data-daily-check="dados3"><span>Confirme fuso/horário, sessões, feriados e se há candles incompletos ou lacunas.</span></label>
+<label class="guide-check"><input type="checkbox" data-daily-check="dados4"><span>Verifique agenda econômica, decisões de juros, indicadores, vencimentos e notícias relevantes.</span></label>
+</div><div class="guide-note">Não misture contratos ou séries ajustadas sem entender como os ajustes alteram máximas, mínimas e gaps. Se o histórico contínuo foi ajustado, anote isso e confira os níveis importantes no contrato efetivamente negociado.</div></section>
+
+<section class="guide-step"><span class="step-number">2</span><h2>Comece pelo cenário macro e intermercado</h2><p>O objetivo não é prever o dado econômico. É saber quando o contexto pode mudar rapidamente e quais variáveis merecem atenção.</p>
+<h3>Para o WINFUT (índice futuro)</h3><ul><li>Observe o comportamento do índice à vista/futuros relacionados, quando disponíveis, e a direção do pregão anterior.</li><li>Considere juros futuros brasileiros, decisões/expectativas de política monetária, fluxo estrangeiro e notícias de empresas de grande peso.</li><li>Compare o desempenho do índice com o exterior relevante para o horário: bolsas americanas, futuros e notícias globais.</li></ul>
+<h3>Para o WDOFUT (dólar futuro)</h3><ul><li>Verifique DXY, moedas emergentes e pares relevantes, sem assumir correlação fixa.</li><li>Observe juros americanos, Treasury yields, expectativas de Fed e Banco Central, além de notícias fiscais/políticas locais.</li><li>Confira eventos que possam afetar o real, o dólar e a liquidez global; registre o horário e o que muda no seu plano.</li></ul>
+<div class="guide-note"><strong>Intermercado é contexto, não gatilho.</strong> Correlação pode enfraquecer, inverter ou ser dominada por um evento específico. Não force uma explicação para cada oscilação.</div>
+<div class="guide-field"><label for="macroHoje">Eventos, horários e variáveis que merecem atenção hoje</label><textarea id="macroHoje" placeholder="Ex.: divulgação às 9h; reunião de juros; notícia fiscal; exterior com volatilidade elevada."></textarea></div></section>
+
+<section class="guide-step"><span class="step-number">3</span><h2>Leia a estrutura em três horizontes</h2><p>Use primeiro o gráfico diário, depois o de 60/15 minutos e, por último, o intraday que corresponde à sua forma de operar. Não comece pelo candle de 1 minuto: ele pode esconder o contexto.</p>
+<table class="guide-table"><thead><tr><th>Horizonte</th><th>O que observar</th><th>Pergunta útil</th></tr></thead><tbody>
+<tr><td>Diário / vários pregões</td><td>Sequência de máximas e mínimas, regiões de congestão, gaps, grandes deslocamentos, fechamento e extremos recentes.</td><td>O mercado está em tendência, faixa ou transição?</td></tr>
+<tr><td>60/15 min</td><td>Estrutura mais recente, zonas que foram defendidas, rompimentos, retornos e posição dentro da faixa maior.</td><td>O preço está perto de uma borda ou no meio da faixa?</td></tr>
+<tr><td>Intraday</td><td>Abertura, VWAP se usada, máxima/mínima do dia, velocidade, volume e resposta ao tocar referências.</td><td>Que comportamento observável confirmaria ou enfraqueceria meu cenário?</td></tr>
+</tbody></table>
+<div class="guide-checks">
+<label class="guide-check"><input type="checkbox" data-daily-check="estrutura1"><span>Marquei a máxima e mínima do pregão anterior e o fechamento anterior.</span></label>
+<label class="guide-check"><input type="checkbox" data-daily-check="estrutura2"><span>Identifiquei a estrutura de 5–10 pregões, sem classificar tendência por um único candle.</span></label>
+<label class="guide-check"><input type="checkbox" data-daily-check="estrutura3"><span>Sei se o preço está no topo, fundo ou centro da faixa mais ampla.</span></label>
+<label class="guide-check"><input type="checkbox" data-daily-check="estrutura4"><span>Registrei quando a leitura é incerta ou de transição.</span></label>
+</div><p><strong>Regra prática:</strong> descreva primeiro o que o preço fez; só depois dê nome ao regime. “Máximas ascendentes, mínimas ascendentes e correções curtas” é mais verificável do que “está muito comprador”.</p></section>
+
+<section class="guide-step"><span class="step-number">4</span><h2>Construa suportes e resistências por relevância</h2><p>Não tente desenhar todas as oscilações. Priorize zonas onde o mercado mostrou comportamento observável e que ainda façam sentido na faixa de preços atual.</p>
+<h3>Camada A — referências do pregão anterior</h3><ul><li>Máxima e mínima do dia anterior.</li><li>Fechamento anterior e abertura, quando relevantes para o seu método.</li><li>Máxima/mínima da sessão noturna ou de sessões específicas, se os dados e a sua estratégia as utilizam.</li></ul>
+<h3>Camada B — estrutura recente (5–10 pregões)</h3><ul><li>Topos e fundos que geraram deslocamento claro ou interromperam movimentos.</li><li>Bordas de congestão, regiões de rompimento e reteste, gaps e zonas de aceitação/rejeição.</li><li>Regiões com várias reações independentes, não apenas vários toques muito próximos dentro do mesmo movimento.</li></ul>
+<h3>Camada C — níveis históricos (20–60+ pregões)</h3><ul><li>Extremos semanais/mensais e zonas históricas de negociação que ainda estejam próximas do preço atual.</li><li>Regiões antigas só entram no mapa se houver uma razão objetiva para considerá-las relevantes agora.</li><li>Se o preço já está muito distante, não deixe um nível histórico dominar o plano só porque parece importante no gráfico.</li></ul>
+<div class="guide-note">Desenhe <strong>zonas</strong>, não uma precisão falsa de um tick. Anote a origem do nível e a evidência observada. Um suporte anterior pode falhar; se houver aceitação além dele, a leitura precisa ser atualizada.</div>
+<div class="guide-field"><label for="niveisWIN">WINFUT — zonas e justificativa</label><textarea id="niveisWIN" placeholder="Suporte: faixa e motivo. Resistência: faixa e motivo. Nível de invalidação."></textarea></div>
+<div class="guide-field"><label for="niveisWDO">WDOFUT — zonas e justificativa</label><textarea id="niveisWDO" placeholder="Suporte: faixa e motivo. Resistência: faixa e motivo. Nível de invalidação."></textarea></div></section>
+
+<section class="guide-step"><span class="step-number">5</span><h2>Meça a volatilidade recente</h2><p>Amplitude é uma medida simples e prática para começar; ela não é uma medida completa de volatilidade e não indica direção.</p>
+<p>Para cada pregão, calcule <strong>amplitude diária = máxima − mínima</strong>. Registre em pontos para WIN/WDO e, quando útil, em percentual. Compare janelas equivalentes: por exemplo, os últimos 5 pregões contra 20 pregões, sem misturar sessões incompletas com pregões completos.</p>
+<table class="guide-table"><thead><tr><th>Métrica</th><th>Uso</th><th>Cuidado</th></tr></thead><tbody>
+<tr><td>Amplitude diária</td><td>Mostra a faixa percorrida no dia.</td><td>Não informa a ordem do movimento nem se houve reversão.</td></tr>
+<tr><td>Mediana dos últimos 5 dias</td><td>Resumo robusto do comportamento recente.</td><td>Uma amostra pequena muda rapidamente.</td></tr>
+<tr><td>Mediana/percentil dos últimos 20 dias</td><td>Referência de comparação para o comportamento usual.</td><td>Compare a mesma sessão e convenção de dados.</td></tr>
+<tr><td>ATR (ex. 14 períodos)</td><td>Inclui gaps pelo true range e suaviza a amplitude.</td><td>Não é previsão nem alvo obrigatório.</td></tr>
+<tr><td>Faixa por horário</td><td>Ajuda a comparar a abertura com a abertura de dias anteriores.</td><td>Não compare 30 minutos com o pregão inteiro.</td></tr>
+</tbody></table>
+<p>Classifique a condição como <em>abaixo do usual</em>, <em>próxima do usual</em> ou <em>acima do usual</em>, usando uma regra que você consiga repetir. Se possível, use percentis históricos e não limites escolhidos depois de ver o resultado.</p>
+<div class="guide-field"><label for="volWIN">WINFUT — amplitude/ATR e comparação histórica</label><textarea id="volWIN" placeholder="Ex.: mediana 5d; mediana 20d; condição relativa; horários de maior amplitude."></textarea></div>
+<div class="guide-field"><label for="volWDO">WDOFUT — amplitude/ATR e comparação histórica</label><textarea id="volWDO" placeholder="Ex.: mediana 5d; mediana 20d; condição relativa; horários de maior amplitude."></textarea></div>
+<div class="guide-note">Uma amplitude maior significa que o preço percorreu mais pontos, não que o ativo ficará mais volátil hoje. Evite usar uma média fixa de pontos como limite universal para todos os regimes.</div></section>
+
+<section class="guide-step"><span class="step-number">6</span><h2>Compare WIN e WDO sem presumir uma relação obrigatória</h2><p>Faça primeiro a leitura individual de cada contrato. Depois pergunte se os movimentos recentes são coerentes com o pano de fundo ou se há divergência relevante.</p>
+<div class="guide-checks">
+<label class="guide-check"><input type="checkbox" data-daily-check="inter1"><span>Descrevi WIN sem usar o movimento do WDO como explicação automática.</span></label>
+<label class="guide-check"><input type="checkbox" data-daily-check="inter2"><span>Descrevi WDO sem presumir que dólar e índice sempre se movem em sentidos opostos.</span></label>
+<label class="guide-check"><input type="checkbox" data-daily-check="inter3"><span>Identifiquei se a divergência pode ser explicada por evento, juros, exterior ou fluxo específico — ou se ainda não há evidência suficiente.</span></label>
+<label class="guide-check"><input type="checkbox" data-daily-check="inter4"><span>Registrei quais relações precisam ser observadas, sem transformá-las em sinal de entrada.</span></label>
+</div></section>
+
+<section class="guide-step"><span class="step-number">7</span><h2>Escreva cenários condicionais para o pregão</h2><p>Para cada ativo, escreva pelo menos um cenário de continuidade, um de falha/reversão e um de não operar. Os cenários não precisam cobrir todas as possibilidades; devem explicitar o que faria você atualizar a leitura.</p>
+<table class="guide-table"><thead><tr><th>Elemento</th><th>Exemplo de formulação</th></tr></thead><tbody>
+<tr><td>Condição observável</td><td>“Se o preço romper a zona X e permanecer negociando acima dela...”</td></tr>
+<tr><td>Interpretação provisória</td><td>“...isso seria evidência de aceitação acima da faixa, não garantia de continuidade.”</td></tr>
+<tr><td>Comportamento permitido</td><td>“Vou observar se há reteste e se o risco cabe no meu plano.”</td></tr>
+<tr><td>Invalidação</td><td>“Retorno e aceitação dentro da faixa enfraquecem a hipótese.”</td></tr>
+<tr><td>Não operar</td><td>“Se o preço oscilar no centro da faixa, sem deslocamento claro, não tenho cenário de qualidade.”</td></tr>
+</tbody></table>
+<div class="guide-field"><label for="cenarioWIN">WINFUT — cenários A/B e não operar</label><textarea id="cenarioWIN" placeholder="A: condição → leitura → comportamento → invalidação. B: ... Não operar se..."></textarea></div>
+<div class="guide-field"><label for="cenarioWDO">WDOFUT — cenários A/B e não operar</label><textarea id="cenarioWDO" placeholder="A: condição → leitura → comportamento → invalidação. B: ... Não operar se..."></textarea></div>
+<div class="guide-field"><label for="riscoHoje">Regras pessoais de risco e eventos para evitar/aguardar</label><textarea id="riscoHoje" placeholder="Limites de perda, limite de tentativas, horários a evitar, condições para encerrar."></textarea></div></section>
+
+<section class="guide-step" id="rotina-interativa"><span class="step-number">8</span><h2>Checklist diário e registro</h2><p>Marque cada etapa conforme concluir. O progresso mede apenas a completude da preparação — não a qualidade do mercado, a probabilidade de lucro nem a existência de oportunidade.</p><div class="guide-progress" aria-label="Progresso do checklist"><div id="progressBar"></div></div><p id="progressText" aria-live="polite">0% concluído</p>
+<div class="guide-checks">
+<label class="guide-check"><input type="checkbox" data-daily-check="final1"><span>Tenho um cenário de continuidade para cada ativo, com condição observável.</span></label>
+<label class="guide-check"><input type="checkbox" data-daily-check="final2"><span>Tenho um cenário alternativo e sei o que invalidaria a hipótese inicial.</span></label>
+<label class="guide-check"><input type="checkbox" data-daily-check="final3"><span>Defini quando não operar e como respeitar meus limites de risco.</span></label>
+<label class="guide-check"><input type="checkbox" data-daily-check="final4"><span>Sei quais níveis e eventos observar na abertura, sem precisar prever o primeiro movimento.</span></label>
+</div>
+<div class="data-actions"><button class="button primary" id="saveRoutine" type="button">Salvar preparação neste navegador</button><button class="button secondary" id="exportRoutine" type="button">Exportar registro TXT</button><button class="button secondary" id="resetRoutine" type="button">Limpar formulário</button></div><p id="saveStatus" aria-live="polite" class="muted"></p>
+<div class="guide-note">Este formulário guarda a preparação neste navegador. Para manter um histórico de vários dias, use também o <a href="../ferramentas/diario-contexto.html">Diário de Contexto</a> e registre nele as hipóteses e o que ocorreu após a abertura.</div></section>
+
+<section class="guide-step"><span class="step-number">9</span><h2>Depois da abertura: atualize, não defenda a hipótese</h2><ul><li>Observe a reação do preço às zonas: aceitação, rejeição, rompimento sem continuidade ou retorno à faixa.</li><li>Não classifique todo rompimento como breakout válido. Procure evidência de permanência/aceitação segundo uma regra definida previamente.</li><li>Atualize o cenário quando houver nova informação; não mova os níveis apenas para justificar uma posição.</li><li>Ao fim do pregão, compare a leitura registrada com o que ocorreu. Separe qualidade da leitura, execução e resultado financeiro.</li><li>Registre erros de processo e acertos de processo, inclusive quando a decisão correta foi não operar.</li></ul><p class="actions"><a class="button primary" href="../ferramentas/diario-contexto.html">Abrir Diário de Contexto</a><a class="button secondary" href="../ferramentas/plano-vs-mercado.html">Comparar plano x mercado</a></p></section>
+
+<section class="guide-step"><h2>Melhorias sugeridas para uma segunda etapa</h2><ol><li><strong>Planilha/CSV de amplitude diária:</strong> calcular automaticamente máxima−mínima, mediana de 5 e 20 pregões, percentis e amplitude por horário para WIN e WDO.</li><li><strong>Mapa de níveis por origem:</strong> guardar cada zona, data em que surgiu, número de reações independentes e se houve aceitação além dela, evitando contar “toques” de forma ingênua.</li><li><strong>Comparação entre ativos:</strong> gráfico sincronizado de WIN/WDO, DXY, juros e índices externos, com correlação móvel como contexto descritivo — nunca como sinal.</li><li><strong>Calendário pré-pregão:</strong> checklist de eventos e horários relevantes com fonte e hora local confirmadas.</li><li><strong>Replay de preparação:</strong> esconder candles futuros e pedir que o trader registre regime, zonas e cenários antes de revelar o restante do pregão.</li><li><strong>Auditoria do plano:</strong> após 20–30 sessões, avaliar se os níveis e critérios foram definidos de forma consistente, sem usar poucos resultados para declarar vantagem estatística.</li></ol><div class="note"><strong>Limite importante:</strong> esta ferramenta não importa cotações em tempo real nem calcula níveis automaticamente. O trader deve usar dados confiáveis do seu gráfico e registrar as evidências. Nenhum nível histórico garante reação futura.</div></section>
+</div></main>
+<footer class="footer"><div class="container">Conteúdo educacional. Não constitui recomendação de investimento, sinal de compra/venda ou promessa de resultado.</div></footer>
+<script src="../script.js"></script>
+<script>
+(function(){
+ const KEY="contextoMercadoPrePregaoWinWdoV1";
+ const ids=["macroHoje","niveisWIN","niveisWDO","volWIN","volWDO","cenarioWIN","cenarioWDO","riscoHoje"];
+ const checks=[...document.querySelectorAll("[data-daily-check]")];
+ function collect(){const values={};ids.forEach(id=>values[id]=document.getElementById(id).value);values.checks={};checks.forEach(c=>values.checks[c.dataset.dailyCheck]=c.checked);values.updatedAt=new Date().toISOString();return values}
+ function apply(d){if(!d)return;ids.forEach(id=>{if(typeof d[id]==="string")document.getElementById(id).value=d[id]});checks.forEach(c=>c.checked=!!(d.checks&&d.checks[c.dataset.dailyCheck]))}
+ function progress(){const done=checks.filter(c=>c.checked).length,pct=Math.round(done/checks.length*100);document.getElementById("progressBar").style.width=pct+"%";document.getElementById("progressText").textContent=pct+"% concluído ("+done+" de "+checks.length+" itens). Esse número mede preparação, não oportunidade."}
+ function save(){try{localStorage.setItem(KEY,JSON.stringify(collect()));document.getElementById("saveStatus").textContent="Preparação salva neste navegador."}catch(e){document.getElementById("saveStatus").textContent="Não foi possível salvar. Exporte o registro e verifique o armazenamento do navegador."}}
+ function exportText(){const d=collect(),lines=["LEITURA PRÉ-PREGÃO WINFUT / WDOFUT","Atualizado: "+d.updatedAt,"","EVENTOS E CONTEXTO MACRO",d.macroHoje,"","WINFUT — NÍVEIS",d.niveisWIN,"","WDOFUT — NÍVEIS",d.niveisWDO,"","WINFUT — VOLATILIDADE",d.volWIN,"","WDOFUT — VOLATILIDADE",d.volWDO,"","WINFUT — CENÁRIOS",d.cenarioWIN,"","WDOFUT — CENÁRIOS",d.cenarioWDO,"","REGRAS DE RISCO",d.riscoHoje,"","CHECKLIST"];checks.forEach(c=>lines.push((c.checked?"[x] ":"[ ] ")+c.parentElement.innerText.trim()));const blob=new Blob([lines.join("\n")],{type:"text/plain;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="leitura-pre-pregao-winfut-wdofut-"+new Date().toISOString().slice(0,10)+".txt";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+ try{apply(JSON.parse(localStorage.getItem(KEY)||"null"))}catch(e){}
+ checks.forEach(c=>c.addEventListener("change",progress));ids.forEach(id=>document.getElementById(id).addEventListener("input",()=>{document.getElementById("saveStatus").textContent="Alterações ainda não salvas."}));
+ document.getElementById("saveRoutine").addEventListener("click",save);document.getElementById("exportRoutine").addEventListener("click",exportText);
+ document.getElementById("resetRoutine").addEventListener("click",()=>{if(!confirm("Limpar este formulário e remover a preparação salva neste navegador?"))return;ids.forEach(id=>document.getElementById(id).value="");checks.forEach(c=>c.checked=false);localStorage.removeItem(KEY);document.getElementById("saveStatus").textContent="Formulário limpo.";progress()});
+ progress();
+})();
+</script></body></html>
