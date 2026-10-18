@@ -49,8 +49,9 @@ const parseLine=line=>{let out=[],v="",q=false;for(let i=0;i<line.length;i++){co
 return lines.map(parseLine)
 }
 function detectSep(text){const sample=text.split(/\r?\n/).slice(0,5).join("\n");return [",",";","\t"].map(s=>({s,n:sample.split(s).length-1})).sort((a,b)=>b.n-a.n)[0].s}
-function detectDecimal(rows){const vals=rows.slice(1,8).flat().filter(v=>/\d[.,]\d/.test(v));const commas=vals.filter(v=>/\d,\d/.test(v)).length;const dots=vals.filter(v=>/\d\.\d/.test(v)).length;return commas>dots?",":"."}
-function number(v){let s=String(v??"").trim().replace(/[\sR$]/g,"");if(!s)return NaN;if(decimal===","){if(s.includes(".")&&s.includes(","))s=s.replace(/\./g,"").replace(",",".");else s=s.replace(",",".")}else if(s.includes(",")&&s.includes("."))s=s.replace(/,/g,"");else s=s.replace(",",".");s=s.replace(/[^0-9+\-.eE]/g,"");return Number(s)}
+function detectDecimal(rows){const vals=rows.slice(1,Math.min(rows.length,50)).flat().filter(v=>/\d/.test(v)&&!/[/:]/.test(v));const both=vals.find(v=>v.includes(".")&&v.includes(","));if(both)return both.lastIndexOf(",")>both.lastIndexOf(".")?",":".";return vals.some(v=>/\d,\d/.test(v))?",":"."}
+function number(v){let s=String(v??"").trim().replace(/[\sR$]/g,"");if(!s)return NaN;if(decimal===",")s=s.replace(/\./g,"").replace(",",".");else s=s.replace(/,/g,"");s=s.replace(/[^0-9+\-.eE]/g,"");return Number(s)}
+async function readText(file){const buffer=await file.arrayBuffer();try{return new TextDecoder("utf-8",{fatal:true}).decode(buffer)}catch{return new TextDecoder("windows-1252").decode(buffer)}}
 function setStatus(s){$("status").textContent=s}
 function headerGuess(type){return headers.findIndex(h=>aliases[type].map(norm).includes(norm(h)))}
 function renderMapping(){
@@ -60,7 +61,7 @@ $("mappingPanel").hidden=false
 }
 function percentile(values,latest){const n=values.filter(v=>Number.isFinite(v)).length;if(!n)return NaN;return 100*values.filter(v=>v<=latest).length/n}
 function median(a){const x=a.filter(Number.isFinite).slice().sort((a,b)=>a-b);if(!x.length)return NaN;const m=Math.floor(x.length/2);return x.length%2?x[m]:(x[m-1]+x[m])/2}
-function fmt(n,d=2){return Number.isFinite(n)?n.toLocaleString("pt-BR",{maximumFractionDigits:d,minimumFractionDigits:0}):"—"}
+function fmt(n,d=3){return Number.isFinite(n)?n.toLocaleString("pt-BR",{maximumFractionDigits:d,minimumFractionDigits:0}):"—"}
 function normalizeDate(raw,rawTime){
 const s=String(raw??"").trim();let y,m,d,embedded="";
 let match=s.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})(?:[T\s]+(\d{1,2}:\d{2}(?::\d{2})?))?/);
@@ -76,8 +77,8 @@ const groups=new Map();let bad=0;
 rawRows.slice(1).forEach(row=>{const rawDate=String(row[map.date]??"").trim();const hi=number(row[map.high]),lo=number(row[map.low]);if(!rawDate||!Number.isFinite(hi)||!Number.isFinite(lo)||hi<lo){bad++;return}
 const normDate=normalizeDate(rawDate,map.time>=0?row[map.time]:"");const date=normDate.date,t=normDate.time;const stamp=date+" "+t;const prev=groups.get(date)||{date,high:-Infinity,low:Infinity,open:NaN,close:NaN,volume:0,first:"\\uffff",last:""};
 const openValue=map.open>=0?number(row[map.open]):NaN,closeValue=map.close>=0?number(row[map.close]):NaN;
-const first=stamp<prev.first?stamp:prev.first,last=stamp>prev.last?stamp:prev.last;
-groups.set(date,{...prev,high:Math.max(prev.high,hi),low:Math.min(prev.low,lo),open:stamp<=prev.first?openValue:prev.open,close:stamp>=prev.last?closeValue:prev.close,volume:prev.volume+(map.volume>=0?(number(row[map.volume])||0):0),first,last})});
+const first=!prev.last||stamp<prev.first?stamp:prev.first,last=!prev.last||stamp>prev.last?stamp:prev.last;
+groups.set(date,{...prev,high:Math.max(prev.high,hi),low:Math.min(prev.low,lo),open:!prev.last||stamp<prev.first?openValue:prev.open,close:!prev.last||stamp>=prev.last?closeValue:prev.close,volume:prev.volume+(map.volume>=0?(number(row[map.volume])||0):0),first,last})});
 let rows=[...groups.values()].sort((a,b)=>a.date.localeCompare(b.date));if(!rows.length){setStatus("Nenhuma linha válida encontrada. Confira separador, decimal e colunas.");return}
 rows=rows.map((r,i)=>{const prev=i?rows[i-1].close:NaN;const tr=Number.isFinite(prev)?Math.max(r.high-r.low,Math.abs(r.high-prev),Math.abs(r.low-prev)):r.high-r.low;return {...r,range:r.high-r.low,rangePct:Number.isFinite(prev)&&prev!==0?(r.high-r.low)/Math.abs(prev)*100:NaN,tr}});
 const ranges=rows.map(r=>r.range),last20=ranges.slice(-20),last5=ranges.slice(-5),tr20=rows.slice(-14).map(r=>r.tr),atr=tr20.reduce((a,b)=>a+b,0)/tr20.length,latest=rows.at(-1),pct=percentile(last20,latest.range),r5=median(last5),r20=median(last20);lastRows=rows;
@@ -86,7 +87,7 @@ $("metrics").innerHTML="";metrics.forEach(([label,value])=>{const el=document.cr
 $("summaryText").textContent="Ativo: "+$("asset").value+". Última data no arquivo: "+latest.date+". Amplitude recente "+fmt(latest.range)+"; mediana de 5 pregões "+fmt(r5)+" e de 20 pregões "+fmt(r20)+". O percentil empírico foi calculado sobre "+last20.length+" amplitude(s) disponível(is). Valores em unidades de preço do arquivo.";
 $("historyRows").innerHTML="";rows.slice().reverse().forEach(r=>{const tr=document.createElement("tr");[r.date,fmt(r.high),fmt(r.low),fmt(r.close),fmt(r.range),fmt(r.rangePct)+"%",fmt(r.tr)].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td)});$("historyRows").append(tr)});
 $("results").hidden=false;setStatus("Cálculo concluído. "+bad+" linha(s) foram ignoradas por data/preços ausentes ou inconsistentes. Revise a amostra antes de usar os números.");}
-$("file").addEventListener("change",async e=>{const f=e.target.files?.[0];if(!f)return;try{const txt=await f.text();delimiter=$("delimiter").value==="auto"?detectSep(txt):$("delimiter").value;decimal=$("decimal").value==="auto"?".":$("decimal").value;rawRows=parseCSV(txt,delimiter);if(rawRows.length<2){setStatus("O arquivo precisa conter cabeçalho e pelo menos uma linha de dados.");return}headers=rawRows[0];if($("decimal").value==="auto")decimal=detectDecimal(rawRows);renderMapping();$("results").hidden=true;setStatus("CSV carregado: "+(rawRows.length-1)+" linha(s). Confirme o mapeamento e calcule.");}catch(err){setStatus("Não foi possível ler o CSV: "+err.message)}});
+$("file").addEventListener("change",async e=>{const f=e.target.files?.[0];if(!f)return;try{const txt=await readText(f);delimiter=$("delimiter").value==="auto"?detectSep(txt):$("delimiter").value;decimal=$("decimal").value==="auto"?".":$("decimal").value;rawRows=parseCSV(txt,delimiter);if(rawRows.length<2){setStatus("O arquivo precisa conter cabeçalho e pelo menos uma linha de dados.");return}headers=rawRows[0];if($("decimal").value==="auto")decimal=detectDecimal(rawRows);renderMapping();$("results").hidden=true;setStatus("CSV carregado: "+(rawRows.length-1)+" linha(s). Confirme o mapeamento e calcule.");}catch(err){setStatus("Não foi possível ler o CSV: "+err.message)}});
 $("delimiter").addEventListener("change",()=>{if($("file").files[0])$("file").dispatchEvent(new Event("change"))});
 $("decimal").addEventListener("change",()=>{if($("file").files[0])$("file").dispatchEvent(new Event("change"))});
 $("calculate").addEventListener("click",calculate);$("recalculate").addEventListener("click",calculate);
