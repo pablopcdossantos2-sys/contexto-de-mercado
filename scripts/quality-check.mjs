@@ -17,7 +17,7 @@ const rel=f=>path.relative(root,f).replaceAll("\\","/");
 function add(arr,file,msg){arr.push(rel(file)+": "+msg)}
 for(const file of htmlFiles){
   const html=fs.readFileSync(file,"utf8");
-  for(const [index,match] of [...html.matchAll(/<script\\b[^>]*>([\\s\\S]*?)<\\/script>/gi)].entries()){
+  for(const [index,match] of [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)].entries()){
     try{new vm.Script(match[1],{filename:rel(file)+" inline script "+(index+1)})}
     catch(error){add(errors,file,"inline JavaScript syntax error in script "+(index+1)+": "+error.message)}
   }
