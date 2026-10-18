@@ -26,7 +26,7 @@
 <div class="calc-panel"><h2>3. Resumo da amostra</h2><div class="metric-grid" id="metrics"></div><div id="summaryText" class="note"></div></div>
 <div class="calc-panel"><h2>Histórico agrupado por pregão</h2><p class="small-note">Se o CSV tiver candles intradiários, a ferramenta agrupa as linhas pela data presente no arquivo e usa a máxima e a mínima do conjunto. A definição de pregão depende da data e da sessão exportadas pela plataforma.</p><div class="table-wrap"><table class="calc-table"><thead><tr><th>Data</th><th>Máxima</th><th>Mínima</th><th>Fechamento</th><th>Amplitude</th><th>Amplitude %</th><th>True range</th></tr></thead><tbody id="historyRows"></tbody></table></div><div class="data-actions"><button class="button primary" id="export" type="button">Exportar resumo CSV</button><button class="button secondary" id="recalculate" type="button">Recalcular com mapeamento atual</button></div></div>
 </div>
-<div class="calc-panel"><h2>Como interpretar</h2><ul><li><strong>Amplitude (máxima − mínima):</strong> faixa percorrida no pregão; não mostra a ordem dos movimentos.</li><li><strong>Medianas de 5 e 20 pregões:</strong> resumem o comportamento recente e uma janela mais ampla, com menor sensibilidade a extremos do que a média.</li><li><strong>Percentil empírico da amplitude mais recente:</strong> posição relativa da última amplitude na janela recente disponível; depende do tamanho e da qualidade da amostra.</li><li><strong>True range:</strong> maior entre máxima−mínima, |máxima−fechamento anterior| e |mínima−fechamento anterior|. O ATR-14 é a média dos true ranges disponíveis nos últimos 14 pregões.</li></ul><div class="note"><strong>Limites:</strong> amplitude passada não prevê a amplitude nem a direção do próximo pregão. ATR não é stop, alvo ou recomendação de risco. Não compare séries de contratos, sessões, fusos ou métodos de ajuste diferentes sem normalizá-las. O cálculo por data não resolve automaticamente sessões que cruzam a meia-noite.</div></div>
+<div class="calc-panel"><h2>Como interpretar</h2><ul><li><strong>Amplitude (máxima − mínima):</strong> faixa percorrida no pregão; não mostra a ordem dos movimentos.</li><li><strong>Medianas de 5 e 20 pregões:</strong> resumem o comportamento recente e uma janela mais ampla, com menor sensibilidade a extremos do que a média.</li><li><strong>Percentil empírico da amplitude mais recente:</strong> posição relativa da última amplitude na janela recente disponível; depende do tamanho e da qualidade da amostra.</li><li><strong>True range:</strong> maior entre máxima−mínima, |máxima−fechamento anterior| e |mínima−fechamento anterior|. O ATR-14 exibido nesta versão é a média simples dos true ranges disponíveis nos últimos 14 pregões; não usa suavização de Wilder.</li></ul><div class="note"><strong>Limites:</strong> amplitude passada não prevê a amplitude nem a direção do próximo pregão. ATR não é stop, alvo ou recomendação de risco. Não compare séries de contratos, sessões, fusos ou métodos de ajuste diferentes sem normalizá-las. O cálculo por data não resolve automaticamente sessões que cruzam a meia-noite.</div></div>
 </div></section></main>
 <footer class="footer"><div class="container">Ferramenta educacional. Processamento local no navegador; não constitui recomendação de investimento.</div></footer>
 <script src="../script.js"></script>
@@ -37,8 +37,8 @@ const aliases={
  date:["data","date","datetime","timestamp","dia","tradingdate","datapregao"],
  time:["hora","time","horario","hour"],
  open:["abertura","open","o","precoabertura"],
- high:["maxima","máxima","high","h","max","precomaximo"],
- low:["minima","mínima","low","l","min","precominimo"],
+ high:["maxima","máxima","maximo","máximo","high","h","max","precomaximo"],
+ low:["minima","mínima","minimo","mínimo","low","l","min","precominimo"],
  close:["fechamento","close","c","ultimo","último","last","precofechamento"],
  volume:["volume","vol","quantidade"]
 };
@@ -63,10 +63,11 @@ function median(a){const x=a.filter(Number.isFinite).slice().sort((a,b)=>a-b);if
 function fmt(n,d=2){return Number.isFinite(n)?n.toLocaleString("pt-BR",{maximumFractionDigits:d,minimumFractionDigits:0}):"—"}
 function normalizeDate(raw,rawTime){
 const s=String(raw??"").trim();let y,m,d,embedded="";
-let match=s.match(/^(\\d{4})[-/.](\\d{1,2})[-/.](\\d{1,2})(?:[T\\s]+(\\d{1,2}:\\d{2}(?::\\d{2})?))?/);
+let match=s.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})(?:[T\s]+(\d{1,2}:\d{2}(?::\d{2})?))?/);
 if(match){y=+match[1];m=+match[2];d=+match[3];embedded=match[4]||""}
-else {match=s.match(/^(\\d{1,2})[/. -](\\d{1,2})[/. -](\\d{4})(?:[T\\s]+(\\d{1,2}:\\d{2}(?::\\d{2})?))?/);if(match){d=+match[1];m=+match[2];y=+match[3];embedded=match[4]||""}else return {date:s,time:String(rawTime??"").trim()}}
-if(m<1||m>12||d<1||d>31)return {date:s,time:String(rawTime??"").trim()};
+else {match=s.match(/^(\d{1,2})[/. -](\d{1,2})[/. -](\d{4})(?:[T\s]+(\d{1,2}:\d{2}(?::\d{2})?))?/);if(match){d=+match[1];m=+match[2];y=+match[3];embedded=match[4]||""}else return {date:s,time:String(rawTime??"").trim()}}
+const valid=new Date(Date.UTC(y,m-1,d));
+if(m<1||m>12||d<1||d>31||valid.getUTCFullYear()!==y||valid.getUTCMonth()!==m-1||valid.getUTCDate()!==d)return {date:s,time:String(rawTime??"").trim()};
 return {date:String(y).padStart(4,"0")+"-"+String(m).padStart(2,"0")+"-"+String(d).padStart(2,"0"),time:String(rawTime??"").trim()||embedded}
 }
 function calculate(){
@@ -79,7 +80,7 @@ const first=stamp<prev.first?stamp:prev.first,last=stamp>prev.last?stamp:prev.la
 groups.set(date,{...prev,high:Math.max(prev.high,hi),low:Math.min(prev.low,lo),open:stamp<=prev.first?openValue:prev.open,close:stamp>=prev.last?closeValue:prev.close,volume:prev.volume+(map.volume>=0?(number(row[map.volume])||0):0),first,last})});
 let rows=[...groups.values()].sort((a,b)=>a.date.localeCompare(b.date));if(!rows.length){setStatus("Nenhuma linha válida encontrada. Confira separador, decimal e colunas.");return}
 rows=rows.map((r,i)=>{const prev=i?rows[i-1].close:NaN;const tr=Number.isFinite(prev)?Math.max(r.high-r.low,Math.abs(r.high-prev),Math.abs(r.low-prev)):r.high-r.low;return {...r,range:r.high-r.low,rangePct:Number.isFinite(prev)&&prev!==0?(r.high-r.low)/Math.abs(prev)*100:NaN,tr}});
-const ranges=rows.map(r=>r.range),last20=ranges.slice(-20),last5=ranges.slice(-5),tr20=rows.slice(-14).map(r=>r.tr),atr=tr20.reduce((a,b)=>a+b,0)/tr20.length,latest=rows.at(-1),pct=percentile(last20,latest.range),r5=median(last5),r20=median(last20);
+const ranges=rows.map(r=>r.range),last20=ranges.slice(-20),last5=ranges.slice(-5),tr20=rows.slice(-14).map(r=>r.tr),atr=tr20.reduce((a,b)=>a+b,0)/tr20.length,latest=rows.at(-1),pct=percentile(last20,latest.range),r5=median(last5),r20=median(last20);lastRows=rows;
 const metrics=[["Pregões válidos",rows.length],["Amplitude mais recente",fmt(latest.range)],["Mediana amplitude · 5",fmt(r5)],["Mediana amplitude · 20",fmt(r20)],["Percentil recente",Number.isFinite(pct)?fmt(pct,0)+"º":"—"],["ATR-14 (média TR)",fmt(atr)],["Amplitude mais recente (%)",fmt(latest.rangePct)+"%"]];
 $("metrics").innerHTML="";metrics.forEach(([label,value])=>{const el=document.createElement("div");el.className="metric";const strong=document.createElement("strong");strong.textContent=value;const span=document.createElement("span");span.textContent=label;el.append(strong,span);$("metrics").append(el)});
 $("summaryText").textContent="Ativo: "+$("asset").value+". Última data no arquivo: "+latest.date+". Amplitude recente "+fmt(latest.range)+"; mediana de 5 pregões "+fmt(r5)+" e de 20 pregões "+fmt(r20)+". O percentil empírico foi calculado sobre "+last20.length+" amplitude(s) disponível(is). Valores em unidades de preço do arquivo.";
