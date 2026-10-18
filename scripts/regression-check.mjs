@@ -17,7 +17,7 @@ assert.equal(helpers.detectDecimal([["Data","Máximo"],["16/10/2026","5.080,500"
 
 const readMatch=html.match(/async function readText\(file\)\{[\s\S]*?\nfunction setStatus/);
 assert.ok(readMatch,"encoding fallback must exist");
-const readSource=readMatch[0].split("\\nfunction setStatus")[0];
+const readSource=readMatch[0].split("\nfunction setStatus")[0];
 const readContext={TextDecoder};
 vm.runInNewContext(readSource,readContext);
 const latin1=Buffer.from("Ativo;Máximo\nWDOFUT;5.080,500","latin1");
