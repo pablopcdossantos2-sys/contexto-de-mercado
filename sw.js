@@ -1,4 +1,4 @@
-const CACHE="contexto-mercado-v7-5";
+const CACHE="contexto-mercado-v7-6";
 const CORE=["./","./index.html","./styles.css","./script.js","./manifest.webmanifest","./icons/icon-192.svg","./icons/icon-512.svg","./offline.html","./roadmap.html","./aprendizado/trilhas.html","./rotina/leitura-pre-pregao-winfut-wdofut.html","./ferramentas/volatilidade-historica-winfut-wdofut.html","./ferramentas/diario-contexto.html","./ferramentas/replay-contexto.html","./ferramentas/replay-guiado.html","./ferramentas/painel-processo.html","./privacidade.html","./ferramentas/gerenciar-dados.html","./en/index.html","./en/course.html","./en/pre-market.html","./en/tools.html","./en/privacy.html","./es/index.html","./es/course.html","./es/pre-market.html","./es/tools.html","./es/privacy.html"];
 const url=p=>new URL(p,self.location.href).href;
 self.addEventListener("install",event=>{
