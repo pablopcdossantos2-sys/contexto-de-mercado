@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Calculadora local de amplitude histórica, true range e ATR para WINFUT e WDOFUT a partir de arquivos CSV.">
+<title>Volatilidade histórica — WINFUT e WDOFUT</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+.calc-panel{border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:clamp(16px,3vw,26px);margin:18px 0}.calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px}.calc-field{display:flex;flex-direction:column;gap:6px}.calc-field label{font-weight:700}.calc-field input,.calc-field select{width:100%;padding:11px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--text);font:inherit}.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin:16px 0}.metric{padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2)}.metric strong{display:block;font-size:1.35rem;overflow-wrap:anywhere}.metric span{font-size:.88rem;color:var(--muted)}.table-wrap{overflow-x:auto}.calc-table{width:100%;border-collapse:collapse;font-size:.93rem}.calc-table th,.calc-table td{padding:10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.status{min-height:1.5em}.small-note{font-size:.92rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="site-header"><div class="container nav"><a class="brand" href="../index.html">Contexto <span>de Mercado</span></a><button class="menu-button" aria-label="Abrir menu">Menu</button><nav class="nav-links"><a href="../index.html">Início</a><a href="../rotina/leitura-pre-pregao-winfut-wdofut.html">Rotina WIN/WDO</a><a href="../ferramentas/diario-contexto.html">Diário</a></nav></div></header>
+<main><section class="hero"><div class="container"><div class="eyebrow">Ferramenta local · CSV</div><h1>Amplitude e volatilidade histórica</h1><p class="lead">Compare a faixa percorrida por WINFUT ou WDOFUT nos últimos pregões, sem transformar estatísticas passadas em previsão.</p><p><a class="button secondary" href="../rotina/leitura-pre-pregao-winfut-wdofut.html">Voltar à rotina pré-pregão</a></p></div></section>
+<section class="section"><div class="container">
+<div class="note"><strong>Privacidade:</strong> o arquivo é lido no seu navegador; não é enviado a um servidor. Use dados exportados da sua plataforma e confira contrato, sessão, fuso, ajustes e candles incompletos antes de interpretar os números.</div>
+<div class="calc-panel"><h2>1. Carregue o histórico</h2><div class="calc-grid">
+<div class="calc-field"><label for="asset">Ativo identificado no relatório</label><select id="asset"><option>WINFUT</option><option>WDOFUT</option><option>Outro / estudo</option></select></div>
+<div class="calc-field"><label for="file">Arquivo CSV</label><input id="file" type="file" accept=".csv,text/csv"></div>
+<div class="calc-field"><label for="delimiter">Separador de colunas</label><select id="delimiter"><option value="auto">Detectar automaticamente</option><option value=",">Vírgula (,)</option><option value=";">Ponto e vírgula (;)</option><option value="\t">Tabulação</option></select></div>
+<div class="calc-field"><label for="decimal">Separador decimal</label><select id="decimal"><option value="auto">Detectar automaticamente</option><option value=".">Ponto (.)</option><option value=",">Vírgula (,)</option></select></div>
+</div><p class="small-note">Aceita barras diárias ou candles intradiários OHLC. Colunas reconhecidas automaticamente incluem Data/Date, Hora/Time, Abertura/Open, Máxima/High, Mínima/Low e Fechamento/Close. Se o cabeçalho não for reconhecido, ajuste o mapeamento após carregar.</p>
+<div id="mappingPanel" hidden><h3>2. Confirme o mapeamento das colunas</h3><div class="calc-grid" id="mappingFields"></div><p class="small-note">A data é obrigatória; máxima e mínima são necessárias para amplitude. O fechamento permite calcular true range e ATR.</p><button class="button primary" id="calculate" type="button">Calcular estatísticas</button></div>
+<p id="status" class="status" role="status" aria-live="polite">Selecione um CSV para começar.</p></div>
+<div id="results" hidden>
+<div class="calc-panel"><h2>3. Resumo da amostra</h2><div class="metric-grid" id="metrics"></div><div id="summaryText" class="note"></div></div>
+<div class="calc-panel"><h2>Histórico agrupado por pregão</h2><p class="small-note">Se o CSV tiver candles intradiários, a ferramenta agrupa as linhas pela data presente no arquivo e usa a máxima e a mínima do conjunto. A definição de pregão depende da data e da sessão exportadas pela plataforma.</p><div class="table-wrap"><table class="calc-table"><thead><tr><th>Data</th><th>Máxima</th><th>Mínima</th><th>Fechamento</th><th>Amplitude</th><th>Amplitude %</th><th>True range</th></tr></thead><tbody id="historyRows"></tbody></table></div><div class="data-actions"><button class="button primary" id="export" type="button">Exportar resumo CSV</button><button class="button secondary" id="recalculate" type="button">Recalcular com mapeamento atual</button></div></div>
+</div>
+<div class="calc-panel"><h2>Como interpretar</h2><ul><li><strong>Amplitude (máxima − mínima):</strong> faixa percorrida no pregão; não mostra a ordem dos movimentos.</li><li><strong>Medianas de 5 e 20 pregões:</strong> resumem o comportamento recente e uma janela mais ampla, com menor sensibilidade a extremos do que a média.</li><li><strong>Percentil empírico da amplitude mais recente:</strong> posição relativa da última amplitude na janela recente disponível; depende do tamanho e da qualidade da amostra.</li><li><strong>True range:</strong> maior entre máxima−mínima, |máxima−fechamento anterior| e |mínima−fechamento anterior|. O ATR-14 é a média dos true ranges disponíveis nos últimos 14 pregões.</li></ul><div class="note"><strong>Limites:</strong> amplitude passada não prevê a amplitude nem a direção do próximo pregão. ATR não é stop, alvo ou recomendação de risco. Não compare séries de contratos, sessões, fusos ou métodos de ajuste diferentes sem normalizá-las. O cálculo por data não resolve automaticamente sessões que cruzam a meia-noite.</div></div>
+</div></section></main>
+<footer class="footer"><div class="container">Ferramenta educacional. Processamento local no navegador; não constitui recomendação de investimento.</div></footer>
+<script src="../script.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);let rawRows=[],headers=[],lastRows=[],delimiter=",",decimal=".";
+const aliases={
+ date:["data","date","datetime","timestamp","dia","tradingdate","datapregao"],
+ time:["hora","time","horario","hour"],
+ open:["abertura","open","o","precoabertura"],
+ high:["maxima","máxima","high","h","max","precomaximo"],
+ low:["minima","mínima","low","l","min","precominimo"],
+ close:["fechamento","close","c","ultimo","último","last","precofechamento"],
+ volume:["volume","vol","quantidade"]
+};
+function norm(s){return String(s??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]/g,"")}
+function parseCSV(text,sep){
+const lines=text.replace(/^\uFEFF/,"").split(/\r?\n/).filter(x=>x.trim());if(!lines.length)return [];
+const parseLine=line=>{let out=[],v="",q=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'&&q&&line[i+1]==='"'){v+='"';i++}else if(c==='"')q=!q;else if(c===sep&&!q){out.push(v.trim());v=""}else v+=c}out.push(v.trim());return out};
+return lines.map(parseLine)
+}
+function detectSep(text){const sample=text.split(/\r?\n/).slice(0,5).join("\n");return [",",";","\t"].map(s=>({s,n:(sample.match(new RegExp(s==="\t"?"\\t":s===";"?";":",","g"))||[]).length})).sort((a,b)=>b.n-a.n)[0].s}
+function detectDecimal(rows){const vals=rows.slice(1,8).flat().filter(v=>/\d[.,]\d/.test(v));const commas=vals.filter(v=>/\d,\d/.test(v)).length;const dots=vals.filter(v=>/\d\.\d/.test(v)).length;return commas>dots?",":"."}
+function number(v){let s=String(v??"").trim().replace(/[\sR$]/g,"");if(!s)return NaN;if(decimal===","){if(s.includes(".")&&s.includes(","))s=s.replace(/\./g,"").replace(",",".");else s=s.replace(",",".")}else if(s.includes(",")&&s.includes("."))s=s.replace(/,/g,"");else s=s.replace(",",".");s=s.replace(/[^0-9+\-.eE]/g,"");return Number(s)}
+function setStatus(s){$("status").textContent=s}
+function headerGuess(type){return headers.findIndex(h=>aliases[type].map(norm).includes(norm(h)))}
+function renderMapping(){
+const fields=[["date","Data (obrigatória)"],["time","Hora (opcional)"],["open","Abertura (opcional)"],["high","Máxima"],["low","Mínima"],["close","Fechamento (opcional)"],["volume","Volume (opcional)"]];const root=$("mappingFields");root.innerHTML="";
+fields.forEach(([key,label])=>{const wrap=document.createElement("div");wrap.className="calc-field";const l=document.createElement("label");l.htmlFor="col-"+key;l.textContent=label;const s=document.createElement("select");s.id="col-"+key;s.dataset.field=key;const empty=document.createElement("option");empty.value="-1";empty.textContent="— não mapeada —";s.append(empty);headers.forEach((h,i)=>{const o=document.createElement("option");o.value=String(i);o.textContent=h||("Coluna "+(i+1));s.append(o)});const g=headerGuess(key);s.value=String(g);wrap.append(l,s);root.append(wrap)});
+$("mappingPanel").hidden=false
+}
+function percentile(values,latest){const n=values.filter(v=>Number.isFinite(v)).length;if(!n)return NaN;return 100*values.filter(v=>v<=latest).length/n}
+function median(a){const x=a.filter(Number.isFinite).slice().sort((a,b)=>a-b);if(!x.length)return NaN;const m=Math.floor(x.length/2);return x.length%2?x[m]:(x[m-1]+x[m])/2}
+function fmt(n,d=2){return Number.isFinite(n)?n.toLocaleString("pt-BR",{maximumFractionDigits:d,minimumFractionDigits:0}):"—"}
+function calculate(){
+const map={};document.querySelectorAll("[data-field]").forEach(s=>map[s.dataset.field]=Number(s.value));if(map.date<0||map.high<0||map.low<0){setStatus("Mapeie pelo menos data, máxima e mínima.");return}
+const groups=new Map();let bad=0;
+rawRows.slice(1).forEach(row=>{const date=String(row[map.date]??"").trim();const hi=number(row[map.high]),lo=number(row[map.low]);if(!date||!Number.isFinite(hi)||!Number.isFinite(lo)||hi<lo){bad++;return}const t=map.time>=0?String(row[map.time]??"").trim():"";const stamp=date+" "+t;const prev=groups.get(date)||{date,high:-Infinity,low:Infinity,open:NaN,close:NaN,volume:0,first:stamp,last:stamp};groups.set(date,{...prev,high:Math.max(prev.high,hi),low:Math.min(prev.low,lo),open:prev.open===undefined||!Number.isFinite(prev.open)?(map.open>=0?number(row[map.open]):NaN):prev.open,close:map.close>=0?number(row[map.close]):prev.close,volume:prev.volume+(map.volume>=0?(number(row[map.volume])||0):0),first:stamp<prev.first?stamp:prev.first,last:stamp>prev.last?stamp:prev.last})});
+let rows=[...groups.values()].sort((a,b)=>a.date.localeCompare(b.date));if(!rows.length){setStatus("Nenhuma linha válida encontrada. Confira separador, decimal e colunas.");return}
+rows=rows.map((r,i)=>{const prev=i?rows[i-1].close:NaN;const tr=Number.isFinite(prev)?Math.max(r.high-r.low,Math.abs(r.high-prev),Math.abs(r.low-prev)):r.high-r.low;return {...r,range:r.high-r.low,rangePct:Number.isFinite(prev)&&prev!==0?(r.high-r.low)/Math.abs(prev)*100:NaN,tr}});
+lastRows=rows;
+const ranges=rows.map(r=>r.range),last20=ranges.slice(-20),last5=ranges.slice(-5),tr20=rows.slice(-14).map(r=>r.tr),atr=tr20.reduce((a,b)=>a+b,0)/tr20.length,latest=rows.at(-1),pct=percentile(last20,latest.range),r5=median(last5),r20=median(last20);
+const metrics=[["Pregões válidos",rows.length],["Amplitude mais recente",fmt(latest.range)],["Mediana amplitude · 5",fmt(r5)],["Mediana amplitude · 20",fmt(r20)],["Percentil recente",Number.isFinite(pct)?fmt(pct,0)+"º":"—"],["ATR-14 (média TR)",fmt(atr)],["Amplitude mais recente (%)",fmt(latest.rangePct)+"%"]];
+$("metrics").innerHTML="";metrics.forEach(([label,value])=>{const el=document.createElement("div");el.className="metric";const strong=document.createElement("strong");strong.textContent=value;const span=document.createElement("span");span.textContent=label;el.append(strong,span);$("metrics").append(el)});
+$("summaryText").textContent="Ativo: "+$("asset").value+". Última data no arquivo: "+latest.date+". Amplitude recente "+fmt(latest.range)+"; mediana de 5 pregões "+fmt(r5)+" e de 20 pregões "+fmt(r20)+". O percentil empírico foi calculado sobre "+last20.length+" amplitude(s) disponível(is). Valores em unidades de preço do arquivo.";
+$("historyRows").innerHTML="";rows.slice().reverse().forEach(r=>{const tr=document.createElement("tr");[r.date,fmt(r.high),fmt(r.low),fmt(r.close),fmt(r.range),fmt(r.rangePct)+"%",fmt(r.tr)].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td)});$("historyRows").append(tr)});
+$("results").hidden=false;setStatus("Cálculo concluído. "+bad+" linha(s) foram ignoradas por data/preços ausentes ou inconsistentes. Revise a amostra antes de usar os números.");}
+$("file").addEventListener("change",async e=>{const f=e.target.files?.[0];if(!f)return;try{const txt=await f.text();delimiter=$("delimiter").value==="auto"?detectSep(txt):$("delimiter").value;decimal=$("decimal").value==="auto"?".":$("decimal").value;rawRows=parseCSV(txt,delimiter);if(rawRows.length<2){setStatus("O arquivo precisa conter cabeçalho e pelo menos uma linha de dados.");return}headers=rawRows[0];if($("decimal").value==="auto")decimal=detectDecimal(rawRows);renderMapping();$("results").hidden=true;setStatus("CSV carregado: "+(rawRows.length-1)+" linha(s). Confirme o mapeamento e calcule.");}catch(err){setStatus("Não foi possível ler o CSV: "+err.message)}});
+$("delimiter").addEventListener("change",()=>{if($("file").files[0])$("file").dispatchEvent(new Event("change"))});
+$("decimal").addEventListener("change",()=>{if($("file").files[0])$("file").dispatchEvent(new Event("change"))});
+$("calculate").addEventListener("click",calculate);$("recalculate").addEventListener("click",calculate);
+$("export").addEventListener("click",()=>{if(!lastRows.length)return;const csv=[["ativo","data","maxima","minima","fechamento","amplitude","amplitude_pct","true_range","volume"],...lastRows.map(r=>[$("asset").value,r.date,r.high,r.low,Number.isFinite(r.close)?r.close:"",r.range,Number.isFinite(r.rangePct)?r.rangePct:"",r.tr,r.volume])].map(row=>row.map(v=>{const s=String(v??"");return /[;"\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s}).join(";")).join("\r\n");const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="volatilidade-historica-"+$("asset").value.toLowerCase()+"-"+new Date().toISOString().slice(0,10)+".csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)});
+})();
+</script></body></html>
