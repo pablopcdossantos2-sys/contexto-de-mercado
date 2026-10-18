@@ -6,7 +6,7 @@ const html=fs.readFileSync("ferramentas/volatilidade-historica-winfut-wdofut.htm
 const numeric=html.match(/function detectDecimal\(rows\)[\s\S]*?function setStatus/);
 assert.ok(numeric,"numeric parser functions must exist");
 const context={};
-const helpers=vm.runInNewContext(numeric[0].replace(/function setStatus[\s\S]*$/,""),context);
+const helpers=vm.runInNewContext(numeric[0].replace(/function setStatus[\\s\\S]*$/,"")+";({number,detectDecimal})",context);
 context.decimal=",";
 assert.equal(helpers.number("210.800"),210800);
 assert.equal(helpers.number("5.080,500"),5080.5);
