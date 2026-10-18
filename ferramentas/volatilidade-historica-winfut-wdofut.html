@@ -75,7 +75,7 @@ function calculate(){
 const map={};document.querySelectorAll("[data-field]").forEach(s=>map[s.dataset.field]=Number(s.value));if(map.date<0||map.high<0||map.low<0){setStatus("Mapeie pelo menos data, máxima e mínima.");return}
 const groups=new Map();let bad=0;
 rawRows.slice(1).forEach(row=>{const rawDate=String(row[map.date]??"").trim();const hi=number(row[map.high]),lo=number(row[map.low]);if(!rawDate||!Number.isFinite(hi)||!Number.isFinite(lo)||hi<lo){bad++;return}
-const normDate=normalizeDate(rawDate,map.time>=0?row[map.time]:"");const date=normDate.date,t=normDate.time;const stamp=date+" "+t;const prev=groups.get(date)||{date,high:-Infinity,low:Infinity,open:NaN,close:NaN,volume:0,first:"\\uffff",last:""};
+const normDate=normalizeDate(rawDate,map.time>=0?row[map.time]:"");const date=normDate.date,t=normDate.time;const stamp=date+" "+t;const prev=groups.get(date)||{date,high:-Infinity,low:Infinity,open:NaN,close:NaN,volume:0,first:"",last:""};
 const openValue=map.open>=0?number(row[map.open]):NaN,closeValue=map.close>=0?number(row[map.close]):NaN;
 const first=!prev.last||stamp<prev.first?stamp:prev.first,last=!prev.last||stamp>prev.last?stamp:prev.last;
 groups.set(date,{...prev,high:Math.max(prev.high,hi),low:Math.min(prev.low,lo),open:!prev.last||stamp<prev.first?openValue:prev.open,close:!prev.last||stamp>=prev.last?closeValue:prev.close,volume:prev.volume+(map.volume>=0?(number(row[map.volume])||0):0),first,last})});
