@@ -61,13 +61,24 @@ $("mappingPanel").hidden=false
 function percentile(values,latest){const n=values.filter(v=>Number.isFinite(v)).length;if(!n)return NaN;return 100*values.filter(v=>v<=latest).length/n}
 function median(a){const x=a.filter(Number.isFinite).slice().sort((a,b)=>a-b);if(!x.length)return NaN;const m=Math.floor(x.length/2);return x.length%2?x[m]:(x[m-1]+x[m])/2}
 function fmt(n,d=2){return Number.isFinite(n)?n.toLocaleString("pt-BR",{maximumFractionDigits:d,minimumFractionDigits:0}):"—"}
+function normalizeDate(raw,rawTime){
+const s=String(raw??"").trim();let y,m,d,embedded="";
+let match=s.match(/^(\\d{4})[-/.](\\d{1,2})[-/.](\\d{1,2})(?:[T\\s]+(\\d{1,2}:\\d{2}(?::\\d{2})?))?/);
+if(match){y=+match[1];m=+match[2];d=+match[3];embedded=match[4]||""}
+else {match=s.match(/^(\\d{1,2})[/. -](\\d{1,2})[/. -](\\d{4})(?:[T\\s]+(\\d{1,2}:\\d{2}(?::\\d{2})?))?/);if(match){d=+match[1];m=+match[2];y=+match[3];embedded=match[4]||""}else return {date:s,time:String(rawTime??"").trim()}}
+if(m<1||m>12||d<1||d>31)return {date:s,time:String(rawTime??"").trim()};
+return {date:String(y).padStart(4,"0")+"-"+String(m).padStart(2,"0")+"-"+String(d).padStart(2,"0"),time:String(rawTime??"").trim()||embedded}
+}
 function calculate(){
 const map={};document.querySelectorAll("[data-field]").forEach(s=>map[s.dataset.field]=Number(s.value));if(map.date<0||map.high<0||map.low<0){setStatus("Mapeie pelo menos data, máxima e mínima.");return}
 const groups=new Map();let bad=0;
-rawRows.slice(1).forEach(row=>{const date=String(row[map.date]??"").trim();const hi=number(row[map.high]),lo=number(row[map.low]);if(!date||!Number.isFinite(hi)||!Number.isFinite(lo)||hi<lo){bad++;return}const t=map.time>=0?String(row[map.time]??"").trim():"";const stamp=date+" "+t;const prev=groups.get(date)||{date,high:-Infinity,low:Infinity,open:NaN,close:NaN,volume:0,first:stamp,last:stamp};groups.set(date,{...prev,high:Math.max(prev.high,hi),low:Math.min(prev.low,lo),open:prev.open===undefined||!Number.isFinite(prev.open)?(map.open>=0?number(row[map.open]):NaN):prev.open,close:map.close>=0?number(row[map.close]):prev.close,volume:prev.volume+(map.volume>=0?(number(row[map.volume])||0):0),first:stamp<prev.first?stamp:prev.first,last:stamp>prev.last?stamp:prev.last})});
+rawRows.slice(1).forEach(row=>{const rawDate=String(row[map.date]??"").trim();const hi=number(row[map.high]),lo=number(row[map.low]);if(!rawDate||!Number.isFinite(hi)||!Number.isFinite(lo)||hi<lo){bad++;return}
+const normDate=normalizeDate(rawDate,map.time>=0?row[map.time]:"");const date=normDate.date,t=normDate.time;const stamp=date+" "+t;const prev=groups.get(date)||{date,high:-Infinity,low:Infinity,open:NaN,close:NaN,volume:0,first:"\\uffff",last:""};
+const openValue=map.open>=0?number(row[map.open]):NaN,closeValue=map.close>=0?number(row[map.close]):NaN;
+const first=stamp<prev.first?stamp:prev.first,last=stamp>prev.last?stamp:prev.last;
+groups.set(date,{...prev,high:Math.max(prev.high,hi),low:Math.min(prev.low,lo),open:stamp<=prev.first?openValue:prev.open,close:stamp>=prev.last?closeValue:prev.close,volume:prev.volume+(map.volume>=0?(number(row[map.volume])||0):0),first,last})});
 let rows=[...groups.values()].sort((a,b)=>a.date.localeCompare(b.date));if(!rows.length){setStatus("Nenhuma linha válida encontrada. Confira separador, decimal e colunas.");return}
 rows=rows.map((r,i)=>{const prev=i?rows[i-1].close:NaN;const tr=Number.isFinite(prev)?Math.max(r.high-r.low,Math.abs(r.high-prev),Math.abs(r.low-prev)):r.high-r.low;return {...r,range:r.high-r.low,rangePct:Number.isFinite(prev)&&prev!==0?(r.high-r.low)/Math.abs(prev)*100:NaN,tr}});
-lastRows=rows;
 const ranges=rows.map(r=>r.range),last20=ranges.slice(-20),last5=ranges.slice(-5),tr20=rows.slice(-14).map(r=>r.tr),atr=tr20.reduce((a,b)=>a+b,0)/tr20.length,latest=rows.at(-1),pct=percentile(last20,latest.range),r5=median(last5),r20=median(last20);
 const metrics=[["Pregões válidos",rows.length],["Amplitude mais recente",fmt(latest.range)],["Mediana amplitude · 5",fmt(r5)],["Mediana amplitude · 20",fmt(r20)],["Percentil recente",Number.isFinite(pct)?fmt(pct,0)+"º":"—"],["ATR-14 (média TR)",fmt(atr)],["Amplitude mais recente (%)",fmt(latest.rangePct)+"%"]];
 $("metrics").innerHTML="";metrics.forEach(([label,value])=>{const el=document.createElement("div");el.className="metric";const strong=document.createElement("strong");strong.textContent=value;const span=document.createElement("span");span.textContent=label;el.append(strong,span);$("metrics").append(el)});
