@@ -109,3 +109,8 @@ O projeto usa HTML, CSS e JavaScript puro, sem dependências obrigatórias. Pode
 ## Aviso educacional
 
 Todo o conteúdo tem finalidade exclusivamente educacional. Nada neste projeto constitui recomendação de investimento, promessa de resultado ou sinal operacional. Trading envolve risco de perda financeira.
+
+
+## Rotina especializada para WINFUT e WDOFUT
+
+- `rotina/leitura-pre-pregao-winfut-wdofut.html` — tutorial diário com contexto macro/intermercado, estrutura multi-horizonte, suportes e resistências recentes/históricos, volatilidade, cenários condicionais e checklist local.
