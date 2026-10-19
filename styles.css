@@ -218,3 +218,10 @@ p+button,p+.button{margin-top:8px}
   .check-group{padding:16px}
   .check-item{align-items:center}
 }
+
+.module-state-control,.module-review-control{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.82rem}
+.module-state-control select,.module-review-control select{min-height:38px;max-width:145px;padding:6px 8px}
+.module-review-control .button{min-height:38px;padding:7px 10px;font-size:.82rem}
+.module-row{flex-wrap:wrap}
+.module-row>a{flex:1 1 210px}
+@media(max-width:680px){.module-state-control,.module-review-control{width:100%;justify-content:flex-start}.module-state-control select,.module-review-control select{max-width:none;flex:1}.module-review-control .button{width:auto}.module-row>a{flex-basis:100%}}
