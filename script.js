@@ -145,7 +145,7 @@ window.CMToolSessions={
     window.dispatchEvent(new CustomEvent("cm-tool-session-updated",{detail:{id,tool}}));return entry;
   },
   latest(tool=null){return this.list(tool)[0]||null},
-  clear(){localStorage.removeItem(this.key);window.dispatchEvent(new CustomEvent("cm-tool-session-updated",{detail:{cleared:true}})}
+  clear(){localStorage.removeItem(this.key);window.dispatchEvent(new CustomEvent("cm-tool-session-updated",{detail:{cleared:true}}))}
 };
 
 function cmRoot(){
