@@ -17,23 +17,25 @@ const rel=f=>path.relative(root,f).replaceAll("\\","/");
 function add(arr,file,msg){arr.push(rel(file)+": "+msg)}
 for(const file of htmlFiles){
   const html=fs.readFileSync(file,"utf8");
+  // IDs and links embedded in JavaScript strings are not DOM markup.
+  const markup=html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,"");
   for(const [index,match] of [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)].entries()){
     try{new vm.Script(match[1],{filename:rel(file)+" inline script "+(index+1)})}
     catch(error){add(errors,file,"inline JavaScript syntax error in script "+(index+1)+": "+error.message)}
   }
-  if(!/^<!doctype html>/i.test(html.trim()))add(errors,file,"missing HTML5 doctype");
-  if(!/<html[^>]+lang=["'][^"']+["']/i.test(html))add(errors,file,"missing html[lang]");
-  if(!/<meta[^>]+name=["']viewport["']/i.test(html))add(errors,file,"missing viewport meta");
-  if(!/<title>[^<]+<\/title>/i.test(html))add(errors,file,"missing non-empty title");
-  if(!/<main\b/i.test(html))add(errors,file,"missing main landmark");
-  const imgs=[...html.matchAll(/<img\b[^>]*>/gi)];
+  if(!/^<!doctype html>/i.test(markup.trim()))add(errors,file,"missing HTML5 doctype");
+  if(!/<html[^>]+lang=["'][^"']+["']/i.test(markup))add(errors,file,"missing html[lang]");
+  if(!/<meta[^>]+name=["']viewport["']/i.test(markup))add(errors,file,"missing viewport meta");
+  if(!/<title>[^<]+<\/title>/i.test(markup))add(errors,file,"missing non-empty title");
+  if(!/<main\b/i.test(markup))add(errors,file,"missing main landmark");
+  const imgs=[...markup.matchAll(/<img\b[^>]*>/gi)];
   imgs.forEach(m=>{if(!/\balt=["'][^"']*["']/i.test(m[0]))add(errors,file,"img without alt attribute")});
-  const menuBtns=[...html.matchAll(/<button\b[^>]*class=["'][^"']*menu-button[^"']*["'][^>]*>/gi)];
+  const menuBtns=[...markup.matchAll(/<button\b[^>]*class=["'][^"']*menu-button[^"']*["'][^>]*>/gi)];
   menuBtns.forEach(m=>{if(!/aria-label=/i.test(m[0]))add(errors,file,"menu button without aria-label")});
-  const ids=[...html.matchAll(/\bid=["']([^"']+)["']/gi)].map(m=>m[1]);
+  const ids=[...markup.matchAll(/\bid=["']([^"']+)["']/gi)].map(m=>m[1]);
   const dup=ids.filter((id,i)=>ids.indexOf(id)!==i);
   [...new Set(dup)].forEach(id=>add(errors,file,"duplicate id: "+id));
-  for(const m of html.matchAll(/href=["']([^"']+)["']/gi)){
+  for(const m of markup.matchAll(/href=["']([^"']+)["']/gi)){
     let href=m[1];
     if(/^(https?:|mailto:|tel:|javascript:|#)/i.test(href)||href.includes("${"))continue;
     href=href.split("#")[0].split("?")[0];
@@ -41,7 +43,7 @@ for(const file of htmlFiles){
     const target=path.resolve(path.dirname(file),href);
     if(!fs.existsSync(target))add(errors,file,"broken internal href: "+m[1]);
   }
-  if(/<table\b/i.test(html)&&!/overflow-x:auto|class=["'][^"']*table/i.test(html)&&!fs.readFileSync(path.join(root,"styles.css"),"utf8").includes("table{display:block;overflow-x:auto"))add(warnings,file,"table may need mobile overflow review");
+  if(/<table\b/i.test(markup)&&!/overflow-x:auto|class=["'][^"']*table/i.test(markup)&&!fs.readFileSync(path.join(root,"styles.css"),"utf8").includes("table{display:block;overflow-x:auto"))add(warnings,file,"table may need mobile overflow review");
 }
 console.log("Quality check: "+htmlFiles.length+" HTML files");
 warnings.forEach(x=>console.warn("WARN "+x));
