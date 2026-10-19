@@ -179,6 +179,14 @@ document.addEventListener("DOMContentLoaded",()=>{
       footer.before(wrap);const btn=wrap.querySelector("[data-learning-complete]");
       const paint=()=>{const done=CMLearning.isComplete(id);btn.textContent=done?"✓ Módulo concluído":"Marcar como concluído";btn.classList.toggle("learning-done",done)};
       btn.addEventListener("click",()=>{CMLearning.isComplete(id)?CMLearning.unmark(id):CMLearning.mark(id,{label});paint()});paint();
+      const current=window.CMCurriculo.lessons[id],trackIds=window.CMCurriculo.tracks[current.track]||[],index=trackIds.indexOf(id);
+      if(index>=0&&trackIds.length>1){
+        const nav=document.createElement("nav");nav.className="actions curriculum-nav";nav.setAttribute("aria-label","Navegação da trilha");
+        const addLink=(lessonId,text)=>{const lesson=window.CMCurriculo.lessons[lessonId];if(!lesson)return;const a=document.createElement("a");a.className="button secondary";a.href=new URL(lesson.href,cmRoot()).href;a.textContent=text+": "+lesson.label;nav.appendChild(a)};
+        if(index>0)addLink(trackIds[index-1],"← Anterior");
+        if(index<trackIds.length-1)addLink(trackIds[index+1],"Próximo →");
+        const container=wrap.querySelector(".container");if(container)container.appendChild(nav);
+      }
     }
   }
 });
