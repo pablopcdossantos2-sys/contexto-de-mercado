@@ -50,21 +50,21 @@ const scriptPath=path.join(root,"script.js");
 if(fs.existsSync(scriptPath)){
   const source=fs.readFileSync(scriptPath,"utf8");
   const manifestStart=source.indexOf("window.CMCurriculo = window.CMCurriculo || {");
-  const manifestEnd=source.indexOf("\\n  };",manifestStart);
+  const manifestEnd=source.indexOf("\n  };",manifestStart);
   if(manifestStart<0||manifestEnd<0){
     errors.push("script.js: curriculum manifest could not be parsed");
   }else{
     const manifest=source.slice(manifestStart,manifestEnd);
-    const lessonBlock=manifest.match(/lessons:\\s*\\{([\\s\\S]*?)\\n\\s*\\},\\s*tracks:/);
-    const activityBlock=manifest.match(/activities:\\s*\\{([\\s\\S]*?)\\n\\s*\\},\\s*requirements:/);
-    const requirementsBlock=manifest.match(/requirements:\\s*\\{([\\s\\S]*?)\\n\\s*\\}/);
+    const lessonBlock=manifest.match(/lessons:\s*\{([\s\S]*?)\n\s*\},\s*tracks:/);
+    const activityBlock=manifest.match(/activities:\s*\{([\s\S]*?)\n\s*\},\s*requirements:/);
+    const requirementsBlock=manifest.match(/requirements:\s*\{([\s\S]*?)\n\s*\}/);
     const lessons=new Map(),activities=new Map(),requirements=[];
     if(!lessonBlock||!activityBlock||!requirementsBlock){
       errors.push("script.js: curriculum manifest sections are incomplete");
     }else{
-      for(const m of lessonBlock[1].matchAll(/"([^"]+)"\\s*:\\s*\\{\\s*href:"([^"]+)"[\\s\\S]*?practice:"([^"]+)"/g))lessons.set(m[1],{href:m[2],practice:m[3]});
-      for(const m of activityBlock[1].matchAll(/"([^"]+)"\\s*:\\s*\\{\\s*href:"([^"]+)"/g))activities.set(m[1],{href:m[2]});
-      for(const m of requirementsBlock[1].matchAll(/([a-z]+)\\s*:\\s*\\[([^\\]]*)\\]/g)){
+      for(const m of lessonBlock[1].matchAll(/"([^"]+)"\s*:\s*\{\s*href:"([^"]+)"[\s\S]*?practice:"([^"]+)"/g))lessons.set(m[1],{href:m[2],practice:m[3]});
+      for(const m of activityBlock[1].matchAll(/"([^"]+)"\s*:\s*\{\s*href:"([^"]+)"/g))activities.set(m[1],{href:m[2]});
+      for(const m of requirementsBlock[1].matchAll(/([a-z]+)\s*:\s*\[([^\]]*)\]/g)){
         const ids=[...m[2].matchAll(/"([^"]+)"/g)].map(x=>x[1]);
         requirements.push({track:m[1],ids});
         if(new Set(ids).size!==ids.length)errors.push("script.js: duplicate requirement in track "+m[1]);
