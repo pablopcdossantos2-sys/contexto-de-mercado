@@ -77,9 +77,13 @@ function data(){const o={};new FormData(form).forEach((v,k)=>o[k]=v);o.checks=ch
 function restore(){try{const o=JSON.parse(localStorage.getItem(key)||"null");if(!o)return;Object.entries(o).forEach(([k,v])=>{if(k==="checks")return;const el=form.elements[k];if(el)el.value=v});if(Array.isArray(o.checks))checks.forEach((c,i)=>c.checked=!!o.checks[i]);update()}catch(e){}}
 function asText(){const o=data();return ["CHECKLIST DE CONTEXTO DE MERCADO","",`Ativo: ${o.ativo||"-"}`,`Data: ${o.data||"-"}`,`Período: ${o.timeframe||"-"}`,"",`Ambiente/eventos:\n${o.eventos||"-"}`,"",`Estrutura:\n${o.estrutura||"-"}`,"",`Regime: ${o.regime||"-"}`,`Volatilidade:\n${o.volatilidade||"-"}`,"",`Referências:\n${o.niveis||"-"}`,"",`Cenário A:\n${o.cenarioA||"-"}`,"",`Cenário B:\n${o.cenarioB||"-"}`,"",`Não operar se:\n${o.naoOperar||"-"}`,"",`Regras de risco:\n${o.risco||"-"}`,"",`Preparação revisada: ${score.textContent}%`,"","Uso educacional. Este registro não é recomendação de investimento nem sinal operacional."].join("\n")}
 checks.forEach(c=>c.addEventListener("change",update));
-document.getElementById("saveBtn").addEventListener("click",()=>{localStorage.setItem(key,JSON.stringify(data()));status.textContent="Preparação salva neste navegador.";});
+document.getElementById("saveBtn").addEventListener("click",()=>{const snapshot=data();localStorage.setItem(key,JSON.stringify(snapshot));CMToolSessions.record("checklist",snapshot,{label:"Checklist · "+(snapshot.ativo||"Ativo não informado")});status.textContent="Preparação salva neste navegador e adicionada ao contexto compartilhado.";});
 document.getElementById("clearBtn").addEventListener("click",()=>{if(confirm("Limpar todos os campos e o registro salvo neste navegador?")){form.reset();localStorage.removeItem(key);update()}});
 document.getElementById("exportBtn").addEventListener("click",()=>{const b=new Blob([asText()],{type:"text/plain;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="contexto-de-mercado.txt";a.click();URL.revokeObjectURL(a.href)});
+const shared=document.createElement("div");shared.className="note";shared.setAttribute("aria-live","polite");
+const showShared=()=>{const last=CMToolSessions.latest("journal");shared.textContent=last?"Último diário compartilhado: "+(last.payload.date||"sem data")+" · "+(last.payload.asset||"sem ativo")+".":"Nenhum registro do Diário de Contexto compartilhado ainda.";};
+const panel=document.querySelector(".tool-panel");if(panel)panel.insertBefore(shared,panel.querySelector("a.button"));
+showShared();window.addEventListener("cm-tool-session-updated",showShared);
 restore();update();
 })();
 </script></body></html>
