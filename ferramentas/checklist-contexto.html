@@ -81,6 +81,34 @@ function asText(){const o=data();return ["CHECKLIST DE CONTEXTO DE MERCADO","",`
 checks.forEach(c=>c.addEventListener("change",update));
 document.getElementById("saveBtn").addEventListener("click",()=>{const snapshot=data();localStorage.setItem(key,JSON.stringify(snapshot));CMToolSessions.record("checklist",snapshot,{label:"Checklist · "+(snapshot.ativo||"Ativo não informado")});status.textContent="Preparação salva neste navegador e adicionada ao contexto compartilhado.";});
 document.getElementById("clearBtn").addEventListener("click",()=>{if(confirm("Limpar todos os campos e o registro salvo neste navegador?")){form.reset();localStorage.removeItem(key);update()}});
+document.getElementById("importAmplitudeBtn").addEventListener("click",()=>document.getElementById("amplitudeFile").click());
+document.getElementById("amplitudeFile").addEventListener("change",async event=>{
+ const file=event.target.files&&event.target.files[0];if(!file)return;
+ try{
+  const snapshot=JSON.parse(await file.text());
+  if(snapshot.schema!=="contexto-mercado-amplitude-v1"||snapshot.sourceProject!=="Sino do Mercado")throw new Error('Arquivo não reconhecido. Exporte o JSON pelo botão "Exportar contexto" no Sino do Mercado.');
+  const lines=[
+   "Fonte: "+(snapshot.sourceProject||"—"),
+   "Ativo: "+(snapshot.asset||"—"),
+   "Origem dos dados: "+(snapshot.dataSource||"—")+" ("+(snapshot.dataSourceType||"—")+")",
+   "Recorte: "+(snapshot.startDate||"início não informado")+" a "+(snapshot.endDate||"fim não informado"),
+   "Modo de análise: "+(snapshot.analysisMode||"—")+" · Métrica: "+(snapshot.metric||"—")+" · Timeframe: "+(snapshot.timeframe||"—"),
+   "Faixa horária: "+(snapshot.sessionStart||"—")+"–"+(snapshot.sessionEnd||"—"),
+   "Tamanho da amostra: "+(snapshot.sampleSize||"—"),
+   "Média: "+(snapshot.mean||"—")+" · Mediana: "+(snapshot.median||"—")+" · Desvio-padrão: "+(snapshot.stdDev||"—"),
+   "P05: "+(snapshot.p05||"—")+" · P25: "+(snapshot.p25||"—")+" · P75: "+(snapshot.p75||"—")+" · P95: "+(snapshot.p95||"—"),
+   "Mínimo: "+(snapshot.minimum||"—")+" · Máximo: "+(snapshot.maximum||"—"),
+   "Exportado em: "+(snapshot.exportedAt||"—"),
+   "Nota: "+(snapshot.notes||"Estatísticas descritivas; não constituem previsão ou sinal operacional.")
+  ].join("\\n");
+  form.elements.amplitudeEstatistica.value=lines;
+  if(snapshot.asset&&!form.elements.ativo.value)form.elements.ativo.value=snapshot.asset;
+  if(snapshot.timeframe&&!form.elements.timeframe.value)form.elements.timeframe.value=snapshot.timeframe;
+  update();
+  status.textContent="Contexto estatístico importado. Confira o ativo, o recorte e a amostra; depois salve a preparação.";
+ }catch(error){alert(error.message||"Não foi possível importar este arquivo JSON.");}
+ finally{event.target.value="";}
+});
 document.getElementById("exportBtn").addEventListener("click",()=>{const b=new Blob([asText()],{type:"text/plain;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="contexto-de-mercado.txt";a.click();URL.revokeObjectURL(a.href)});
 const shared=document.createElement("div");shared.className="note";shared.setAttribute("aria-live","polite");
 const showShared=()=>{const last=CMToolSessions.latest("journal");shared.textContent=last?"Último diário compartilhado: "+(last.payload.date||"sem data")+" · "+(last.payload.asset||"sem ativo")+".":"Nenhum registro do Diário de Contexto compartilhado ainda.";};
