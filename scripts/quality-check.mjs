@@ -45,6 +45,50 @@ for(const file of htmlFiles){
   }
   if(/<table\b/i.test(markup)&&!/overflow-x:auto|class=["'][^"']*table/i.test(markup)&&!fs.readFileSync(path.join(root,"styles.css"),"utf8").includes("table{display:block;overflow-x:auto"))add(warnings,file,"table may need mobile overflow review");
 }
+
+const scriptPath=path.join(root,"script.js");
+if(fs.existsSync(scriptPath)){
+  const source=fs.readFileSync(scriptPath,"utf8");
+  const manifestStart=source.indexOf("window.CMCurriculo = window.CMCurriculo || {");
+  const manifestEnd=source.indexOf("\\n  };",manifestStart);
+  if(manifestStart<0||manifestEnd<0){
+    errors.push("script.js: curriculum manifest could not be parsed");
+  }else{
+    const manifest=source.slice(manifestStart,manifestEnd);
+    const lessonBlock=manifest.match(/lessons:\\s*\\{([\\s\\S]*?)\\n\\s*\\},\\s*tracks:/);
+    const activityBlock=manifest.match(/activities:\\s*\\{([\\s\\S]*?)\\n\\s*\\},\\s*requirements:/);
+    const requirementsBlock=manifest.match(/requirements:\\s*\\{([\\s\\S]*?)\\n\\s*\\}/);
+    const lessons=new Map(),activities=new Map(),requirements=[];
+    if(!lessonBlock||!activityBlock||!requirementsBlock){
+      errors.push("script.js: curriculum manifest sections are incomplete");
+    }else{
+      for(const m of lessonBlock[1].matchAll(/"([^"]+)"\\s*:\\s*\\{\\s*href:"([^"]+)"[\\s\\S]*?practice:"([^"]+)"/g))lessons.set(m[1],{href:m[2],practice:m[3]});
+      for(const m of activityBlock[1].matchAll(/"([^"]+)"\\s*:\\s*\\{\\s*href:"([^"]+)"/g))activities.set(m[1],{href:m[2]});
+      for(const m of requirementsBlock[1].matchAll(/([a-z]+)\\s*:\\s*\\[([^\\]]*)\\]/g)){
+        const ids=[...m[2].matchAll(/"([^"]+)"/g)].map(x=>x[1]);
+        requirements.push({track:m[1],ids});
+        if(new Set(ids).size!==ids.length)errors.push("script.js: duplicate requirement in track "+m[1]);
+        ids.forEach(id=>{if(!lessons.has(id)&&!activities.has(id))errors.push("script.js: unknown curriculum requirement "+id+" in track "+m[1])});
+      }
+      for(const [id,item] of lessons){
+        for(const [kind,href,base] of [["lesson",item.href,root],["practice",item.practice,root]]){
+          const target=path.resolve(base,href.split("#")[0].split("?")[0]);
+          if(!fs.existsSync(target))errors.push("script.js: broken "+kind+" target for "+id+": "+href);
+        }
+      }
+      for(const [id,item] of activities){
+        const target=path.resolve(root,"aprendizado",item.href.split("#")[0].split("?")[0]);
+        if(!fs.existsSync(target))errors.push("script.js: broken activity target for "+id+": "+item.href);
+      }
+      if(requirements.length===0)errors.push("script.js: no curriculum requirements found");
+    }
+  }
+  for(const page of ["aprendizado/trilhas.html","aprendizado/certificado.html"]){
+    const file=path.join(root,page);
+    if(fs.existsSync(file)&&!fs.readFileSync(file,"utf8").includes("curriculum.requirements"))errors.push(page+": does not consume the central curriculum requirements");
+  }
+}
+
 console.log("Quality check: "+htmlFiles.length+" HTML files");
 warnings.forEach(x=>console.warn("WARN "+x));
 if(errors.length){
