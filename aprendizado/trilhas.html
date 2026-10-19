@@ -1,20 +1,15 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Trilhas de aprendizagem do projeto Contexto de Mercado: Iniciante, Intraday e Leitura de Fluxo."><title>Trilhas de Aprendizagem — Contexto de Mercado</title><link rel="stylesheet" href="../styles.css"></head><body>
-<header class="site-header"><div class="container nav"><a class="brand" href="../index.html">Contexto <span>de Mercado</span></a><button class="menu-button" aria-label="Abrir menu">Menu</button><nav class="nav-links"><a href="../index.html">Início</a><a href="../index.html#artigos">Artigos</a><a aria-current="page" href="trilhas.html">Trilhas</a><a href="../index.html#ferramentas">Ferramentas</a><a href="../roadmap.html">ROADMAP</a></nav></div></header>
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Percursos guiados para aprender leitura de contexto e realizar uma preparação pré-mercado estruturada."><title>Trilhas de Aprendizagem — Contexto de Mercado</title><link rel="stylesheet" href="../styles.css"></head><body>
+<header class="site-header"><div class="container nav"><a class="brand" href="../index.html">Contexto <span>de Mercado</span></a><button class="menu-button" aria-label="Abrir menu">Menu</button><nav class="nav-links"><a href="../index.html">Início</a><a href="../biblioteca.html">Biblioteca</a><a aria-current="page" href="trilhas.html">Trilhas</a><a href="../index.html#ferramentas">Ferramentas</a></nav></div></header>
 <div class="container breadcrumb"><a href="../index.html">Início</a> / Aprendizagem / Trilhas</div>
-<section class="article-hero"><div class="container"><div class="eyebrow">Fase 5 · Aprendizagem estruturada</div><h1>Trilhas de Aprendizagem</h1><p class="kicker">Escolha uma trilha e avance por leitura, prática e avaliação. O progresso fica salvo apenas neste navegador.</p></div></section>
+<section class="article-hero"><div class="container"><div class="eyebrow">Fase 5 · Aprendizagem estruturada</div><h1>Trilhas de Aprendizagem</h1><p class="kicker">Este é o seu guia de estudo: cada etapa indica o que abrir, em que ordem avançar e onde praticar. O percurso começa pelos fundamentos e termina aplicando o método à preparação pré-mercado. O progresso é salvo neste navegador.</p></div></section>
 
 <main>
 <section class="section alt"><div class="container">
-<div class="track-grid" id="trackCards"></div>
-</div></section>
-
-<section class="section"><div class="container">
-<div class="section-head"><div><div class="eyebrow">Avaliações comuns</div><h2>Treine antes de concluir.</h2></div><p>As trilhas compartilham exercícios de classificação de regime e separação entre informação relevante e ruído.</p></div>
-<div class="grid">
-<a class="card" href="classificacao-regimes.html"><span class="tag">Exercício</span><h3>Classificação de Regimes</h3><p>Analise seis gráficos sintéticos e classifique tendência, range, compressão, expansão ou transição.</p></a>
-<a class="card" href="informacao-ruido.html"><span class="tag">Exercício</span><h3>Informação x Ruído</h3><p>Decida quais informações realmente alteram uma hipótese e quais apenas parecem importantes.</p></a>
-<a class="card" href="quiz.html"><span class="tag">Avaliação</span><h3>Quizzes por trilha</h3><p>Faça o quiz específico de Iniciante, Intraday ou Leitura de Fluxo. Nota mínima: 80%.</p></a>
+<div class="pathway-intro">
+<div><span class="tag">Como avançar</span><h2>Uma etapa por vez, na ordem sugerida.</h2><p>Abra cada título para estudar o conteúdo. As leituras e os exercícios usados nas trilhas também podem ser consultados individualmente na <a href="../biblioteca.html">Biblioteca de leitura de contexto</a>.</p></div>
+<div class="pathway-goal"><span class="eyebrow">Objetivo prático</span><strong>Preparar o pré-mercado com método.</strong><p>Ao final, você deverá conseguir organizar referências, reconhecer eventos e volatilidade, construir cenários condicionais e definir quando não operar.</p><a class="button secondary" href="../rotina/pre-mercado.html">Ver as etapas da preparação</a></div>
 </div>
+<div class="track-grid" id="trackCards"></div>
 </div></section>
 
 <section class="section alt"><div class="container">
@@ -26,40 +21,62 @@
 <script>
 document.addEventListener("DOMContentLoaded",()=>{
 const curriculum=window.CMCurriculo;
-const resolveRequirement=(id)=>{
+const resolveRequirement=id=>{
  const item=curriculum.lessons[id]||curriculum.activities[id];if(!item)return null;
- const href=curriculum.lessons[id]?"../"+item.href:item.href;
- return [id,item.label,href,!!curriculum.activities[id]];
+ return {id,label:item.label,href:curriculum.lessons[id]?"../"+item.href:item.href,isLesson:!!curriculum.lessons[id],isActivity:!!curriculum.activities[id],isAssessment:id.startsWith("quiz-")};
+};
+const descriptions={
+ "fund-contexto":"Entenda contexto, cenário, gatilho e invalidação — a linguagem que organiza todas as etapas seguintes.",
+ "fund-regimes":"Aprenda a descrever tendência, range e transição sem transformar rótulos em previsões.",
+ "fund-topdown":"Organize a leitura do quadro maior para o período operacional.",
+ "fund-localizacao":"Identifique onde o preço está em relação às referências importantes.",
+ "fund-volatilidade":"Avalie amplitude e ritmo para ajustar expectativas e reconhecer condições de risco.",
+ "fund-rotina":"Síntese aplicada: transforme calendário, referências e hipóteses em uma preparação pré-mercado completa.",
+ "intraday-horarios":"Relacione o momento da sessão a mudanças possíveis de ritmo e liquidez.",
+ "intraday-gaps":"Pratique a leitura de rompimentos, aceitação, rejeição e falha de continuidade.",
+ "intraday-intermercado":"Use relações entre ativos como contexto, sem confundir correlação com causalidade.",
+ "intraday-macro":"Inclua eventos no plano sem tentar adivinhar o resultado ou sua reação.",
+ "fluxo-liquidez":"Descreva volume, agressão e resposta do preço sem presumir intenções privadas.",
+ "exercise-regimes":"Aplique os conceitos em gráficos sintéticos e compare sua classificação.",
+ "exercise-signal-noise":"Separe observações que mudam sua hipótese de informações que apenas distraem.",
+ "quiz-iniciante":"Confira se você domina os fundamentos. Nota mínima para aprovação: 80%.",
+ "quiz-intraday":"Avalie tempo de sessão, aceitação/rejeição e atualização de contexto. Nota mínima: 80%.",
+ "quiz-fluxo":"Avalie leitura de fluxo e os limites do que os dados permitem concluir. Nota mínima: 80%."
 };
 const tracks=Object.fromEntries(Object.entries(curriculum.requirements).map(([key,ids])=>[key,{
  name:curriculum.trackMeta[key].name,desc:curriculum.trackMeta[key].desc,
  ids,modules:ids.map(resolveRequirement).filter(Boolean)
 }]));
 const root=document.getElementById("trackCards");
-const reviewPanel=document.createElement("section");reviewPanel.className="section";
-reviewPanel.innerHTML='<div class="container"><div class="section-head"><div><div class="eyebrow">Revisão espaçada</div><h2>Revisões programadas</h2></div><p>As revisões ficam registradas neste navegador. A próxima data depende da sua avaliação de lembrança (0 a 5).</p></div><div id="reviewQueue" class="checklist"></div></div>';
-root.parentElement.parentElement.insertBefore(reviewPanel,root.parentElement.nextSibling);
-const states=[["lido","Lido"],["praticado","Praticado"],["verificado","Verificado"],["aplicado","Aplicado"]];
-const resolveLabel=(id)=>{const x=curriculum.lessons[id]||curriculum.activities[id];return x?x.label:id};
+const escapeHtml=value=>String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+const typeLabel=m=>m.id==="fund-rotina"?"Aplicação final":m.isAssessment?"Avaliação":m.isActivity?"Prática guiada":"Leitura";
 function render(){
- const d=CMLearning.load();
+ const data=CMLearning.load();
  root.innerHTML=Object.entries(tracks).map(([key,t])=>{
-  const done=t.ids.filter(id=>d.completed[id]).length,pct=Math.round(done/t.ids.length*100);
-  return `<section class="track-card"><span class="tag">${done}/${t.ids.length} módulos</span><h2>${t.name}</h2><p class="muted">${t.desc}</p><div class="progress-track"><div class="progress-bar" style="width:${pct}%"></div></div><p><strong>${pct}% concluído</strong></p><div>${t.modules.map(([id,label,href,isAssessment])=>{
-   const state=CMLearning.getState(id).state;
-   return `<div class="module-row"><a href="${href}">${label}</a><label class="module-state-control" ${isAssessment?"hidden":""}><span class="muted">Estado</span><select data-state-id="${id}" aria-label="Estado de ${label}"><option value="">—</option>${states.map(([v,n])=>`<option value="${v}" ${state===v?"selected":""}>${n}</option>`).join("")}</select></label><label class="module-review-control"><span class="muted">Lembrança</span><select data-quality-id="${id}" aria-label="Qualidade da lembrança de ${label}"><option value="">0–5</option>${[0,1,2,3,4,5].map(n=>`<option value="${n}">${n}</option>`).join("")}</select><button class="button secondary" type="button" data-review-id="${id}">Revisar</button></label><span class="module-state ${d.completed[id]?"done":""}">${isAssessment?(d.completed[id]?"✓ concluído":"pendente"):state==="aplicado"?"✓ aplicado":state==="verificado"?"✓ verificado":state==="praticado"?"praticado":state==="lido"?"lido":d.completed[id]?"✓ concluído":"pendente"}</span></div>`;
-  }).join("")}</div><div class="actions"><a class="button ${pct===100?"primary":"secondary"}" href="certificado.html?trilha=${key}">${pct===100?"Gerar certificado":"Ver requisitos"}</a></div></section>`;
+  const done=t.ids.filter(id=>!!data.completed[id]).length,pct=Math.round(done/t.ids.length*100);
+  const modules=t.modules.map((m,index)=>{
+   const completed=!!data.completed[m.id],detail=descriptions[m.id]||(m.isActivity?"Aplique os conceitos apresentados nas leituras.":m.isAssessment?"Confira sua compreensão com esta avaliação.":"Leia o conteúdo e registre a conclusão ao final.");
+   return `<li class="pathway-step ${completed?"is-complete":""}">
+    <span class="pathway-node" aria-hidden="true">${completed?"✓":String(index+1).padStart(2,"0")}</span>
+    <div class="pathway-step-body">
+      <div class="pathway-step-meta"><span class="pathway-kind">${typeLabel(m)}</span><span class="pathway-status">${completed?"Concluída":"Etapa "+(index+1)+" de "+t.modules.length}</span></div>
+      <a class="pathway-step-link" href="${escapeHtml(m.href)}">${escapeHtml(m.label)} <span aria-hidden="true">↗</span></a>
+      <p>${escapeHtml(detail)}</p>
+      ${m.id==="fund-rotina"?'<a class="pathway-practice-link" href="../ferramentas/checklist-contexto.html">Aplicar no Checklist de Contexto →</a>':""}
+    </div>
+   </li>`;
+  }).join("");
+  const next=t.modules.find(m=>!data.completed[m.id]);
+  const cta=done===t.ids.length
+   ? `<a class="button primary" href="certificado.html?trilha=${key}">Ver conclusão e certificado</a>`
+   : `<a class="button primary" href="${escapeHtml((next||t.modules[0]).href)}">Continuar: ${escapeHtml((next||t.modules[0]).label)}</a>`;
+  return `<section class="track-card pathway-track">
+   <div class="pathway-track-header"><div><span class="tag">Percurso de aprendizagem</span><h2>${escapeHtml(t.name)}</h2><p class="muted">${escapeHtml(t.desc)}</p></div><div class="pathway-progress"><strong>${pct}%</strong><span>${done} de ${t.ids.length} etapas concluídas</span></div></div>
+   <div class="progress-track" role="progressbar" aria-label="Progresso da trilha ${escapeHtml(t.name)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><div class="progress-bar" style="width:${pct}%"></div></div>
+   <ol class="learning-path">${modules}</ol>
+   <div class="pathway-footer">${cta}<span class="muted">O progresso é privado e fica salvo neste navegador.</span></div>
+  </section>`;
  }).join("");
- root.querySelectorAll("[data-state-id]").forEach(select=>select.addEventListener("change",()=>{
-  if(select.value)CMLearning.setState(select.dataset.stateId,select.value);
- }));
- root.querySelectorAll("[data-review-id]").forEach(button=>button.addEventListener("click",()=>{
-  const id=button.dataset.reviewId,select=root.querySelector(`[data-quality-id="${id}"]`);
-  if(select.value===""){select.focus();return}
-  CMLearning.recordReview(id,Number(select.value));select.value="";
- }));
- const queue=document.getElementById("reviewQueue"),due=CMLearning.dueReviews();
- queue.innerHTML=due.length?due.map(r=>`<div class="module-row"><strong>${resolveLabel(r.id)}</strong><span>Vencida: ${new Intl.DateTimeFormat("pt-BR",{dateStyle:"medium"}).format(new Date(r.nextReviewAt))}</span><span>Última lembrança: ${r.quality}/5</span></div>`).join(""):'<p class="muted">Nenhuma revisão vencida. Registre uma revisão em qualquer módulo para iniciar o agendamento.</p>';
 }
 window.addEventListener("cm-learning-updated",render);
 render();
