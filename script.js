@@ -91,7 +91,7 @@ window.CMLearning={
         states:raw.states&&typeof raw.states==="object"?raw.states:{},
         reviews:raw.reviews&&typeof raw.reviews==="object"?raw.reviews:{}
       };
-    }catch(e){return {completed:{},scores:{},certificates:{}}}
+    }catch(e){return {completed:{},scores:{},certificates:{},states:{},reviews:{}}}
   },
   save(data){localStorage.setItem(CM_LEARNING_KEY,JSON.stringify(data))},
   mark(id,meta={}){
