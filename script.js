@@ -205,7 +205,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       "fund-topdown": { href:"artigos/leitura-top-down.html", label:"Fundamentos: leitura top-down", track:"iniciante", practice:"ferramentas/checklist-contexto.html#secao-quadro-maior" },
       "fund-localizacao": { href:"artigos/localizacao-do-preco.html", label:"Fundamentos: localização do preço", track:"iniciante", practice:"ferramentas/checklist-contexto.html#secao-referencias" },
       "fund-volatilidade": { href:"artigos/volatilidade.html", label:"Fundamentos: volatilidade", track:"iniciante", practice:"ferramentas/volatilidade-historica-winfut-wdofut.html" },
-      "fund-rotina": { href:"rotina/pre-mercado.html", label:"Rotina pré-mercado", track:"iniciante", practice:"ferramentas/checklist-contexto.html#secao-ambiente" },
+      "fund-rotina": { href:"rotina/pre-mercado.html", label:"Síntese: preparação pré-mercado", track:"iniciante", practice:"ferramentas/checklist-contexto.html#secao-ambiente" },
       "intraday-horarios": { href:"artigos/abertura-e-horarios.html", label:"Intraday: abertura e horários", track:"intraday", practice:"ferramentas/checklist-contexto.html#secao-ambiente" },
       "intraday-gaps": { href:"artigos/gaps-aceitacao-rejeicao.html", label:"Intraday: gaps, aceitação e rejeição", track:"intraday", practice:"ferramentas/laboratorio-cenarios.html" },
       "intraday-intermercado": { href:"artigos/correlacao-intermercado.html", label:"Intraday: correlação e intermercado", track:"intraday", practice:"ferramentas/laboratorio-cenarios.html" },
@@ -230,9 +230,9 @@ document.addEventListener("DOMContentLoaded",()=>{
       "quiz-fluxo":{href:"quiz.html?trilha=fluxo",label:"Quiz Leitura de Fluxo"}
     },
     requirements:{
-      iniciante:["fund-contexto","fund-regimes","fund-topdown","fund-localizacao","fund-volatilidade","fund-rotina","exercise-regimes","quiz-iniciante"],
-      intraday:["intraday-horarios","fund-localizacao","fund-volatilidade","intraday-gaps","intraday-intermercado","intraday-macro","exercise-regimes","exercise-signal-noise","quiz-intraday"],
-      fluxo:["fluxo-liquidez","intraday-gaps","fund-localizacao","exercise-signal-noise","quiz-fluxo"]
+      iniciante:["fund-contexto","fund-regimes","fund-topdown","fund-localizacao","fund-volatilidade","exercise-regimes","quiz-iniciante","fund-rotina"],
+      intraday:["intraday-horarios","fund-localizacao","fund-volatilidade","intraday-gaps","intraday-intermercado","intraday-macro","exercise-regimes","exercise-signal-noise","quiz-intraday","fund-rotina"],
+      fluxo:["fluxo-liquidez","intraday-gaps","fund-localizacao","exercise-signal-noise","quiz-fluxo","fund-rotina"]
     }
   };
   const modules=Object.entries(window.CMCurriculo.lessons).map(([id,lesson])=>[lesson.href,id,lesson.label]);
