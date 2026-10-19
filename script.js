@@ -8,6 +8,7 @@ const CM_DATA_KEYS=[
   "contextoMercadoPlanVsRealV1",
   "contextoMercadoReplayV1",
   "contextoMercadoGuidedReplayV1",
+  "contextoMercadoPrePregaoWinWdoV1",
   "contextoMercadoLearningProgressV1"
 ];
 
