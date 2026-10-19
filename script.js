@@ -127,10 +127,7 @@ window.CMLearning={
     d.reviews[id]={quality:q,repetitions:reps,intervalDays,lastReviewedAt:reviewedAt.toISOString(),nextReviewAt:next.toISOString()};
     d.states[id]={state:q>=4?"verificado":"praticado",updatedAt:reviewedAt.toISOString(),reviewQuality:q};
     const isAssessment=!!(window.CMCurriculo&&window.CMCurriculo.activities&&window.CMCurriculo.activities[id]);
-    if(!isAssessment){
-      if(q>=4)d.completed[id]={...(d.completed[id]||{}),completedAt:reviewedAt.toISOString(),state:"verificado"};
-      else delete d.completed[id];
-    }
+    if(!isAssessment&&q>=4)d.completed[id]={...(d.completed[id]||{}),completedAt:reviewedAt.toISOString(),state:"verificado"};
     this.save(d);window.dispatchEvent(new CustomEvent("cm-learning-updated",{detail:{id,review:d.reviews[id]}}));return d.reviews[id];
   },
   dueReviews(now=new Date()){const d=this.load(),time=now.getTime();return Object.entries(d.reviews).filter(([,r])=>r.nextReviewAt&&Date.parse(r.nextReviewAt)<=time).map(([id,review])=>({id,...review}));},
