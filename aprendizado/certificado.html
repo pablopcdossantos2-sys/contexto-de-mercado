@@ -29,33 +29,15 @@
 <footer class="footer"><div class="container">A elegibilidade depende apenas do progresso salvo neste navegador.</div></footer><script src="../script.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded",()=>{
-const tracks={
-iniciante:{name:"Iniciante",req:[
-["fund-contexto","O que é contexto de mercado?","../artigos/o-que-e-contexto-de-mercado.html"],
-["fund-regimes","Tendência, range e transição","../artigos/regimes-de-mercado.html"],
-["fund-topdown","Leitura top-down","../artigos/leitura-top-down.html"],
-["fund-localizacao","Localização e referências","../artigos/localizacao-do-preco.html"],
-["fund-volatilidade","Volatilidade","../artigos/volatilidade.html"],
-["fund-rotina","Rotina pré-mercado","../rotina/pre-mercado.html"],
-["exercise-regimes","Classificação de regimes","classificacao-regimes.html"],
-["quiz-iniciante","Quiz Iniciante (≥80%)","quiz.html?trilha=iniciante"]]},
-intraday:{name:"Intraday",req:[
-["intraday-horarios","Abertura e horários","../artigos/abertura-e-horarios.html"],
-["fund-localizacao","Localização e referências","../artigos/localizacao-do-preco.html"],
-["fund-volatilidade","Volatilidade","../artigos/volatilidade.html"],
-["intraday-gaps","Gaps, aceitação e rejeição","../artigos/gaps-aceitacao-rejeicao.html"],
-["intraday-intermercado","Correlação e intermercado","../artigos/correlacao-intermercado.html"],
-["intraday-macro","Eventos macroeconômicos","../artigos/eventos-macroeconomicos.html"],
-["exercise-regimes","Classificação de regimes","classificacao-regimes.html"],
-["exercise-signal-noise","Informação x ruído","informacao-ruido.html"],
-["quiz-intraday","Quiz Intraday (≥80%)","quiz.html?trilha=intraday"]]},
-fluxo:{name:"Leitura de Fluxo",req:[
-["fluxo-liquidez","Liquidez, volume e agressão","../artigos/liquidez-volume-agressao.html"],
-["intraday-gaps","Aceitação, rejeição e falsos rompimentos","../artigos/gaps-aceitacao-rejeicao.html"],
-["fund-localizacao","Localização e referências","../artigos/localizacao-do-preco.html"],
-["exercise-signal-noise","Informação x ruído","informacao-ruido.html"],
-["quiz-fluxo","Quiz Leitura de Fluxo (≥80%)","quiz.html?trilha=fluxo"]]}
+const curriculum=window.CMCurriculo;
+const resolveRequirement=(id)=>{
+ const item=curriculum.lessons[id]||curriculum.activities[id];if(!item)return null;
+ const href=curriculum.lessons[id]?"../"+item.href:item.href;
+ return [id,item.label,href];
 };
+const tracks=Object.fromEntries(Object.entries(curriculum.requirements).map(([key,ids])=>[key,{
+ name:curriculum.trackMeta[key].name,req:ids.map(resolveRequirement).filter(Boolean)
+}]));
 const track=document.getElementById("track"),req=document.getElementById("requirements"),pct=document.getElementById("pct"),elig=document.getElementById("eligibility"),gen=document.getElementById("generateBtn"),print=document.getElementById("printBtn"),name=document.getElementById("name"),certificate=document.getElementById("certificate");
 const q=new URLSearchParams(location.search).get("trilha");if(tracks[q])track.value=q;
 function render(){const d=CMLearning.load(),t=tracks[track.value],done=t.req.filter(r=>d.completed[r[0]]).length,p=Math.round(done/t.req.length*100),ok=done===t.req.length;pct.textContent=p+"%";elig.textContent=ok?"Todos os requisitos foram concluídos. Digite o nome e gere o certificado.":`Faltam ${t.req.length-done} de ${t.req.length} requisitos.`;req.innerHTML=t.req.map(([id,label,href])=>`<div class="module-row"><a href="${href}">${label}</a><span class="module-state ${d.completed[id]?"done":""}">${d.completed[id]?"✓ concluído":"pendente"}</span></div>`).join("");gen.disabled=!ok;certificate.hidden=true;print.disabled=true}
