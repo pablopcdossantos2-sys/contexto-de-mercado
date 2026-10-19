@@ -1,6 +1,6 @@
 const CM_LEARNING_KEY="contextoMercadoLearningProgressV1";
 const CM_SCHEMA_KEY="contextoMercadoDataSchemaVersion";
-const CM_SCHEMA_VERSION=2;
+const CM_SCHEMA_VERSION=3;
 const CM_DATA_KEYS=[
   "contextoMercadoChecklistV1",
   "contextoMercadoJournalV1",
@@ -30,7 +30,9 @@ window.CMData={
           localStorage.setItem(CM_LEARNING_KEY,JSON.stringify({
             completed:p.completed&&typeof p.completed==="object"?p.completed:{},
             scores:p.scores&&typeof p.scores==="object"?p.scores:{},
-            certificates:p.certificates&&typeof p.certificates==="object"?p.certificates:{}
+            certificates:p.certificates&&typeof p.certificates==="object"?p.certificates:{},
+            states:p.states&&typeof p.states==="object"?p.states:{},
+            reviews:p.reviews&&typeof p.reviews==="object"?p.reviews:{}
           }));
         }catch(e){localStorage.removeItem(CM_LEARNING_KEY)}
       }
@@ -61,7 +63,9 @@ window.CMData={
             localStorage.setItem(key,JSON.stringify({
               completed:{...(current.completed||{}),...(incoming.completed||{})},
               scores:{...(current.scores||{}),...(incoming.scores||{})},
-              certificates:{...(current.certificates||{}),...(incoming.certificates||{})}
+              certificates:{...(current.certificates||{}),...(incoming.certificates||{})},
+              states:{...(current.states||{}),...(incoming.states||{})},
+              reviews:{...(current.reviews||{}),...(incoming.reviews||{})}
             }));return;
           }
         }catch(e){}
@@ -82,7 +86,9 @@ window.CMLearning={
       return {
         completed:raw.completed&&typeof raw.completed==="object"?raw.completed:{},
         scores:raw.scores&&typeof raw.scores==="object"?raw.scores:{},
-        certificates:raw.certificates&&typeof raw.certificates==="object"?raw.certificates:{}
+        certificates:raw.certificates&&typeof raw.certificates==="object"?raw.certificates:{},
+        states:raw.states&&typeof raw.states==="object"?raw.states:{},
+        reviews:raw.reviews&&typeof raw.reviews==="object"?raw.reviews:{}
       };
     }catch(e){return {completed:{},scores:{},certificates:{}}}
   },
@@ -99,6 +105,26 @@ window.CMLearning={
     window.dispatchEvent(new CustomEvent("cm-learning-updated",{detail:{id}}));return d;
   },
   getScore(id){return this.load().scores[id]||null},
+  setState(id,state,meta={}){
+    const allowed=["lido","praticado","verificado","aplicado"];
+    if(!allowed.includes(state))throw new Error("learning-state-invalid");
+    const d=this.load();d.states[id]={state,updatedAt:new Date().toISOString(),...meta};
+    if(state==="verificado"||state==="aplicado")d.completed[id]={...(d.completed[id]||{}),completedAt:new Date().toISOString(),state,...meta};
+    this.save(d);window.dispatchEvent(new CustomEvent("cm-learning-updated",{detail:{id,state}}));return d.states[id];
+  },
+  getState(id){const d=this.load();return d.states[id]||{state:d.completed[id]?"verificado":"pendente"};},
+  recordReview(id,quality){
+    const q=Number(quality);
+    if(!Number.isFinite(q)||q<0||q>5)throw new Error("review-quality-invalid");
+    const d=this.load(),prev=d.reviews[id]||{},reps=q<3?0:(Number(prev.repetitions)||0)+1;
+    const schedule=[1,3,7,14,30],intervalDays=q<3?1:schedule[Math.min(reps-1,schedule.length-1)];
+    const reviewedAt=new Date(),next=new Date(reviewedAt.getTime()+intervalDays*86400000);
+    d.reviews[id]={quality:q,repetitions:reps,intervalDays,lastReviewedAt:reviewedAt.toISOString(),nextReviewAt:next.toISOString()};
+    d.states[id]={state:q>=4?"verificado":"praticado",updatedAt:reviewedAt.toISOString(),reviewQuality:q};
+    if(q>=4)d.completed[id]={...(d.completed[id]||{}),completedAt:reviewedAt.toISOString(),state:"verificado"};
+    this.save(d);window.dispatchEvent(new CustomEvent("cm-learning-updated",{detail:{id,review:d.reviews[id]}}));return d.reviews[id];
+  },
+  dueReviews(now=new Date()){const d=this.load(),time=now.getTime();return Object.entries(d.reviews).filter(([,r])=>r.nextReviewAt&&Date.parse(r.nextReviewAt)<=time).map(([id,review])=>({id,...review}));},
   percent(ids){if(!ids.length)return 0;const d=this.load();return Math.round(ids.filter(id=>d.completed[id]).length/ids.length*100)}
 };
 
@@ -167,6 +193,23 @@ document.addEventListener("DOMContentLoaded",()=>{
       iniciante:["fund-contexto","fund-regimes","fund-topdown","fund-localizacao","fund-volatilidade","fund-rotina"],
       intraday:["intraday-horarios","intraday-gaps","intraday-intermercado","intraday-macro"],
       fluxo:["fluxo-liquidez","intraday-gaps","fund-localizacao"]
+    },
+    trackMeta:{
+      iniciante:{name:"Iniciante",desc:"Construa vocabulário, aprenda a localizar o preço e transforme análise em rotina."},
+      intraday:{name:"Intraday",desc:"Aprofunde tempo de sessão, rompimentos, macro, intermercado e atualização de contexto."},
+      fluxo:{name:"Leitura de Fluxo",desc:"Aprenda o que volume, agressão e liquidez mostram — e evite inferir intenção sem evidência."}
+    },
+    activities:{
+      "exercise-regimes":{href:"classificacao-regimes.html",label:"Classificação de regimes"},
+      "exercise-signal-noise":{href:"informacao-ruido.html",label:"Informação x ruído"},
+      "quiz-iniciante":{href:"quiz.html?trilha=iniciante",label:"Quiz Iniciante"},
+      "quiz-intraday":{href:"quiz.html?trilha=intraday",label:"Quiz Intraday"},
+      "quiz-fluxo":{href:"quiz.html?trilha=fluxo",label:"Quiz Leitura de Fluxo"}
+    },
+    requirements:{
+      iniciante:["fund-contexto","fund-regimes","fund-topdown","fund-localizacao","fund-volatilidade","fund-rotina","exercise-regimes","quiz-iniciante"],
+      intraday:["intraday-horarios","fund-localizacao","fund-volatilidade","intraday-gaps","intraday-intermercado","intraday-macro","exercise-regimes","exercise-signal-noise","quiz-intraday"],
+      fluxo:["fluxo-liquidez","intraday-gaps","fund-localizacao","exercise-signal-noise","quiz-fluxo"]
     }
   };
   const modules=Object.entries(window.CMCurriculo.lessons).map(([id,lesson])=>[lesson.href,id,lesson.label]);
