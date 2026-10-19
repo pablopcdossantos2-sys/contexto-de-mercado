@@ -9,7 +9,8 @@ const CM_DATA_KEYS=[
   "contextoMercadoReplayV1",
   "contextoMercadoGuidedReplayV1",
   "contextoMercadoPrePregaoWinWdoV1",
-  "contextoMercadoLearningProgressV1"
+  "contextoMercadoLearningProgressV1",
+  "contextoMercadoToolSessionsV1"
 ];
 
 window.CMData={
@@ -110,6 +111,7 @@ window.CMLearning={
     if(!allowed.includes(state))throw new Error("learning-state-invalid");
     const d=this.load();d.states[id]={state,updatedAt:new Date().toISOString(),...meta};
     if(state==="verificado"||state==="aplicado")d.completed[id]={...(d.completed[id]||{}),completedAt:new Date().toISOString(),state,...meta};
+    else delete d.completed[id];
     this.save(d);window.dispatchEvent(new CustomEvent("cm-learning-updated",{detail:{id,state}}));return d.states[id];
   },
   getState(id){const d=this.load();return d.states[id]||{state:d.completed[id]?"verificado":"pendente"};},
@@ -122,10 +124,28 @@ window.CMLearning={
     d.reviews[id]={quality:q,repetitions:reps,intervalDays,lastReviewedAt:reviewedAt.toISOString(),nextReviewAt:next.toISOString()};
     d.states[id]={state:q>=4?"verificado":"praticado",updatedAt:reviewedAt.toISOString(),reviewQuality:q};
     if(q>=4)d.completed[id]={...(d.completed[id]||{}),completedAt:reviewedAt.toISOString(),state:"verificado"};
+    else delete d.completed[id];
     this.save(d);window.dispatchEvent(new CustomEvent("cm-learning-updated",{detail:{id,review:d.reviews[id]}}));return d.reviews[id];
   },
   dueReviews(now=new Date()){const d=this.load(),time=now.getTime();return Object.entries(d.reviews).filter(([,r])=>r.nextReviewAt&&Date.parse(r.nextReviewAt)<=time).map(([id,review])=>({id,...review}));},
   percent(ids){if(!ids.length)return 0;const d=this.load();return Math.round(ids.filter(id=>d.completed[id]).length/ids.length*100)}
+};
+
+
+window.CMToolSessions={
+  key:"contextoMercadoToolSessionsV1",
+  list(tool=null){
+    try{const items=JSON.parse(localStorage.getItem(this.key)||"[]");if(!Array.isArray(items))return [];return items.filter(item=>!tool||item.tool===tool).sort((a,b)=>Date.parse(b.createdAt)-Date.parse(a.createdAt));}catch(e){return []}
+  },
+  record(tool,payload,meta={}){
+    if(!tool||!payload||typeof payload!=="object")throw new Error("tool-session-invalid");
+    const items=this.list(),createdAt=new Date().toISOString(),id=tool+"-"+Date.now()+"-"+Math.random().toString(36).slice(2,8);
+    const entry={id,tool,createdAt,label:meta.label||tool,payload};
+    items.unshift(entry);localStorage.setItem(this.key,JSON.stringify(items.slice(0,200)));
+    window.dispatchEvent(new CustomEvent("cm-tool-session-updated",{detail:{id,tool}}));return entry;
+  },
+  latest(tool=null){return this.list(tool)[0]||null},
+  clear(){localStorage.removeItem(this.key);window.dispatchEvent(new CustomEvent("cm-tool-session-updated",{detail:{cleared:true}})}
 };
 
 function cmRoot(){
