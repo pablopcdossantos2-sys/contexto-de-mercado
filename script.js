@@ -148,19 +148,28 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.querySelectorAll("[data-year]").forEach(el=>el.textContent=new Date().getFullYear());
 
   const path=location.pathname.replace(/\\/g,"/");
-  const modules=[
-    ["artigos/o-que-e-contexto-de-mercado.html","fund-contexto","Fundamentos: contexto de mercado"],
-    ["artigos/regimes-de-mercado.html","fund-regimes","Fundamentos: regimes de mercado"],
-    ["artigos/leitura-top-down.html","fund-topdown","Fundamentos: leitura top-down"],
-    ["artigos/localizacao-do-preco.html","fund-localizacao","Fundamentos: localização do preço"],
-    ["artigos/volatilidade.html","fund-volatilidade","Fundamentos: volatilidade"],
-    ["rotina/pre-mercado.html","fund-rotina","Rotina pré-mercado"],
-    ["artigos/abertura-e-horarios.html","intraday-horarios","Intraday: abertura e horários"],
-    ["artigos/gaps-aceitacao-rejeicao.html","intraday-gaps","Intraday: gaps, aceitação e rejeição"],
-    ["artigos/correlacao-intermercado.html","intraday-intermercado","Intraday: correlação e intermercado"],
-    ["artigos/eventos-macroeconomicos.html","intraday-macro","Intraday: eventos macroeconômicos"],
-    ["artigos/liquidez-volume-agressao.html","fluxo-liquidez","Fluxo: liquidez, volume e agressão"]
-  ];
+  // Manifesto único do currículo: IDs de progresso, artigos, trilhas e prática sugerida.
+  window.CMCurriculo = window.CMCurriculo || {
+    lessons: {
+      "fund-contexto": { href:"artigos/o-que-e-contexto-de-mercado.html", label:"Fundamentos: contexto de mercado", track:"iniciante", practice:"aprendizado/informacao-ruido.html" },
+      "fund-regimes": { href:"artigos/regimes-de-mercado.html", label:"Fundamentos: regimes de mercado", track:"iniciante", practice:"aprendizado/classificacao-regimes.html" },
+      "fund-topdown": { href:"artigos/leitura-top-down.html", label:"Fundamentos: leitura top-down", track:"iniciante", practice:"ferramentas/checklist-contexto.html#secao-quadro-maior" },
+      "fund-localizacao": { href:"artigos/localizacao-do-preco.html", label:"Fundamentos: localização do preço", track:"iniciante", practice:"ferramentas/checklist-contexto.html#secao-referencias" },
+      "fund-volatilidade": { href:"artigos/volatilidade.html", label:"Fundamentos: volatilidade", track:"iniciante", practice:"ferramentas/volatilidade-historica-winfut-wdofut.html" },
+      "fund-rotina": { href:"rotina/pre-mercado.html", label:"Rotina pré-mercado", track:"iniciante", practice:"ferramentas/checklist-contexto.html#secao-ambiente" },
+      "intraday-horarios": { href:"artigos/abertura-e-horarios.html", label:"Intraday: abertura e horários", track:"intraday", practice:"ferramentas/checklist-contexto.html#secao-ambiente" },
+      "intraday-gaps": { href:"artigos/gaps-aceitacao-rejeicao.html", label:"Intraday: gaps, aceitação e rejeição", track:"intraday", practice:"ferramentas/laboratorio-cenarios.html" },
+      "intraday-intermercado": { href:"artigos/correlacao-intermercado.html", label:"Intraday: correlação e intermercado", track:"intraday", practice:"ferramentas/laboratorio-cenarios.html" },
+      "intraday-macro": { href:"artigos/eventos-macroeconomicos.html", label:"Intraday: eventos macroeconômicos", track:"intraday", practice:"ferramentas/checklist-contexto.html#secao-ambiente" },
+      "fluxo-liquidez": { href:"artigos/liquidez-volume-agressao.html", label:"Fluxo: liquidez, volume e agressão", track:"fluxo", practice:"ferramentas/laboratorio-cenarios.html" }
+    },
+    tracks: {
+      iniciante:["fund-contexto","fund-regimes","fund-topdown","fund-localizacao","fund-volatilidade","fund-rotina"],
+      intraday:["intraday-horarios","intraday-gaps","intraday-intermercado","intraday-macro"],
+      fluxo:["fluxo-liquidez","intraday-gaps","fund-localizacao"]
+    }
+  };
+  const modules=Object.entries(window.CMCurriculo.lessons).map(([id,lesson])=>[lesson.href,id,lesson.label]);
   const hit=modules.find(([suffix])=>path.endsWith(suffix));
   if(hit&&document.documentElement.lang.startsWith("pt")){
     const [,id,label]=hit,footer=document.querySelector(".footer");
