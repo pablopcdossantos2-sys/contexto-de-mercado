@@ -110,8 +110,11 @@ window.CMLearning={
     const allowed=["lido","praticado","verificado","aplicado"];
     if(!allowed.includes(state))throw new Error("learning-state-invalid");
     const d=this.load();d.states[id]={state,updatedAt:new Date().toISOString(),...meta};
-    if(state==="verificado"||state==="aplicado")d.completed[id]={...(d.completed[id]||{}),completedAt:new Date().toISOString(),state,...meta};
-    else delete d.completed[id];
+    const isAssessment=!!(window.CMCurriculo&&window.CMCurriculo.activities&&window.CMCurriculo.activities[id]);
+    if(!isAssessment){
+      if(state==="verificado"||state==="aplicado")d.completed[id]={...(d.completed[id]||{}),completedAt:new Date().toISOString(),state,...meta};
+      else delete d.completed[id];
+    }
     this.save(d);window.dispatchEvent(new CustomEvent("cm-learning-updated",{detail:{id,state}}));return d.states[id];
   },
   getState(id){const d=this.load();return d.states[id]||{state:d.completed[id]?"verificado":"pendente"};},
@@ -123,8 +126,11 @@ window.CMLearning={
     const reviewedAt=new Date(),next=new Date(reviewedAt.getTime()+intervalDays*86400000);
     d.reviews[id]={quality:q,repetitions:reps,intervalDays,lastReviewedAt:reviewedAt.toISOString(),nextReviewAt:next.toISOString()};
     d.states[id]={state:q>=4?"verificado":"praticado",updatedAt:reviewedAt.toISOString(),reviewQuality:q};
-    if(q>=4)d.completed[id]={...(d.completed[id]||{}),completedAt:reviewedAt.toISOString(),state:"verificado"};
-    else delete d.completed[id];
+    const isAssessment=!!(window.CMCurriculo&&window.CMCurriculo.activities&&window.CMCurriculo.activities[id]);
+    if(!isAssessment){
+      if(q>=4)d.completed[id]={...(d.completed[id]||{}),completedAt:reviewedAt.toISOString(),state:"verificado"};
+      else delete d.completed[id];
+    }
     this.save(d);window.dispatchEvent(new CustomEvent("cm-learning-updated",{detail:{id,review:d.reviews[id]}}));return d.reviews[id];
   },
   dueReviews(now=new Date()){const d=this.load(),time=now.getTime();return Object.entries(d.reviews).filter(([,r])=>r.nextReviewAt&&Date.parse(r.nextReviewAt)<=time).map(([id,review])=>({id,...review}));},
