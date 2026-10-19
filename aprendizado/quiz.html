@@ -59,9 +59,8 @@ function render(){
  });
  form.innerHTML=currentQuestions.map((x,i)=>`<section class="check-group quiz-question"><h3>${i+1}. ${x[0]}</h3>${x[1].map((o,j)=>`<label class="quiz-option"><input type="radio" name="q${i}" value="${j}"><span>${o}</span></label>`).join("")}<div class="quiz-feedback" id="f${i}" hidden></div></section>`).join("");
  form.querySelectorAll('input[type="radio"]').forEach(input=>input.addEventListener("change",()=>{
-  const questionIndex=Number(input.name.slice(1));
-  form.querySelectorAll(`input[name="q${questionIndex}"]`).forEach(option=>option.closest(".quiz-option").classList.remove("answer-correct","answer-incorrect"));
-  const feedback=document.getElementById("f"+questionIndex);feedback.hidden=true;feedback.className="quiz-feedback";
+  form.querySelectorAll(".quiz-option").forEach(label=>label.classList.remove("answer-correct","answer-incorrect"));
+  form.querySelectorAll(".quiz-feedback").forEach(feedback=>{feedback.hidden=true;feedback.className="quiz-feedback";});
   score.textContent="—";status.textContent="Você alterou uma resposta. Corrija o quiz novamente para atualizar o resultado.";
  }));
 }
