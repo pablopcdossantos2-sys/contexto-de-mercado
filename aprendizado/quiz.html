@@ -1,14 +1,13 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Quizzes conceituais das trilhas do Contexto de Mercado."><title>Quizzes — Contexto de Mercado</title><link rel="stylesheet" href="../styles.css"></head><body>
-<header class="site-header"><div class="container nav"><a class="brand" href="../index.html">Contexto <span>de Mercado</span></a><button class="menu-button" aria-label="Abrir menu">Menu</button><nav class="nav-links"><a href="../index.html">Início</a><a href="trilhas.html">Trilhas</a><a aria-current="page" href="quiz.html">Quizzes</a><a href="../roadmap.html">ROADMAP</a></nav></div></header>
+<header class="site-header"><div class="container nav"><a class="brand" href="../index.html">Contexto <span>de Mercado</span></a><button class="menu-button" aria-label="Abrir menu">Menu</button><nav class="nav-links"><a href="../index.html">Início</a><a href="../biblioteca.html">Biblioteca</a><a href="trilhas.html">Trilhas</a><a aria-current="page" href="quiz.html">Quizzes</a></nav></div></header>
 <div class="container breadcrumb"><a href="../index.html">Início</a> / Aprendizagem / Quizzes</div>
-<section class="article-hero"><div class="container"><div class="eyebrow">Avaliação conceitual</div><h1>Quizzes por trilha</h1><p class="kicker">A nota mínima para concluir o módulo é 80%. As perguntas testam conceitos e processo, não previsão de preço.</p></div></section>
-<main class="section"><div class="container tool-grid">
-<div>
-<div class="check-group"><label>Escolha a trilha<select id="track"><option value="iniciante">Iniciante</option><option value="intraday">Intraday</option><option value="fluxo">Leitura de Fluxo</option></select></label></div>
-<form id="quizForm" class="checklist"></form>
-<div class="actions"><button class="button primary" id="submitBtn" type="button">Corrigir quiz</button><button class="button secondary" id="resetBtn" type="button">Recomeçar</button></div>
-</div>
-<aside class="tool-panel"><span class="tag">Resultado</span><div class="score" id="score">—</div><p id="status" class="muted">Responda todas as perguntas e corrija o quiz.</p><hr style="border:0;border-top:1px solid var(--line);margin:22px 0"><p class="muted">Seu melhor resultado fica salvo localmente. Acertar uma questão não significa que exista uma resposta mecânica equivalente no mercado real.</p></aside>
+<section class="article-hero"><div class="container"><div class="eyebrow">Avaliação conceitual</div><h1>Quizzes por trilha</h1><p class="kicker">Responda às questões sem consultar os artigos. Ao corrigir, você verá a alternativa correta em verde e, quando sua escolha estiver errada, ela será destacada em vermelho. A nota mínima para concluir o módulo é 80%.</p></div></section>
+<main class="section"><div class="container quiz-container">
+<div class="quiz-track-select"><label for="track">Escolha a trilha do questionário</label><select id="track"><option value="iniciante">Iniciante</option><option value="intraday">Intraday</option><option value="fluxo">Leitura de Fluxo</option></select></div>
+<form id="quizForm" class="checklist quiz-form"></form>
+<div class="quiz-actions"><button class="button primary" id="submitBtn" type="button">Corrigir respostas</button><button class="button secondary" id="resetBtn" type="button">Refazer quiz</button></div>
+<section class="quiz-result-panel" id="quizResult" aria-labelledby="resultTitle"><div><span class="tag">Resultado da avaliação</span><h2 id="resultTitle">Seu resultado</h2><p id="status" class="muted" aria-live="polite">Responda às perguntas e, ao final, selecione “Corrigir respostas”.</p></div><div class="quiz-score-wrap"><div class="score" id="score" aria-live="polite">—</div><span class="muted">Nota final</span></div></section>
+<p class="quiz-note muted">Seu melhor resultado fica salvo localmente. Uma resposta correta demonstra compreensão conceitual, não uma regra mecânica para prever o mercado real.</p>
 </div></main>
 <footer class="footer"><div class="container">Avaliação educacional local. Nota mínima de conclusão: 80%.</div></footer><script src="../script.js"></script>
 <script>
@@ -51,8 +50,52 @@ fluxo:[
 const track=document.getElementById("track"),form=document.getElementById("quizForm"),score=document.getElementById("score"),status=document.getElementById("status");
 const q=new URLSearchParams(location.search).get("trilha");if(sets[q])track.value=q;
 let currentQuestions=[];
-function render(){score.textContent="—";status.textContent="Responda todas as perguntas e corrija o quiz.";currentQuestions=sets[track.value].map(x=>{const opts=x[1].map((text,index)=>({text,correct:index===x[2]}));for(let i=opts.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[opts[i],opts[j]]=[opts[j],opts[i]]}return [x[0],opts.map(o=>o.text),opts.findIndex(o=>o.correct),x[3]]});form.innerHTML=currentQuestions.map((x,i)=>`<section class="check-group"><h3>${i+1}. ${x[0]}</h3>${x[1].map((o,j)=>`<label class="quiz-option"><input type="radio" name="q${i}" value="${j}">${o}</label>`).join("")}<div class="quiz-feedback" id="f${i}" hidden></div></section>`).join("")}
-function correct(){const qs=currentQuestions;let hits=0,answered=0;qs.forEach((x,i)=>{const a=form.querySelector(`input[name=q${i}]:checked`),fb=document.getElementById("f"+i);if(a){answered++;const ok=Number(a.value)===x[2];if(ok)hits++;fb.hidden=false;fb.innerHTML=(ok?"<strong>✓ Correto.</strong> ":"<strong>✗ Revise.</strong> ")+x[3]}else{fb.hidden=false;fb.innerHTML="<strong>Sem resposta.</strong> "+x[3]}});const pct=Math.round(hits/qs.length*100);score.textContent=pct+"%";CMLearning.setScore("quiz-"+track.value,pct,{hits,total:qs.length});if(pct>=80){CMLearning.mark("quiz-"+track.value,{score:pct,label:"Quiz "+track.options[track.selectedIndex].text});status.textContent="Aprovado. Este módulo foi concluído."}else{status.textContent="Resultado abaixo de 80%. Revise os feedbacks e tente novamente."}return {pct,answered}}
-track.onchange=()=>{history.replaceState(null,"","?trilha="+track.value);render()};document.getElementById("submitBtn").onclick=correct;document.getElementById("resetBtn").onclick=render;render();
-});
+function render(){
+ score.textContent="—";status.textContent="Responda às perguntas e corrija o quiz ao terminar.";
+ currentQuestions=sets[track.value].map(x=>{
+  const opts=x[1].map((text,index)=>({text,correct:index===x[2]}));
+  for(let i=opts.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[opts[i],opts[j]]=[opts[j],opts[i]]}
+  return [x[0],opts.map(o=>o.text),opts.findIndex(o=>o.correct),x[3]];
+ });
+ form.innerHTML=currentQuestions.map((x,i)=>`<section class="check-group quiz-question"><h3>${i+1}. ${x[0]}</h3>${x[1].map((o,j)=>`<label class="quiz-option"><input type="radio" name="q${i}" value="${j}"><span>${o}</span></label>`).join("")}<div class="quiz-feedback" id="f${i}" hidden></div></section>`).join("");
+ form.querySelectorAll('input[type="radio"]').forEach(input=>input.addEventListener("change",()=>{
+  const questionIndex=Number(input.name.slice(1));
+  form.querySelectorAll(`input[name="q${questionIndex}"]`).forEach(option=>option.closest(".quiz-option").classList.remove("answer-correct","answer-incorrect"));
+  const feedback=document.getElementById("f"+questionIndex);feedback.hidden=true;feedback.className="quiz-feedback";
+  score.textContent="—";status.textContent="Você alterou uma resposta. Corrija o quiz novamente para atualizar o resultado.";
+ }));
+}
+function correct(){
+ let hits=0,answered=0;
+ currentQuestions.forEach((x,i)=>{
+  const selected=form.querySelector(`input[name="q${i}"]:checked`);
+  const ok=!!selected&&Number(selected.value)===x[2];
+  if(selected)answered++;if(ok)hits++;
+  form.querySelectorAll(`input[name="q${i}"]`).forEach(option=>{
+   const label=option.closest(".quiz-option");
+   label.classList.remove("answer-correct","answer-incorrect");
+   if(Number(option.value)===x[2])label.classList.add("answer-correct");
+   if(selected&&option===selected&&!ok)label.classList.add("answer-incorrect");
+  });
+  const feedback=document.getElementById("f"+i);
+  feedback.hidden=false;
+  feedback.className="quiz-feedback "+(ok?"feedback-correct":selected?"feedback-incorrect":"feedback-unanswered");
+  feedback.textContent=(ok?"✓ Correto. ":selected?"✗ Resposta incorreta. ":"Sem resposta. ")+x[3];
+ });
+ const pct=Math.round(hits/currentQuestions.length*100);
+ score.textContent=pct+"%";
+ CMLearning.setScore("quiz-"+track.value,pct,{hits,total:currentQuestions.length,answered});
+ if(pct>=80){
+  CMLearning.mark("quiz-"+track.value,{score:pct,label:"Quiz "+track.options[track.selectedIndex].text});
+  status.textContent="Aprovado: "+hits+" de "+currentQuestions.length+" respostas corretas. Esta etapa foi concluída.";
+ }else{
+  status.textContent=hits+" de "+currentQuestions.length+" respostas corretas. Resultado abaixo de 80%: revise os feedbacks e refaça o quiz.";
+ }
+ document.getElementById("quizResult").scrollIntoView({behavior:"smooth",block:"nearest"});
+ return {pct,answered};
+}
+track.onchange=()=>{history.replaceState(null,"","?trilha="+track.value);render()};
+document.getElementById("submitBtn").onclick=correct;
+document.getElementById("resetBtn").onclick=render;
+render();
 </script></body></html>
