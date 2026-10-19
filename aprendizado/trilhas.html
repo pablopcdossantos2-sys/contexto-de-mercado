@@ -25,33 +25,16 @@
 <footer class="footer"><div class="container">Progresso salvo localmente. Limpar os dados do navegador pode apagar o histórico da Fase 5.</div></footer><script src="../script.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded",()=>{
-const tracks={
-iniciante:{name:"Iniciante",desc:"Construa vocabulário, aprenda a localizar o preço e transforme análise em rotina.",ids:["fund-contexto","fund-regimes","fund-topdown","fund-localizacao","fund-volatilidade","fund-rotina","exercise-regimes","quiz-iniciante"],modules:[
-["fund-contexto","O que é contexto de mercado?","../artigos/o-que-e-contexto-de-mercado.html"],
-["fund-regimes","Tendência, range e transição","../artigos/regimes-de-mercado.html"],
-["fund-topdown","Leitura top-down","../artigos/leitura-top-down.html"],
-["fund-localizacao","Localização e referências","../artigos/localizacao-do-preco.html"],
-["fund-volatilidade","Volatilidade","../artigos/volatilidade.html"],
-["fund-rotina","Rotina pré-mercado","../rotina/pre-mercado.html"],
-["exercise-regimes","Exercício: classificação de regimes","classificacao-regimes.html"],
-["quiz-iniciante","Quiz Iniciante","quiz.html?trilha=iniciante"]]},
-intraday:{name:"Intraday",desc:"Aprofunde tempo de sessão, rompimentos, macro, intermercado e atualização de contexto.",ids:["intraday-horarios","fund-localizacao","fund-volatilidade","intraday-gaps","intraday-intermercado","intraday-macro","exercise-regimes","exercise-signal-noise","quiz-intraday"],modules:[
-["intraday-horarios","Abertura e horários","../artigos/abertura-e-horarios.html"],
-["fund-localizacao","Localização e referências","../artigos/localizacao-do-preco.html"],
-["fund-volatilidade","Volatilidade","../artigos/volatilidade.html"],
-["intraday-gaps","Gaps, aceitação e rejeição","../artigos/gaps-aceitacao-rejeicao.html"],
-["intraday-intermercado","Correlação e intermercado","../artigos/correlacao-intermercado.html"],
-["intraday-macro","Eventos macroeconômicos","../artigos/eventos-macroeconomicos.html"],
-["exercise-regimes","Exercício: classificação de regimes","classificacao-regimes.html"],
-["exercise-signal-noise","Exercício: informação x ruído","informacao-ruido.html"],
-["quiz-intraday","Quiz Intraday","quiz.html?trilha=intraday"]]},
-fluxo:{name:"Leitura de Fluxo",desc:"Aprenda o que volume, agressão e liquidez mostram — e evite inferir intenção sem evidência.",ids:["fluxo-liquidez","intraday-gaps","fund-localizacao","exercise-signal-noise","quiz-fluxo"],modules:[
-["fluxo-liquidez","Liquidez, volume e agressão","../artigos/liquidez-volume-agressao.html"],
-["intraday-gaps","Aceitação, rejeição e falsos rompimentos","../artigos/gaps-aceitacao-rejeicao.html"],
-["fund-localizacao","Localização e referências","../artigos/localizacao-do-preco.html"],
-["exercise-signal-noise","Exercício: informação x ruído","informacao-ruido.html"],
-["quiz-fluxo","Quiz Leitura de Fluxo","quiz.html?trilha=fluxo"]]}
+const curriculum=window.CMCurriculo;
+const resolveRequirement=(id)=>{
+ const item=curriculum.lessons[id]||curriculum.activities[id];if(!item)return null;
+ const href=curriculum.lessons[id]?"../"+item.href:item.href;
+ return {id,label:item.label,href};
 };
+const tracks=Object.fromEntries(Object.entries(curriculum.requirements).map(([key,ids])=>[key,{
+ name:curriculum.trackMeta[key].name,desc:curriculum.trackMeta[key].desc,
+ ids,modules:ids.map(resolveRequirement).filter(Boolean)
+}]));
 const d=CMLearning.load(),root=document.getElementById("trackCards");
 root.innerHTML=Object.entries(tracks).map(([key,t])=>{
  const done=t.ids.filter(id=>d.completed[id]).length,pct=Math.round(done/t.ids.length*100);
